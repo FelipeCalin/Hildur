@@ -15,9 +15,11 @@
     <ClInclude Include="src\Hildur\Application.h" />
     <ClInclude Include="src\Hildur\Core.h" />
     <ClInclude Include="src\Hildur\EntryPoint.h" />
+    <ClInclude Include="src\Hildur\Log.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hildur\Application.cpp" />
+    <ClCompile Include="src\Hildur\Log.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -68,7 +70,7 @@
       <PreprocessorDefinitions>HR_PLATFORM_WINDOWS;HR_BUILD_DLL;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(VC_IncludePath);$(WindowsSDK_IncludePath)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Hildur\vendor\spdlog\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -83,6 +85,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>HR_PLATFORM_WINDOWS;HR_BUILD_DLL;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Hildur\vendor\spdlog\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

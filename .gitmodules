@@ -1,0 +1,3 @@
+[submodule "Hildur/vendor/spdlog"]
+	path = Hildur/vendor/spdlog
+	url = https://github.com/gabime/spdlog
