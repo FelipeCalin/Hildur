@@ -1,0 +1,3 @@
+﻿  Hildur.vcxproj -> C:\Dev\C++\Hildur\Hildur\..\bin-int\Debug-windows-x86_64\Hildur\Hildur.dll
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(149,5): error MSB3073: The command "IF EXIST ..\bin-int\Debug-windows-x86_64\Hildur\Hildur.dll\ (xcopy /Q /E /Y /I ..\bin-int\Debug-windows-x86_64\Hildur\Hildur.dll ..\binDebug-windows-x86_64\Sandbox > nul) ELSE (xcopy /Q /Y /I ..\bin-int\Debug-windows-x86_64\Hildur\Hildur.dll ..\binDebug-windows-x86_64\Sandbox > nul)
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(149,5): error MSB3073: :VCEnd" exited with code 2.
