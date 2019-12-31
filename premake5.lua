@@ -13,95 +13,99 @@ workspace "Hildur"
  outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
  project "Hildur"
- location "Hildur"
- kind "SharedLib"
- language "C++"
+  location "Hildur"
+  kind "SharedLib"
+  language "C++"
 
- targetdir ("bin/" .. outputdir .. "/%{prj.name}")
- objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+  targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+  objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
- files
- {
-  "%{prj.name}/src/**.h",
-  "%{prj.name}/src/**.cpp"
- }
+  pchheader "hrpcheaders.h"
+  pchsource "Hildur/src/hrpcheaders.cpp"
 
- includedirs
- {
-  "%{prj.name}/vendor/spdlog/include"
- }
-
- filter "system:windows"
-  cppdialect "C++17"
-  staticruntime "On"
-  systemversion "latest"
-
-  defines
+  files
   {
-   "HR_PLATFORM_WINDOWS",
-   "HR_BUILD_DLL"
+    "%{prj.name}/src/**.h",
+    "%{prj.name}/src/**.cpp"
   }
 
-  postbuildcommands
+  includedirs
   {
-    ("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
+    "%{prj.name}/vendor/spdlog/include",
+    "%{prj.name}/src",
   }
 
- filter "configurations:Debug"
-  defines "HR_DEBUG"
-  symbols "On"
+  filter "system:windows"
+    cppdialect "C++17"
+    staticruntime "On"
+    systemversion "latest"
 
- filter "configurations:Release"
-  defines "HR_RELEASE"
-  optimize "On"
+    defines
+    {
+      "HR_PLATFORM_WINDOWS",
+      "HR_BUILD_DLL"
+    }
 
- filter "configurations:Dist"
-  defines "HR_DIST"
-  optimize "On"
+    postbuildcommands
+    {
+      ("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
+    }
 
-project "Sandbox"
- location "Sandbox"
- kind "ConsoleApp"
- language "C++"
+  filter "configurations:Debug"
+    defines "HR_DEBUG"
+    symbols "On"
 
- targetdir ("bin/" .. outputdir .. "/%{prj.name}")
- objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+  filter "configurations:Release"
+    defines "HR_RELEASE"
+    optimize "On"
 
- files
- {
-  "%{prj.name}/src/**.h",
-  "%{prj.name}/src/**.cpp"
- }
+  filter "configurations:Dist"
+    defines "HR_DIST"
+    optimize "On"
 
- includedirs
- {
-  "Hildur/vendor/spdlog/include",
-  "Hildur/src"
- }
+ project "Sandbox"
+   location "Sandbox"
+   kind "ConsoleApp"
+   language "C++"
 
- links
- {
-  "Hildur"
- }
+   targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+   objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
- filter "system:windows"
-  cppdialect "C++17"
-  staticruntime "On"
-  systemversion "latest"
+   files
+   {
+     "%{prj.name}/src/**.h",
+     "%{prj.name}/src/**.cpp"
+   }
 
-  defines
-  {
-   "HR_PLATFORM_WINDOWS"
-  }
+   includedirs
+   {
+     "Hildur/vendor/spdlog/include",
+     "Hildur/src"
+   }
 
- filter "configurations:Debug"
-  defines "HR_DEBUG"
-  symbols "On"
+   links
+   {
+     "Hildur"
+   }
 
- filter "configurations:Release"
-  defines "HR_RELEASE"
-  optimize "On"
+   filter "system:windows"
+     cppdialect "C++17"
+     staticruntime "On"
+     systemversion "latest"
 
- filter "configurations:Dist"
-  defines "HR_DIST"
-  optimize "On"
+     defines
+     {
+       "HR_PLATFORM_WINDOWS"
+     }
+
+   filter "configurations:Debug"
+     defines "HR_DEBUG"
+     symbols "On"
+
+   filter "configurations:Release"
+     defines "HR_RELEASE"
+     optimize "On"
+
+   filter "configurations:Dist"
+     defines "HR_DIST"
+     optimize "On"

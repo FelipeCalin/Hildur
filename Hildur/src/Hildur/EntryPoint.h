@@ -11,8 +11,8 @@ int main(int argc, char** argv) {
 
 	Hildur::Log::Init();
 
-	HR_CORE_ERROR("Core logger initialized");
 	HR_INFO("Client logger working, initialized with code {0}", bb);
+	HR_CORE_ERROR("Core logger initialized");
 
 	printf("Hildur engine online\n");
 	auto app = Hildur::CreateApplication();

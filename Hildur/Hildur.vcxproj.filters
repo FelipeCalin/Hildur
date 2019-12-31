@@ -4,6 +4,9 @@
     <Filter Include="Hildur">
       <UniqueIdentifier>{CD707BB7-B912-A68D-A2CD-B9E18E0E2DDE}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Hildur\Events">
+      <UniqueIdentifier>{11946AE8-7D54-E61E-468F-2F9CB20E2BFB}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Hildur.h" />
@@ -16,9 +19,22 @@
     <ClInclude Include="src\Hildur\EntryPoint.h">
       <Filter>Hildur</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hildur\Events\ApplicationEvent.h">
+      <Filter>Hildur\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hildur\Events\Event.h">
+      <Filter>Hildur\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hildur\Events\KeyEvent.h">
+      <Filter>Hildur\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hildur\Events\MouseEvent.h">
+      <Filter>Hildur\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\Hildur\Log.h">
       <Filter>Hildur</Filter>
     </ClInclude>
+    <ClInclude Include="src\hrpcheaders.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hildur\Application.cpp">
@@ -27,5 +43,6 @@
     <ClCompile Include="src\Hildur\Log.cpp">
       <Filter>Hildur</Filter>
     </ClCompile>
+    <ClCompile Include="src\hrpcheaders.cpp" />
   </ItemGroup>
 </Project>
