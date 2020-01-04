@@ -12,6 +12,13 @@ workspace "Hildur"
 
  outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+ -- Include directories relative to root folder (solution directory)
+ IncludeDir = {}
+ IncludeDir["SFML"] = "Hildur/vendor/SFML/include"
+
+ include "Hildur/vendor/SFML"
+  
+ 
  project "Hildur"
   location "Hildur"
   kind "SharedLib"
@@ -33,7 +40,36 @@ workspace "Hildur"
   {
     "%{prj.name}/vendor/spdlog/include",
     "%{prj.name}/src",
+    "%{IncludeDir.SFML}"
   }
+
+  libdirs 
+  { 
+    "vendor/SFML/extlibs/bin/x64",
+    "vendor/SFML/extlibs/libs-msvc-universal/x64"
+  }
+
+  links
+  {
+    "sfml-audio",
+    "sfml-graphics",
+    "sfml-main",
+    "sfml-network",
+    "sfml-system",
+    "sfml-window",
+    "sfml-system",
+    "openal32",
+    "flac",
+    "vorbisenc",
+    "vorbisfile",
+    "vorbis",
+    "ogg"
+  }
+  
+	defines
+	{
+		"SFML_STATIC"
+	}
 
   filter "system:windows"
     cppdialect "C++17"

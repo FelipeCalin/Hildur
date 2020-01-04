@@ -1,5 +1,5 @@
 #include "hrpcheaders.h"
-#include "Log.h"
+
 
 namespace Hildur {
 

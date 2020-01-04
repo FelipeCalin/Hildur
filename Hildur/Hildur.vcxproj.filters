@@ -7,6 +7,9 @@
     <Filter Include="Hildur\Events">
       <UniqueIdentifier>{11946AE8-7D54-E61E-468F-2F9CB20E2BFB}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2f75dd47-a757-4777-9539-b17e41f06dcf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Hildur.h" />
@@ -35,6 +38,12 @@
       <Filter>Hildur</Filter>
     </ClInclude>
     <ClInclude Include="src\hrpcheaders.h" />
+    <ClInclude Include="src\Hildur\Window.h">
+      <Filter>Hildur</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hildur\Application.cpp">
@@ -44,5 +53,8 @@
       <Filter>Hildur</Filter>
     </ClCompile>
     <ClCompile Include="src\hrpcheaders.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

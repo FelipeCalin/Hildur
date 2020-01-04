@@ -3,6 +3,7 @@
 
 #ifdef HR_PLATFORM_WINDOWS
 
+
 extern Hildur::Application* Hildur::CreateApplication();
 
 int main(int argc, char** argv) {
@@ -20,5 +21,6 @@ int main(int argc, char** argv) {
 	delete app;
 
 }
+
 
 #endif 

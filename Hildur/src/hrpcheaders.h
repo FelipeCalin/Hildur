@@ -14,6 +14,8 @@
 #include <unordered_set>
 
 
+#include "Hildur/Log.h"
+
 
 #ifndef HR_PLATFORM_WINDOWS
 	#include <Windows.h>
