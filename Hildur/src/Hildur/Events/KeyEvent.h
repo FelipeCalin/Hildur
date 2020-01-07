@@ -27,9 +27,14 @@ namespace Hildur {
 	class HILDUR_API KeyPressedEvent : public KeyEvent {
 
 	public:
-
+		
 		KeyPressedEvent(int keycode, int repeatCount)
 			: KeyEvent(keycode), m_RepeatCount(repeatCount) {}
+		
+		/*
+		KeyPressedEvent(int keycode)
+			: KeyEvent(keycode), m_RepeatCount(0) {}
+		*/
 
 		inline int GetRepeatCount() const { return m_RepeatCount; }
 

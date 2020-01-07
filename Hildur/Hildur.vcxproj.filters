@@ -8,7 +8,10 @@
       <UniqueIdentifier>{11946AE8-7D54-E61E-468F-2F9CB20E2BFB}</UniqueIdentifier>
     </Filter>
     <Filter Include="Platform">
-      <UniqueIdentifier>{2f75dd47-a757-4777-9539-b17e41f06dcf}</UniqueIdentifier>
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -34,27 +37,39 @@
     <ClInclude Include="src\Hildur\Events\MouseEvent.h">
       <Filter>Hildur\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hildur\Layer.h">
+      <Filter>Hildur</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hildur\LayerStack.h">
+      <Filter>Hildur</Filter>
+    </ClInclude>
     <ClInclude Include="src\Hildur\Log.h">
       <Filter>Hildur</Filter>
     </ClInclude>
-    <ClInclude Include="src\hrpcheaders.h" />
     <ClInclude Include="src\Hildur\Window.h">
       <Filter>Hildur</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
-      <Filter>Platform</Filter>
+      <Filter>Platform\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="src\hrpcheaders.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hildur\Application.cpp">
       <Filter>Hildur</Filter>
     </ClCompile>
+    <ClCompile Include="src\Hildur\Layer.cpp">
+      <Filter>Hildur</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hildur\LayerStack.cpp">
+      <Filter>Hildur</Filter>
+    </ClCompile>
     <ClCompile Include="src\Hildur\Log.cpp">
       <Filter>Hildur</Filter>
     </ClCompile>
-    <ClCompile Include="src\hrpcheaders.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
-      <Filter>Platform</Filter>
+      <Filter>Platform\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\hrpcheaders.cpp" />
   </ItemGroup>
 </Project>

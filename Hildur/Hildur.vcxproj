@@ -84,6 +84,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/MDd %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -110,6 +111,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -137,6 +139,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -160,18 +163,22 @@
     <ClInclude Include="src\Hildur\Events\Event.h" />
     <ClInclude Include="src\Hildur\Events\KeyEvent.h" />
     <ClInclude Include="src\Hildur\Events\MouseEvent.h" />
+    <ClInclude Include="src\Hildur\Layer.h" />
+    <ClInclude Include="src\Hildur\LayerStack.h" />
     <ClInclude Include="src\Hildur\Log.h" />
     <ClInclude Include="src\Hildur\Window.h" />
-    <ClInclude Include="src\hrpcheaders.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
+    <ClInclude Include="src\hrpcheaders.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hildur\Application.cpp" />
+    <ClCompile Include="src\Hildur\Layer.cpp" />
+    <ClCompile Include="src\Hildur\LayerStack.cpp" />
     <ClCompile Include="src\Hildur\Log.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\hrpcheaders.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\SFML\build\projects\sfml-audio.vcxproj">

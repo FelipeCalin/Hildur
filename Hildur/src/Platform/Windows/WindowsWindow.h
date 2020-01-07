@@ -25,14 +25,19 @@ namespace Hildur {
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override;
 
+		//this was in second private
+		sf::Window m_Window;
+
 	private:
 
 		virtual void Init(const WindowProps& props);
 		virtual void Shutdown();
 
+
+		void* GetWindow(/*sf::Window* window*/);
+
 	private:
 
-		sf::Window m_Window;
 
 		struct WindowData {
 
@@ -46,6 +51,9 @@ namespace Hildur {
 		};
 
 		WindowData m_Data;
+
+		void ProcessEvents();
+
 
 	};
 

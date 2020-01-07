@@ -46,6 +46,9 @@ namespace Hildur {
 
 	public:
 
+		bool Handled = false;
+
+
 		virtual EventType GetEventType() const = 0;
 		virtual const char* GetName() const = 0;
 		virtual int GetCategoryFlags() const = 0;
@@ -59,7 +62,6 @@ namespace Hildur {
 
 	protected:
 
-		bool m_Handled = false;
 
 	};
 
@@ -75,12 +77,11 @@ namespace Hildur {
 			: m_Event(event) {}
 
 		template<typename T>
-
 		bool Dispatch(EventFn<T> func) {
 
 			if (m_Event.GetEventType() == T::GetStaticType()) {
 
-				m_Event.Handled = func(static_cast<T&>(m_Event));
+				m_Event.Handled = func(*(T*)&m_Event);
 
 				return true;
 

@@ -9,6 +9,7 @@
 //--------Core Files------------------
 
 #include "Hildur/Application.h"
+#include "Hildur/Layer.h"
 #include "Hildur/Log.h"
 
 //-------EntryPoint-------------------
