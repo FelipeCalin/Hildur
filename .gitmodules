@@ -5,3 +5,6 @@
 	path = Hildur/vendor/SFML
 	url = https://github.com/FelipeCalin/SFML.git
 
+[submodule "Hildur/vendor/ImGui"]
+	path = Hildur/vendor/ImGui
+	url = https://github.com/FelipeCarlin/imgui.git
