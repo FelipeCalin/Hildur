@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Win32">
+      <UniqueIdentifier>{78C2600E-E4D6-88BF-AD58-2C1F192C85F0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\Clipboard.cpp" />
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\Context.cpp" />
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\Cursor.cpp" />
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\EGLCheck.cpp" />
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\EglContext.cpp" />
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\GlContext.cpp" />
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\GlResource.cpp" />
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\Joystick.cpp" />
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\JoystickManager.cpp" />
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\Keyboard.cpp" />
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\Mouse.cpp" />
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\Sensor.cpp" />
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\SensorManager.cpp" />
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\Touch.cpp" />
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\VideoMode.cpp" />
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\Vulkan.cpp" />
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\Win32\ClipboardImpl.cpp">
+      <Filter>Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\Win32\CursorImpl.cpp">
+      <Filter>Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\Win32\InputImpl.cpp">
+      <Filter>Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\Win32\JoystickImpl.cpp">
+      <Filter>Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\Win32\SensorImpl.cpp">
+      <Filter>Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\Win32\VideoModeImpl.cpp">
+      <Filter>Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\Win32\VulkanImplWin32.cpp">
+      <Filter>Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\Win32\WglContext.cpp">
+      <Filter>Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\Win32\WindowImplWin32.cpp">
+      <Filter>Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\Window.cpp" />
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\WindowBase.cpp" />
+    <ClCompile Include="..\..\..\SFML\src\SFML\Window\WindowImpl.cpp" />
+  </ItemGroup>
+</Project>

@@ -22,7 +22,10 @@ namespace Hildur {
 		void OnEvent(Event& e);
 
 		void PushLayer(Layer* layer);
-		void PopLayer(Layer* layer);
+		void PushOverlay(Layer* layer);
+
+		inline Window& GetWindow() { return *m_Window; }
+		inline static Application& Get() { return *s_Instance; }
 
 	private:
 
@@ -34,6 +37,10 @@ namespace Hildur {
 		bool m_Running = true;
 
 		LayerStack m_LayerStack;
+
+	private:
+
+		static Application* s_Instance;
 
 	};
 

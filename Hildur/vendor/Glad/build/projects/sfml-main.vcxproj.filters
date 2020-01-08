@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="SFML">
+      <UniqueIdentifier>{F7C68B7C-E3FD-8C0D-8CEA-72107800090F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SFML\src">
+      <UniqueIdentifier>{8E2890DA-7AF5-EAE5-A30E-D98D8F3A2074}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SFML\src\SFML">
+      <UniqueIdentifier>{6FE8A691-DBA8-22C8-A4E3-6B45106367A4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SFML\src\SFML\Main">
+      <UniqueIdentifier>{43E9A2BC-2FCD-6312-982D-5E6584304E94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\SFML">
+      <UniqueIdentifier>{6EE624CF-5AB3-7FDA-83CC-6D826FF8B468}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\SFML\Main">
+      <UniqueIdentifier>{A27E3A6C-0E3F-B6A2-D779-FF1F43F9FA7E}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\SFML\src\SFML\Main\MainWin32.cpp">
+      <Filter>SFML\src\SFML\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\SFML\Main\MainWin32.cpp">
+      <Filter>src\SFML\Main</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

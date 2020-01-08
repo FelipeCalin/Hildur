@@ -3,7 +3,7 @@
 #include "Hildur/Window.h"
 
 #include <SFML/Window.hpp>
-
+#include <SFML/Graphics/RenderWindow.hpp>
 
 namespace Hildur {
 
@@ -24,17 +24,19 @@ namespace Hildur {
 		inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; };
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override;
+	
 
-		//this was in second private
-		sf::Window m_Window;
+		inline virtual void* GetNativeWindow() const { return m_Window; }
 
 	private:
 
 		virtual void Init(const WindowProps& props);
 		virtual void Shutdown();
 
+		sf::RenderWindow* CreateSFMLWindow(int width, int height, std::string name);
 
-		void* GetWindow(/*sf::Window* window*/);
+		void ProcessEvents();
+
 
 	private:
 
@@ -52,7 +54,9 @@ namespace Hildur {
 
 		WindowData m_Data;
 
-		void ProcessEvents();
+		sf::RenderWindow* m_Window;
+
+		sf::RenderWindow m_NewWindow;
 
 
 	};

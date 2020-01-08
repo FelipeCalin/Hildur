@@ -5,6 +5,11 @@
 #include "Hildur/Events/MouseEvent.h"
 #include "Hildur/Events/KeyEvent.h"
 
+#include <glad/glad.h>
+
+#include <imgui.h>
+#include <imgui-SFML.h>
+
 
 namespace Hildur {
 
@@ -43,13 +48,25 @@ namespace Hildur {
 		HR_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
 
-		m_Window.create(sf::VideoMode(props.Width, props.Height), props.Title);
+		//TESTING
+		//---------------------------------------
+
+		//m_Window = CreateSFMLWindow(props.Width, props.Height, props.Title);
+
+		//sf::RenderWindow m_NewWindow;
+
+		m_Window = &m_NewWindow;
+		m_Window->create(sf::VideoMode(props.Width, props.Height), props.Title);
+
+		//m_NewWindow.create(sf::VideoMode(props.Width, props.Height), props.Title);
+
+		//---------------------------------------
 
 		SetVSync(true);
 
-		//Set SFML callbacks, though they might be automatic
+		int status = gladLoadGLLoader((GLADloadproc)wglGetProcAddress);
+		HR_CORE_ASSERT(status, "Falied to initialize Glad!");
 
-		
 
 	}
 
@@ -57,7 +74,7 @@ namespace Hildur {
 
 		HR_CORE_INFO("Y did u doo dis 2 me D':");
 
-		m_Window.close();
+		(*m_Window).close();
 
 	}
 
@@ -69,7 +86,7 @@ namespace Hildur {
 
 	void WindowsWindow::SetVSync(bool enabled) {
 
-		m_Window.setVerticalSyncEnabled(enabled);
+		(*m_Window).setVerticalSyncEnabled(enabled);
 		m_Data.VSync = enabled;
 
 	}
@@ -86,8 +103,11 @@ namespace Hildur {
 		sf::Window* window;
 		
 
-		while (m_Window.pollEvent(Event))
+		while ((*m_Window).pollEvent(Event))
 		{
+			//TESTING
+			//ImGui::SFML::ProcessEvent(Event);
+
 			
 			//Window closed
 			if (Event.type == sf::Event::Closed) {
@@ -180,17 +200,20 @@ namespace Hildur {
 
 
 			}
-			
+
+
 		}
-	}
-
-	void* WindowsWindow::GetWindow(/*sf::Window* window*/) {
-
-		//window = &m_Window;
-
-		return &m_Window;
 
 	}
 
+	sf::RenderWindow* WindowsWindow::CreateSFMLWindow(int width, int height, std::string name)
+	{
+
+		sf::RenderWindow window;
+		//window.create(sf::VideoMode(width, height), name);
+
+		return &window;
+
+	}
 
 }

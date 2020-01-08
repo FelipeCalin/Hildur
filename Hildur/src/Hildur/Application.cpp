@@ -1,14 +1,20 @@
 #include "hrpcheaders.h"
 #include "Application.h"
 
-
+#include <glad/glad.h>
 
 
 namespace Hildur {
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
+	Application* Application::s_Instance = nullptr;
+
+
 	Application::Application() {
+
+		HR_CORE_ASSERT(!s_Instance, "Application already exists")
+		s_Instance = this;
 
 		//m_Window = Window::Create();
 		m_Window = std::unique_ptr<Window>(Window::Create());
@@ -64,13 +70,14 @@ namespace Hildur {
 	void Application::PushLayer(Layer* layer) {
 
 		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
 
 	}
 
-	void Application::PopLayer(Layer* layer) {
+	void Application::PushOverlay(Layer* layer) {
 
-		m_LayerStack.PopLayer(layer);
-
+		m_LayerStack.PushOverlay(layer);
+		layer->OnAttach();
 	}
 
 }

@@ -12,6 +12,8 @@
 #include "Hildur/Layer.h"
 #include "Hildur/Log.h"
 
+#include "Hildur/ImGui/imGuiLayer.h"
+
 //-------EntryPoint-------------------
 
 #include "Hildur/EntryPoint.h"

@@ -14,9 +14,17 @@ workspace "Hildur"
 
   -- Include directories relative to root folder (solution directory)
   IncludeDir = {}
-  IncludeDir["SFML"] = "Hildur/vendor/SFML/include"
+IncludeDir["SFML"] = "Hildur/vendor/SFML/include"
+IncludeDir["Glad"] = "Hildur/vendor/Glad/include"
+IncludeDir["ImGui"] = "Hildur/vendor/imgui"
 
-  include "Hildur/vendor/SFML"
+  group "Dependencies"
+
+    include "Hildur/vendor/SFML"
+    include "Hildur/vendor/Glad"
+    include "Hildur/vendor/ImGui"
+
+  group ""
 
   project "Hildur"
     location "Hildur"
@@ -39,7 +47,12 @@ workspace "Hildur"
     {
       "%{prj.name}/vendor/spdlog/include",
       "%{prj.name}/src",
-      "%{IncludeDir.SFML}"
+      --"%{IncludeDir.SFML}",
+		  --"%{IncludeDir.Glad}",
+      --"%{IncludeDir.ImGui}"
+      "%{prj.name}/vendor/SFML/include",
+      "%{prj.name}/vendor/Glad/include",
+      "%{prj.name}/vendor/ImGui"
     }
   
     libdirs 
@@ -50,19 +63,22 @@ workspace "Hildur"
   
     links
     {
-      "sfml-audio",
+      "Glad",                   --Glad
+      "ImGui",                  --ImGui
+      "sfml-audio",             --SFML
       "sfml-graphics",
       "sfml-main",
       "sfml-network",
       "sfml-system",
       "sfml-window",
       "sfml-system",
-      "openal32",
+      "openal32",               --SFML Dependencies
       "flac",
       "vorbisenc",
       "vorbisfile",
       "vorbis",
-      "ogg"
+      "ogg",
+      "opengl32.lib"
     }
     
 	  defines
