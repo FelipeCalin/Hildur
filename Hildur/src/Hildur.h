@@ -12,6 +12,10 @@
 #include "Hildur/Layer.h"
 #include "Hildur/Log.h"
 
+#include "Hildur/Input.h"
+#include "Hildur/KeyCodes.h"
+#include "Hildur/MouseButtonCodes.h"
+
 #include "Hildur/ImGui/imGuiLayer.h"
 
 //-------EntryPoint-------------------

@@ -3,6 +3,8 @@
 
 #include "Core.h"
 
+#include "Input.h"
+
 #include <glad/glad.h>
 
 
@@ -35,7 +37,7 @@ namespace Hildur {
 		EventDispatcher distpatcher(e);
 		distpatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindoClose));
 
-		HR_CORE_TRACE("{0}", e);
+		//HR_CORE_TRACE("{0}", e);
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
 

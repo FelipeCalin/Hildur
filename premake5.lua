@@ -17,6 +17,7 @@ workspace "Hildur"
   IncludeDir["SFML"] = "Hildur/vendor/SFML/include"
   IncludeDir["Glad"] = "Hildur/vendor/Glad/include"
   IncludeDir["ImGui"] = "Hildur/vendor/imgui"
+  IncludeDir["GLM"] = "Hildur/vendor/GLM"
 
   group "Dependencies"
 
@@ -30,6 +31,7 @@ workspace "Hildur"
     location "Hildur"
     kind "SharedLib"
     language "C++"
+    staticruntime "off"
   
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -40,7 +42,9 @@ workspace "Hildur"
     files
     {
       "%{prj.name}/src/**.h",
-      "%{prj.name}/src/**.cpp"
+      "%{prj.name}/src/**.cpp",
+      "%{prj.name}/vendor/GLM/glm/**.hpp",
+      "%{prj.name}/vendor/GLM/glm/**.inl"
     }
   
     includedirs
@@ -49,10 +53,12 @@ workspace "Hildur"
       "%{prj.name}/src",
       --"%{IncludeDir.SFML}",
 		  --"%{IncludeDir.Glad}",
-      --"%{IncludeDir.ImGui}"
+      --"%{IncludeDir.ImGui}",
+      --"%{IncludeDir.GLM}"
       "%{prj.name}/vendor/SFML/include",
       "%{prj.name}/vendor/Glad/include",
-      "%{prj.name}/vendor/ImGui"
+      "%{prj.name}/vendor/ImGui",
+      "%{prj.name}/vendor/GLM"
     }
   
     libdirs 
@@ -88,7 +94,6 @@ workspace "Hildur"
 
     filter "system:windows"
       cppdialect "C++17"
-      staticruntime "On"
       systemversion "latest"
 
       defines
@@ -99,22 +104,22 @@ workspace "Hildur"
 
       postbuildcommands
       {
-        ("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
+        ("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
       }
 
     filter "configurations:Debug"
       defines "HR_DEBUG"
-      buildoptions "/MDd"
+      runtime "Debug"
       symbols "On"
 
     filter "configurations:Release"
       defines "HR_RELEASE"
-      buildoptions "/MD"
+      runtime "Release"
       optimize "On"
 
     filter "configurations:Dist"
       defines "HR_DIST"
-      buildoptions "/MD"
+      runtime "Release"
       optimize "On"
 
 
@@ -138,7 +143,9 @@ workspace "Hildur"
     {
       "Hildur/vendor/spdlog/include",
       "Hildur/src",
-      "%{IncludeDir.SFML}"
+      "%{IncludeDir.SFML}",
+      --"%{IncludeDir.GLM}"
+      "Hildur/vendor/GLM"
     }
 
     links

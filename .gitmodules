@@ -8,3 +8,6 @@
 [submodule "Hildur/vendor/ImGui"]
 	path = Hildur/vendor/ImGui
 	url = https://github.com/FelipeCarlin/imgui.git
+[submodule "Hildur/vendor/GLM"]
+	path = Hildur/vendor/GLM
+	url = https://github.com/g-truc/glm.git
