@@ -14,9 +14,9 @@ workspace "Hildur"
 
   -- Include directories relative to root folder (solution directory)
   IncludeDir = {}
-IncludeDir["SFML"] = "Hildur/vendor/SFML/include"
-IncludeDir["Glad"] = "Hildur/vendor/Glad/include"
-IncludeDir["ImGui"] = "Hildur/vendor/imgui"
+  IncludeDir["SFML"] = "Hildur/vendor/SFML/include"
+  IncludeDir["Glad"] = "Hildur/vendor/Glad/include"
+  IncludeDir["ImGui"] = "Hildur/vendor/imgui"
 
   group "Dependencies"
 
@@ -137,7 +137,8 @@ IncludeDir["ImGui"] = "Hildur/vendor/imgui"
     includedirs
     {
       "Hildur/vendor/spdlog/include",
-      "Hildur/src"
+      "Hildur/src",
+      "%{IncludeDir.SFML}"
     }
 
     links

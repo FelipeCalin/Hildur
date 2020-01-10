@@ -31,10 +31,6 @@ namespace Hildur {
 		KeyPressedEvent(int keycode, int repeatCount)
 			: KeyEvent(keycode), m_RepeatCount(repeatCount) {}
 		
-		/*
-		KeyPressedEvent(int keycode)
-			: KeyEvent(keycode), m_RepeatCount(0) {}
-		*/
 
 		inline int GetRepeatCount() const { return m_RepeatCount; }
 
@@ -68,6 +64,26 @@ namespace Hildur {
 		}
 
 		EVENT_CLASS_TYPE(KeyReleased)
+
+	};
+
+	class HILDUR_API KeyTypedEvent : public KeyEvent {
+
+	public:
+
+		KeyTypedEvent(unsigned int keycode)
+			: KeyEvent(keycode) {}
+
+
+		std::string ToString() const override {
+
+			std::stringstream ss;
+			ss << "KeyTypedEvent: " << m_KeyCode;
+			return ss.str();
+
+		}
+
+		EVENT_CLASS_TYPE(KeyTyped)
 
 	};
 

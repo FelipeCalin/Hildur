@@ -33,13 +33,9 @@ namespace Hildur {
 		virtual void Init(const WindowProps& props);
 		virtual void Shutdown();
 
-		sf::RenderWindow* CreateSFMLWindow(int width, int height, std::string name);
-
 		void ProcessEvents();
 
-
 	private:
-
 
 		struct WindowData {
 
@@ -57,7 +53,6 @@ namespace Hildur {
 		sf::RenderWindow* m_Window;
 
 		sf::RenderWindow m_NewWindow;
-
 
 	};
 

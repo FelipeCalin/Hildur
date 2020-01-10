@@ -16,12 +16,10 @@ namespace Hildur {
 
 	static bool s_SFMLInitialized = false;
 
-	//sf::Event event;
 	int verticalScroll = 0, horizontalScroll = 0;
-
 	int lastKeyCode = 0, isTheSame = 0;
 
-
+	short width, height;
 
 	Window* Window::Create(const WindowProps& props) {
 		return new WindowsWindow(props);
@@ -47,26 +45,16 @@ namespace Hildur {
 
 		HR_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
-
-		//TESTING
-		//---------------------------------------
-
-		//m_Window = CreateSFMLWindow(props.Width, props.Height, props.Title);
-
-		//sf::RenderWindow m_NewWindow;
-
 		m_Window = &m_NewWindow;
 		m_Window->create(sf::VideoMode(props.Width, props.Height), props.Title);
 
-		//m_NewWindow.create(sf::VideoMode(props.Width, props.Height), props.Title);
-
-		//---------------------------------------
-
 		SetVSync(true);
+
+		width = props.Width;
+		height = props.Height;
 
 		int status = gladLoadGLLoader((GLADloadproc)wglGetProcAddress);
 		HR_CORE_ASSERT(status, "Falied to initialize Glad!");
-
 
 	}
 
@@ -82,6 +70,8 @@ namespace Hildur {
 
 		ProcessEvents();
 
+		width = m_Window->getSize().x;
+		height = m_Window->getSize().y;
 	}
 
 	void WindowsWindow::SetVSync(bool enabled) {
@@ -102,12 +92,9 @@ namespace Hildur {
 		sf::Event Event;
 		sf::Window* window;
 		
-
+		
 		while ((*m_Window).pollEvent(Event))
 		{
-			//TESTING
-			//ImGui::SFML::ProcessEvent(Event);
-
 			
 			//Window closed
 			if (Event.type == sf::Event::Closed) {
@@ -115,26 +102,19 @@ namespace Hildur {
 				WindowCloseEvent event;
 				m_Data.EventCallback(event);
 
-				//Shutdown();
-
 			}
 
 			//Window resized
 			if (Event.type == sf::Event::Resized) {
 
-
-				//WindowData& data = *(WindowData*)GetWindow();
 				WindowResizeEvent event(Event.size.width, Event.size.height);
 				m_Data.EventCallback(event);
 				
-
 			}
 
 			//Key Events
 			if (Event.type == sf::Event::KeyPressed) {
 
-
-				//WindowData& data = *(WindowData*)GetWindow(window);
 				KeyPressedEvent event(Event.key.code, isTheSame);
 				m_Data.EventCallback(event);
 			
@@ -151,24 +131,25 @@ namespace Hildur {
 
 			}
 
+			if (Event.type == sf::Event::TextEntered) {
+
+				KeyTypedEvent event(Event.text.unicode);
+				m_Data.EventCallback(event);
+
+			}
+
 			//Mouse Events
 			if (Event.type == sf::Event::MouseButtonPressed) {
 
-
-				//WindowData& data = *(WindowData*)GetWindow(window);
 				MouseButtonPressedEvent event(Event.key.code);
 				m_Data.EventCallback(event);
-
 
 			}
 
 			if (Event.type == sf::Event::MouseButtonReleased) {
 
-
-				//WindowData& data = *(WindowData*)GetWindow(window);
 				MouseButtonReleasedEvent event(Event.key.code);
 				m_Data.EventCallback(event);
-
 
 			}
 
@@ -184,7 +165,6 @@ namespace Hildur {
 					verticalScroll = 0;
 				}
 
-				//WindowData& data = *(WindowData*)GetWindow(window);
 				MouseScrolledEvent event(horizontalScroll, verticalScroll);
 				m_Data.EventCallback(event);
 
@@ -193,27 +173,15 @@ namespace Hildur {
 
 			if (Event.type == sf::Event::MouseMoved) {
 
-
-				//WindowData& data = *(WindowData*)GetWindow(window);
 				MouseMovedEvent event(Event.mouseMove.x, Event.mouseMove.y);
 				m_Data.EventCallback(event);
 
-
 			}
 
-
 		}
+		
 
 	}
 
-	sf::RenderWindow* WindowsWindow::CreateSFMLWindow(int width, int height, std::string name)
-	{
-
-		sf::RenderWindow window;
-		//window.create(sf::VideoMode(width, height), name);
-
-		return &window;
-
-	}
 
 }

@@ -1,6 +1,8 @@
 #include "hrpcheaders.h"
 #include "Application.h"
 
+#include "Core.h"
+
 #include <glad/glad.h>
 
 

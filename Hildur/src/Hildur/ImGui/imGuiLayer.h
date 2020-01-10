@@ -6,8 +6,8 @@
 #include "Hildur/Events/KeyEvent.h"
 #include "Hildur/Events/MouseEvent.h"
 
-#include <SFML/Window.hpp>
-#include <SFML/Graphics/RenderWindow.hpp>
+//#include <SFML/Window.hpp>
+#include "C:\Dev\C++\Hildur\Hildur\vendor\SFML\include\SFML\Graphics.hpp"
 
 
 namespace Hildur {
@@ -35,7 +35,7 @@ namespace Hildur {
 		bool OnMouseScrolledEvent(MouseScrolledEvent& e);
 		bool OnKeyPressedEvent(KeyPressedEvent& e);
 		bool OnKeyReleasedEvent(KeyReleasedEvent& e);
-		//bool OnkeyTypedEvent(KeyTypedEvent& e);
+		bool OnKeyTypedEvent(KeyTypedEvent& e);
 		bool OnWindowResizedEvent(WindowResizeEvent& e);
 
 	private:
