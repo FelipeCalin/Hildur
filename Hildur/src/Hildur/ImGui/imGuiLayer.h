@@ -20,15 +20,19 @@ namespace Hildur {
 		ImGuiLayer();
 		~ImGuiLayer();
 
-		void OnAttach();
-		void OnDettach();
-		void OnUpdate();
-		void OnEvent(Event& event);
+		virtual void OnAttach() override;
+		virtual void OnDetach() override;
+		virtual void OnImGuiRender() override;
+		virtual void OnEvent(Event& event) override;
+
+		void Begin();
+		void End();
+		
 
 		sf::RenderWindow& GetReference();
 
 	private:
-
+		
 		bool OnMouseButtonPressedEvent(MouseButtonPressedEvent& e);
 		bool OnMouseButtonReleasedEvent(MouseButtonReleasedEvent& e);
 		bool OnMouseMovedEvent(MouseMovedEvent& e);
@@ -38,7 +42,6 @@ namespace Hildur {
 		bool OnKeyTypedEvent(KeyTypedEvent& e);
 		bool OnWindowResizedEvent(WindowResizeEvent& e);
 
-	private:
 
 		float m_Time = 0.0f;
 

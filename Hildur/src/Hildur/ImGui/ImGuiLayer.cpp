@@ -7,7 +7,8 @@
 #include "imgui-SFML.h"
 #include "imgui.h"
 
-#include "Platform/OpenGL/ImGuiOpenGLRenderer.h"
+#define IMGUI_IMPL_API
+#include "examples/imgui_impl_opengl3.h"
 
 #include "Hildur/Application.h"
 
@@ -18,7 +19,6 @@
 namespace Hildur {
 
 	sf::Clock deltaClock;
-	sf::Time deltaTime;
 	sf::Color bgColor;
 	
 	
@@ -38,42 +38,92 @@ namespace Hildur {
 		sf::RenderWindow& m_Window = GetReference();
 
 		ImGui::SFML::Init(m_Window);
+		//bool GLStatus = ImGui_ImplOpenGL3_Init();
+		//HR_ASSERT(GLStatus, "Couldn't initialize Imgui OpenGL :(")
+
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
+		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
+
+		ImGui::StyleColorsDark();
+		//ImGui::StyleColorsClassic();
+
+		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+		ImGuiStyle& style = ImGui::GetStyle();
+
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			style.WindowRounding = 0.0f;
+			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+		}
 
 	}
 
-	void ImGuiLayer::OnDettach() {
+	void ImGuiLayer::OnDetach() {
 
-		ImGui::GetIO().Fonts->TexID = (ImTextureID)NULL;
+		ImGui::SFML::Shutdown();
 
 	}
 
-	void ImGuiLayer::OnUpdate() {
+	void ImGuiLayer::Begin() {
+
+		ImGuiIO& io = ImGui::GetIO();
+		sf::RenderWindow& m_Window = GetReference();
+		
+
+		/*sf::Event event;
+		while (m_Window.pollEvent(event)) {
+			ImGui::SFML::ProcessEvent(event);
+
+		}*/
+
+		//ImGui::SFML::Update(m_Window, deltaClock.restart());
+
+		//ImGui_ImplOpenGL3_NewFrame();
+		ImGui::NewFrame();
+
+
+	}
+
+	void ImGuiLayer::End() {
+
+		ImGuiIO& io = ImGui::GetIO();
+		sf::RenderWindow& m_Window = GetReference();
+
+		//ImGui::EndFrame();
+		io.DisplaySize = m_Window.getSize();
+	
+
+		//Rendering
+		m_Window.clear(bgColor); // fill background with color
+		ImGui::SFML::Render(m_Window);
+		m_Window.display();
+
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+
+			//sf::Window* backup_current_context = sf::Context
+			ImGui::UpdatePlatformWindows();
+			ImGui::RenderPlatformWindowsDefault();
+
+		}
+		
+
+	}
+
+	void ImGuiLayer::OnImGuiRender() {
 
 		sf::RenderWindow& m_Window = GetReference();
 		ImGuiIO& io = ImGui::GetIO();
 
-		io.DisplaySize = m_Window.getSize();
-
-		ImGui::NewFrame();
 
 		static bool ShowDemo = true;
 		ImGui::ShowDemoWindow(&ShowDemo);
 
-	    /*
-		ImGui::NewFrame();
-
-		ImGui::Begin("Demo window");
-		ImGui::Button("Hello!");
-		ImGui::Spacing();
-		ImGui::InputText("Input", InputBuf, IM_ARRAYSIZE(InputBuf), ImGuiInputTextFlags_EnterReturnsTrue );
-		ImGui::End();
-		*/
-
-
-		m_Window.clear(bgColor); // fill background with color
-		ImGui::SFML::Render(m_Window);
-
-		m_Window.display();
     }
 
 

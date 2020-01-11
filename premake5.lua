@@ -145,7 +145,8 @@ workspace "Hildur"
       "Hildur/src",
       "%{IncludeDir.SFML}",
       --"%{IncludeDir.GLM}"
-      "Hildur/vendor/GLM"
+      "Hildur/vendor/GLM",
+      "Hildur/vendor/ImGui"
     }
 
     links

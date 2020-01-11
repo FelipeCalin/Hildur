@@ -15,7 +15,8 @@ namespace Hildur {
 		virtual ~Layer();
 
 		virtual void OnAttach() {}
-		virtual void OnDettach() {}
+		virtual void OnDetach() {}
+		virtual void OnImGuiRender() {}
 		virtual void OnUpdate() {}
 		virtual void OnEvent(Event& event) {}
 

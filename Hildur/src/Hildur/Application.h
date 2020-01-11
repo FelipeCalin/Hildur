@@ -7,6 +7,8 @@
 #include "Hildur/LayerStack.h"
 #include "Hildur/Events/ApplicationEvent.h"
 
+#include "Hildur/ImGui/imGuiLayer.h"
+
 
 
 namespace Hildur {
@@ -33,6 +35,7 @@ namespace Hildur {
 
 
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 
