@@ -3,39 +3,52 @@
 
 #include "Hildur/Application.h"
 
-#include <SFML/Window.hpp>
-
+#include <GLFW/glfw3.h>
 
 namespace Hildur {
 
+
 	Input* Input::s_Instance = new WindowsInput();
 
+	bool WindowsInput::IsKeyPressedImpl(int keycode) {
 
-	bool WindowsInput::IsKeyPressedImpl(int keycode)
-	{
-		sf::Keyboard::Key keyboard = (sf::Keyboard::Key)keycode;
-		return sf::Keyboard::isKeyPressed(keyboard);
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		auto state = glfwGetKey(window, keycode);
+		return state == GLFW_PRESS || state == GLFW_REPEAT;
+
 	}
 
-	bool WindowsInput::IsMouseButtonPressedImpl(int button)
-	{
-		sf::Mouse::Button mouse = (sf::Mouse::Button)button;
-		return sf::Mouse::isButtonPressed(mouse);
+	bool WindowsInput::IsMouseButtonPressedImpl(int button) {
+
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		auto state = glfwGetMouseButton(window, button);
+		return state == GLFW_PRESS;
+
 	}
 
-	std::pair<float, float> WindowsInput::GetMousePositionImpl()
-	{
-		return { sf::Mouse::getPosition().x, sf::Mouse::getPosition().y };
+	std::pair<float, float> WindowsInput::GetMousePositionImpl() {
+
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		double xpos, ypos;
+		glfwGetCursorPos(window, &xpos, &ypos);
+
+		return { (float)xpos, (float)ypos };
+
 	}
 
-	float WindowsInput::GetMouseXImpl()
-	{
-		return sf::Mouse::getPosition().x;
+	float WindowsInput::GetMouseXImpl() {
+
+		auto [x, y] = GetMousePositionImpl();
+		return x;
+
 	}
 
-	float WindowsInput::GetMouseYImpl()
-	{
-		return sf::Mouse::getPosition().y;
+	float WindowsInput::GetMouseYImpl() {
+
+		auto [x, y] = GetMousePositionImpl();
+		return y;
+
 	}
+
 
 }

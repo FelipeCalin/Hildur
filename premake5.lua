@@ -1,180 +1,144 @@
 workspace "Hildur"
-  architecture "x64"
+	architecture "x64"
+	startproject "Sandbox"
 
-  startproject "Sandbox"
+	configurations
+	{
+		"Debug",
+		"Release",
+		"Dist"
+	}
 
-  configurations
-  {
-  "Debug",
-  "Release",
-  "Dist"
-  }
+outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
-  outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+-- Include directories relative to root folder (solution directory)
+IncludeDir = {}
+IncludeDir["GLFW"] = "Hildur/vendor/GLFW/include"
+IncludeDir["Glad"] = "Hildur/vendor/Glad/include"
+IncludeDir["ImGui"] = "Hildur/vendor/imgui"
+IncludeDir["glm"] = "Hildur/vendor/glm"
 
-  -- Include directories relative to root folder (solution directory)
-  IncludeDir = {}
-  IncludeDir["SFML"] = "Hildur/vendor/SFML/include"
-  IncludeDir["Glad"] = "Hildur/vendor/Glad/include"
-  IncludeDir["ImGui"] = "Hildur/vendor/imgui"
-  IncludeDir["GLM"] = "Hildur/vendor/GLM"
+include "Hildur/vendor/GLFW"
+include "Hildur/vendor/Glad"
+include "Hildur/vendor/imgui"
 
-  group "Dependencies"
+project "Hildur"
+	location "Hildur"
+	kind "StaticLib"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
 
-    include "Hildur/vendor/SFML"
-    include "Hildur/vendor/Glad"
-    include "Hildur/vendor/ImGui"
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-  group ""
+	pchheader "hrpcheaders.h"
+	pchsource "Hildur/src/hrpcheaders.cpp"
 
-  project "Hildur"
-    location "Hildur"
-    kind "SharedLib"
-    language "C++"
-    staticruntime "off"
-  
-    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-  
-    pchheader "hrpcheaders.h"
-    pchsource "Hildur/src/hrpcheaders.cpp"
-  
-    files
-    {
-      "%{prj.name}/src/**.h",
-      "%{prj.name}/src/**.cpp",
-      "%{prj.name}/vendor/GLM/glm/**.hpp",
-      "%{prj.name}/vendor/GLM/glm/**.inl"
-    }
-  
-    includedirs
-    {
-      "%{prj.name}/vendor/spdlog/include",
-      "%{prj.name}/src",
-      --"%{IncludeDir.SFML}",
-		  --"%{IncludeDir.Glad}",
-      --"%{IncludeDir.ImGui}",
-      --"%{IncludeDir.GLM}"
-      "%{prj.name}/vendor/SFML/include",
-      "%{prj.name}/vendor/Glad/include",
-      "%{prj.name}/vendor/ImGui",
-      "%{prj.name}/vendor/GLM"
-    }
-  
-    libdirs 
-    { 
-      "%{prj.name}/vendor/SFML/extlibs/bin/x64",
-      "%{prj.name}/vendor/SFML/extlibs/libs-msvc-universal/x64"
-    }
-  
-    links
-    {
-      "Glad",                   --Glad
-      "ImGui",                  --ImGui
-      "sfml-audio",             --SFML
-      "sfml-graphics",
-      "sfml-main",
-      "sfml-network",
-      "sfml-system",
-      "sfml-window",
-      "sfml-system",
-      "openal32",               --SFML Dependencies
-      "flac",
-      "vorbisenc",
-      "vorbisfile",
-      "vorbis",
-      "ogg",
-      "opengl32.lib"
-    }
-    
-	  defines
-	  {
-	  	"SFML_STATIC"
-	  }
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/glm/glm/**.hpp",
+		"%{prj.name}/vendor/glm/glm/**.inl",
+	}
 
-    filter "system:windows"
-      cppdialect "C++17"
-      systemversion "latest"
+	defines
+	{
+		"_CRT_SECURE_NO_WARNINGS"
+	}
 
-      defines
-      {
-        "HR_PLATFORM_WINDOWS",
-        "HR_BUILD_DLL"
-      }
+	includedirs
+	{
+		"%{prj.name}/src",
+		"%{prj.name}/vendor/spdlog/include",
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.glm}"
+	}
 
-      postbuildcommands
-      {
-        ("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
-      }
+	links 
+	{ 
+		"GLFW",
+		"Glad",
+		"ImGui",
+		"opengl32.lib"
+	}
 
-    filter "configurations:Debug"
-      defines "HR_DEBUG"
-      runtime "Debug"
-      symbols "On"
+	filter "system:windows"
+		systemversion "latest"
 
-    filter "configurations:Release"
-      defines "HR_RELEASE"
-      runtime "Release"
-      optimize "On"
+		defines
+		{
+			"HR_PLATFORM_WINDOWS",
+			"HR_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
+		}
 
-    filter "configurations:Dist"
-      defines "HR_DIST"
-      runtime "Release"
-      optimize "On"
+	filter "configurations:Debug"
+		defines "HR_DEBUG"
+		runtime "Debug"
+		symbols "on"
 
+	filter "configurations:Release"
+		defines "HR_RELEASE"
+		runtime "Release"
+		optimize "on"
 
--- Sandbox test project (placeholder for actual app)
+	filter "configurations:Dist"
+		defines "HR_DIST"
+		runtime "Release"
+		optimize "on"
 
- project "Sandbox"
-    location "Sandbox"
-    kind "ConsoleApp"
-    language "C++"
+project "Sandbox"
+	location "Sandbox"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
 
-    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-    files
-    {
-      "%{prj.name}/src/**.h",
-      "%{prj.name}/src/**.cpp"
-    }
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
 
-    includedirs
-    {
-      "Hildur/vendor/spdlog/include",
-      "Hildur/src",
-      "%{IncludeDir.SFML}",
-      --"%{IncludeDir.GLM}"
-      "Hildur/vendor/GLM",
-      "Hildur/vendor/ImGui"
-    }
+	includedirs
+	{
+		"Hildur/vendor/spdlog/include",
+		"Hildur/src",
+		"Hildur/vendor",
+		"%{IncludeDir.glm}"
+	}
 
-    links
-    {
-      "Hildur"
-    }
+	links
+	{
+		"Hildur"
+	}
 
-    filter "system:windows"
-      cppdialect "C++17"
-      staticruntime "On"
-      systemversion "latest"
+	filter "system:windows"
+		systemversion "latest"
 
-      defines
-      {
-        "HR_PLATFORM_WINDOWS"
-      }
+		defines
+		{
+			"HR_PLATFORM_WINDOWS"
+		}
 
-    filter "configurations:Debug"
-      defines "HR_DEBUG"
-      buildoptions "/MDd"
-      symbols "On"
+	filter "configurations:Debug"
+		defines "HR_DEBUG"
+		runtime "Debug"
+		symbols "on"
 
-    filter "configurations:Release"
-      defines "HR_RELEASE"
-      buildoptions "/MD"
-      optimize "On"
+	filter "configurations:Release"
+		defines "HR_RELEASE"
+		runtime "Release"
+		optimize "on"
 
-    filter "configurations:Dist"
-      defines "HR_DIST"
-      buildoptions "/MD"
-      optimize "On"
+	filter "configurations:Dist"
+		defines "HR_DIST"
+		runtime "Release"
+		optimize "on"

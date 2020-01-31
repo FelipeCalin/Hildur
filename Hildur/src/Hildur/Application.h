@@ -10,7 +10,6 @@
 #include "Hildur/ImGui/imGuiLayer.h"
 
 
-
 namespace Hildur {
 
 	class HILDUR_API Application
@@ -42,6 +41,8 @@ namespace Hildur {
 	private:
 
 		static Application* s_Instance;
+
+		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
 
 	};
 

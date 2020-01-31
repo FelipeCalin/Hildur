@@ -5,24 +5,23 @@
 #include "Hildur/Events/MouseEvent.h"
 #include "Hildur/Events/KeyEvent.h"
 
-#include <glad/glad.h>
-
-#include <imgui.h>
-#include <imgui-SFML.h>
-
+#include "Platform/OpenGL/OpenGLContext.h"
 
 namespace Hildur {
 
 
-	static bool s_SFMLInitialized = false;
+	static bool s_GLFWInitialized = false;
 
-	int verticalScroll = 0, horizontalScroll = 0;
-	int lastKeyCode = 0, isTheSame = 0;
+	static void GLFWErrorCallback(int error, const char* description) {
 
-	short width, height;
+		HR_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
+
+	}
 
 	Window* Window::Create(const WindowProps& props) {
+
 		return new WindowsWindow(props);
+
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props) {
@@ -45,38 +44,149 @@ namespace Hildur {
 
 		HR_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
-		m_Window = &m_NewWindow;
-		m_Window->create(sf::VideoMode(props.Width, props.Height), props.Title);
+		if (!s_GLFWInitialized) {
 
+			// TODO: glfwTerminate on system shutdown
+			int success = glfwInit();
+			HR_CORE_ASSERT(success, "Could not intialize GLFW!");
+			glfwSetErrorCallback(GLFWErrorCallback);
+			s_GLFWInitialized = true;
+
+		}
+
+		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+
+		m_Context = new OpenGLContext(m_Window);
+		m_Context->Init();
+
+		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 
-		width = props.Width;
-		height = props.Height;
+		// Set GLFW callbacks
+		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
+			{
 
-		int status = gladLoadGLLoader((GLADloadproc)wglGetProcAddress);
-		HR_CORE_ASSERT(status, "Falied to initialize Glad!");
+				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+				data.Width = width;
+				data.Height = height;
 
+				WindowResizeEvent event(width, height);
+				data.EventCallback(event);
+
+			});
+
+		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
+			{
+
+				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+				WindowCloseEvent event;
+				data.EventCallback(event);
+
+			});
+
+		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+			{
+
+				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+				switch (action)
+				{
+				case GLFW_PRESS:
+				{
+					KeyPressedEvent event(key, 0);
+					data.EventCallback(event);
+					break;
+				}
+				case GLFW_RELEASE:
+				{
+					KeyReleasedEvent event(key);
+					data.EventCallback(event);
+					break;
+				}
+				case GLFW_REPEAT:
+				{
+					KeyPressedEvent event(key, 1);
+					data.EventCallback(event);
+					break;
+				}
+				}
+
+			});
+
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
+			{
+
+				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+				KeyTypedEvent event(keycode);
+				data.EventCallback(event);
+
+			});
+
+		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
+			{
+
+				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+				switch (action)
+				{
+				case GLFW_PRESS:
+				{
+					MouseButtonPressedEvent event(button);
+					data.EventCallback(event);
+					break;
+				}
+				case GLFW_RELEASE:
+				{
+					MouseButtonReleasedEvent event(button);
+					data.EventCallback(event);
+					break;
+				}
+				}
+
+			});
+
+		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset)
+			{
+
+				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+				MouseScrolledEvent event((float)xOffset, (float)yOffset);
+				data.EventCallback(event);
+
+			});
+
+		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPos, double yPos)
+			{
+
+				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+				MouseMovedEvent event((float)xPos, (float)yPos);
+				data.EventCallback(event);
+
+			});
 	}
 
 	void WindowsWindow::Shutdown() {
 
-		HR_CORE_INFO("Y did u doo dis 2 me D':");
-
-		(*m_Window).close();
+		glfwDestroyWindow(m_Window);
 
 	}
 
 	void WindowsWindow::OnUpdate() {
 
-		ProcessEvents();
+		glfwPollEvents();
+		m_Context->SwapBuffers();
 
-		width = m_Window->getSize().x;
-		height = m_Window->getSize().y;
 	}
 
 	void WindowsWindow::SetVSync(bool enabled) {
 
-		(*m_Window).setVerticalSyncEnabled(enabled);
+		if (enabled)
+			glfwSwapInterval(1);
+		else
+			glfwSwapInterval(0);
+
 		m_Data.VSync = enabled;
 
 	}
@@ -84,102 +194,6 @@ namespace Hildur {
 	bool WindowsWindow::IsVSync() const {
 
 		return m_Data.VSync;
-
-	}
-
-	void WindowsWindow::ProcessEvents()
-	{
-		sf::Event Event;
-		sf::Window* window;
-		
-		
-		while ((*m_Window).pollEvent(Event))
-		{
-			
-			//Window closed
-			if (Event.type == sf::Event::Closed) {
-
-				WindowCloseEvent event;
-				m_Data.EventCallback(event);
-
-			}
-
-			//Window resized
-			if (Event.type == sf::Event::Resized) {
-
-				WindowResizeEvent event(Event.size.width, Event.size.height);
-				m_Data.EventCallback(event);
-				
-			}
-
-			//Key Events
-			if (Event.type == sf::Event::KeyPressed) {
-
-				KeyPressedEvent event(Event.key.code, isTheSame);
-				m_Data.EventCallback(event);
-			
-				isTheSame = 1;
-
-			}
-
-			if (Event.type == sf::Event::KeyReleased) {
-
-				KeyReleasedEvent event(Event.key.code);
-				m_Data.EventCallback(event);
-
-				isTheSame = 0;
-
-			}
-
-			if (Event.type == sf::Event::TextEntered) {
-
-				KeyTypedEvent event(Event.text.unicode);
-				m_Data.EventCallback(event);
-
-			}
-
-			//Mouse Events
-			if (Event.type == sf::Event::MouseButtonPressed) {
-
-				MouseButtonPressedEvent event(Event.key.code);
-				m_Data.EventCallback(event);
-
-			}
-
-			if (Event.type == sf::Event::MouseButtonReleased) {
-
-				MouseButtonReleasedEvent event(Event.key.code);
-				m_Data.EventCallback(event);
-
-			}
-
-			if (Event.type == sf::Event::MouseWheelScrolled) {
-
-				
-				if (Event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
-					verticalScroll = Event.mouseWheelScroll.delta;
-					horizontalScroll = 0;
-				}
-				if (Event.mouseWheelScroll.wheel == sf::Mouse::HorizontalWheel) {
-					horizontalScroll = Event.mouseWheelScroll.delta;
-					verticalScroll = 0;
-				}
-
-				MouseScrolledEvent event(horizontalScroll, verticalScroll);
-				m_Data.EventCallback(event);
-
-
-			}
-
-			if (Event.type == sf::Event::MouseMoved) {
-
-				MouseMovedEvent event(Event.mouseMove.x, Event.mouseMove.y);
-				m_Data.EventCallback(event);
-
-			}
-
-		}
-		
 
 	}
 

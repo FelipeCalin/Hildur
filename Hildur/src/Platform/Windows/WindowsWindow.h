@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Hildur/Window.h"
+#include "Hildur/Renderer/GraphicsContext.h"
 
-#include <SFML/Window.hpp>
-#include <SFML/Graphics/RenderWindow.hpp>
+#include <GLFW/glfw3.h>
 
 namespace Hildur {
 
@@ -15,16 +15,15 @@ namespace Hildur {
 		WindowsWindow(const WindowProps& props);
 		virtual ~WindowsWindow();
 
-		void OnUpdate();
+		void OnUpdate() override;
 
-		inline unsigned int GetWidth() const override { return m_Data.Width; };
-		inline unsigned int GetHeight() const override { return m_Data.Height; };
+		inline unsigned int GetWidth() const override { return m_Data.Width; }
+		inline unsigned int GetHeight() const override { return m_Data.Height; }
 
-		//Atributes
-		inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; };
+		// Window attributes
+		inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override;
-	
 
 		inline virtual void* GetNativeWindow() const { return m_Window; }
 
@@ -33,26 +32,21 @@ namespace Hildur {
 		virtual void Init(const WindowProps& props);
 		virtual void Shutdown();
 
-		void ProcessEvents();
-
 	private:
+
+		GLFWwindow* m_Window;
+		GraphicsContext* m_Context;
 
 		struct WindowData {
 
 			std::string Title;
-			unsigned int Width;
-			unsigned int Height;
+			unsigned int Width, Height;
 			bool VSync;
 
 			EventCallbackFn EventCallback;
-
 		};
 
 		WindowData m_Data;
-
-		sf::RenderWindow* m_Window;
-
-		sf::RenderWindow m_NewWindow;
 
 	};
 

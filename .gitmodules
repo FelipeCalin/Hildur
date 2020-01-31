@@ -1,13 +1,12 @@
 [submodule "Hildur/vendor/spdlog"]
 	path = Hildur/vendor/spdlog
 	url = https://github.com/gabime/spdlog
-[submodule "Hildur/vendor/SFML"]
-	path = Hildur/vendor/SFML
-	url = https://github.com/FelipeCalin/SFML.git
-
 [submodule "Hildur/vendor/ImGui"]
 	path = Hildur/vendor/ImGui
 	url = https://github.com/FelipeCarlin/imgui.git
 [submodule "Hildur/vendor/GLM"]
 	path = Hildur/vendor/GLM
 	url = https://github.com/g-truc/glm.git
+[submodule "Hildur/vendor/GLFW"]
+	path = Hildur/vendor/GLFW
+	url = https://github.com/FelipeCarlin/glfw.git

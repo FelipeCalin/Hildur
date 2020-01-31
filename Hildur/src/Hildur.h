@@ -1,9 +1,7 @@
 #pragma once
 
-#include <stdio.h>
 
 //For use of applications using the engine
-
 
 
 //--------Core Files------------------

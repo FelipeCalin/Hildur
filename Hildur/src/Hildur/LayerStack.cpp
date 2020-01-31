@@ -8,7 +8,6 @@ namespace Hildur {
 	LayerStack::LayerStack() {
 
 
-
 	}
 
 	LayerStack::~LayerStack() {
