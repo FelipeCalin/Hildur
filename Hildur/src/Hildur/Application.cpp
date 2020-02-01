@@ -2,7 +2,6 @@
 #include "Application.h"
 
 #include "Core.h"
-
 #include "Input.h"
 
 #include <glad/glad.h>
@@ -13,6 +12,27 @@ namespace Hildur {
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
 	Application* Application::s_Instance = nullptr;
+
+	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
+	{
+		switch (type)
+		{
+		case Hildur::ShaderDataType::Float:    return GL_FLOAT;
+		case Hildur::ShaderDataType::Float2:   return GL_FLOAT;
+		case Hildur::ShaderDataType::Float3:   return GL_FLOAT;
+		case Hildur::ShaderDataType::Float4:   return GL_FLOAT;
+		case Hildur::ShaderDataType::Mat3:     return GL_FLOAT;
+		case Hildur::ShaderDataType::Mat4:     return GL_FLOAT;
+		case Hildur::ShaderDataType::Int:      return GL_INT;
+		case Hildur::ShaderDataType::Int2:     return GL_INT;
+		case Hildur::ShaderDataType::Int3:     return GL_INT;
+		case Hildur::ShaderDataType::Int4:     return GL_INT;
+		case Hildur::ShaderDataType::Bool:     return GL_BOOL;
+		}
+
+		HR_CORE_ASSERT(false, "Unknown ShaderDataType!");
+		return 0;
+	}
 
 
 	Application::Application() {
@@ -33,101 +53,90 @@ namespace Hildur {
 		glGenVertexArrays(1, &m_VertexArray);
 		glBindVertexArray(m_VertexArray);
 
-		glGenBuffers(1, &m_VertexBuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+		
 
-		float vertices[3 * 3] = {
+		float vertices[3 * 7] = {
 
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.0f,  0.5f, 0.0f
+			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+			 0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f
 
 		};
 
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
 
-		//Vertex Shader
+		BufferLayout layout = {
 
-		const char* vertexShaderSource = "#version 140 core\n"
-			"layout (location = 0) in vec3 aPos;\n"
-			"void main()\n"
-			"{\n"
-			"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-			"}\0";
+			{ ShaderDataType::Float3, "a_Pos" },
+			{ ShaderDataType::Float4, "a_Color" }
+
+		};
+
+		m_VertexBuffer->SetLayout(layout);
+
+		uint32_t index = 0;
+		for (const auto& element : m_VertexBuffer->GetLayout()) {
+
+			glEnableVertexAttribArray(index);
+			glVertexAttribPointer(index, 
+				element.GetComponentCount(), 
+				ShaderDataTypeToOpenGLBaseType(element.Type), 
+				element.Normalized ? GL_TRUE : GL_FALSE,
+				layout.GetStride(), 
+				(const void*) element.Offset);
+			index++;
+		}
+
+		//m_VertexBuffer->SetLayout(layout);
 		
-
-		unsigned int vertexShader;
-		vertexShader = glCreateShader(GL_VERTEX_SHADER);
-		glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-		glCompileShader(vertexShader);
-
-		int  success;
-		char infoLog[512];
-		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-
-		//HR_CORE_ASSERT(!success, "Shader failed to compile")
-		if (!success)
-		{
-			glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-			HR_ERROR("Error in compilation of shader: {0}", infoLog);
-		}
-
-
-		//Fragment Shader
-
-		const char* fragmentShaderSource = "#version 140 core\n"
-			"out vec4 FragColor\n"
-			"void main()\n"
-			"{\n"
-			"   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-			"}\0";
-
-		unsigned int fragmentShader;
-		fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-		glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-		glCompileShader(fragmentShader);
-
-
-		//Shader Program
-
-		unsigned int shaderProgram;
-		shaderProgram = glCreateProgram();
-
-		glAttachShader(shaderProgram, vertexShader);
-		glAttachShader(shaderProgram, fragmentShader);
-		glLinkProgram(shaderProgram);
-
-		glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-		if (!success) {
-			glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-			HR_ERROR("Error linking shader program: {0}", infoLog);
-		}
-
-		glUseProgram(shaderProgram);
-
-		glDeleteShader(vertexShader);
-		glDeleteShader(fragmentShader);
-
-		//End
-
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-		glEnableVertexAttribArray(0);
-
-		glGenBuffers(1, &m_IndexBuffer);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
-
-		unsigned int indices[3] = { 0, 1, 2 };
-
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+		uint32_t indices[3] = { 0, 1, 2 };
+		m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 
 		//TEST
 
-		glClearColor(0.2f, 0.2f, 0.2f, 1);
-		glClear(GL_COLOR_BUFFER_BIT);
+		std::string vertexSrc = R"(
 
-		glBindVertexArray(m_VertexArray);
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+			#version 140 core
+			#extension GL_ARB_explicit_attrib_location : require
+
+			layout(location = 0) in vec3 a_Pos;
+			layout(location = 1) in vec4 a_Color;
+
+			out vec3 v_Pos;
+			out vec4 v_Col;
+
+			void main() {
+
+			v_Pos = a_Pos;
+			v_Col = a_Color;
+			gl_Position = vec4(a_Pos, 1.0);
+
+			}
+
+		)";
+
+		std::string fragmentSrc = R"(
+
+			#version 140 core
+			#extension GL_ARB_explicit_attrib_location : require
+
+			layout(location = 0) out vec4 color;
+
+			in vec3 v_Pos;
+			in vec4 v_Col;
+
+			void main() {
+
+			color = vec4(v_Col);
+			//color = vec4(v_Pos * 0.5 + 0.5, 1.0);
+
+			}
+
+		)";
+
+		m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
+
 
 	}
 
@@ -161,8 +170,10 @@ namespace Hildur {
 			glClearColor(0.2f, 0.2f, 0.2f, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			m_Shader->Bind();
+
 			glBindVertexArray(m_VertexArray);
-			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
