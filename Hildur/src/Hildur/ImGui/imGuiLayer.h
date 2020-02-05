@@ -8,9 +8,11 @@
 
 namespace Hildur {
 
+
 	class HILDUR_API ImGuiLayer : public Layer
 	{
 	public:
+
 		ImGuiLayer();
 		~ImGuiLayer();
 
@@ -20,8 +22,10 @@ namespace Hildur {
 
 		void Begin();
 		void End();
+
 	private:
-		float m_Time = 0.0f;
+
 	};
+
 
 }

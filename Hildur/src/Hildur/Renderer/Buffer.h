@@ -79,7 +79,6 @@ namespace Hildur {
 	public:
 
 		BufferLayout() {};
-
 		BufferLayout(const std::initializer_list<BufferElement>& elements) 
 			:m_Elements(elements) {
 		
@@ -88,7 +87,7 @@ namespace Hildur {
 		};
 
 		inline uint32_t GetStride() const { return m_Stride; }
-		inline const std::vector<BufferElement>& GetElements() const { return m_Elements; };
+		inline const std::vector<BufferElement>& GetElements() const { return m_Elements; }
 
 		std::vector<BufferElement>::iterator begin() { return m_Elements.begin(); }
 		std::vector<BufferElement>::iterator end() { return m_Elements.end(); }
@@ -124,7 +123,6 @@ namespace Hildur {
 
 		virtual ~VertexBuffer() {}
 
-
 		virtual const BufferLayout& GetLayout() const = 0;
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 
@@ -140,7 +138,6 @@ namespace Hildur {
 	public:
 
 		virtual ~IndexBuffer() {}
-
 
 		virtual void Bind() const = 0;
 		virtual void UnBind() const = 0;

@@ -7,10 +7,9 @@
 #include "Hildur/LayerStack.h"
 #include "Hildur/Events/ApplicationEvent.h"
 
-#include "Hildur/ImGui/imGuiLayer.h"
+#include "Hildur/Core/Timestep.h"
 
-#include "Hildur/Renderer/Shader.h"
-#include "Hildur/Renderer/Buffer.h"
+#include "Hildur/ImGui/imGuiLayer.h"
 
 
 namespace Hildur {
@@ -35,20 +34,19 @@ namespace Hildur {
 
 		bool OnWindoClose(WindowCloseEvent& e);
 
+	private:
 
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 
+		float m_LastFrameTime = 0;
+
 	private:
 
 		static Application* s_Instance;
 
-		unsigned int m_VertexArray;
-		std::unique_ptr<Shader> m_Shader;
-		std::unique_ptr<VertexBuffer> m_VertexBuffer;
-		std::unique_ptr<IndexBuffer> m_IndexBuffer;
 	};
 
 	//To be defined in CLIENT

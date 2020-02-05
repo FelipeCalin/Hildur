@@ -2,6 +2,8 @@
 
 #include "Hildur/Core.h"
 #include "Hildur/Events/Event.h"
+#include "Hildur/Core/Timestep.h"
+
 
 namespace Hildur {
 
@@ -17,7 +19,7 @@ namespace Hildur {
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
 		virtual void OnImGuiRender() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(Timestep ts) {}
 		virtual void OnEvent(Event& event) {}
 
 		inline const std::string& GetName() const { return m_DebugName; }
