@@ -6,6 +6,7 @@ namespace Hildur {
 
 
 	RendererAPI::API RendererAPI::s_API = RendererAPI::API::OpenGL;
+	int RendererAPI::m_TargetID = 0;
 
 
 }

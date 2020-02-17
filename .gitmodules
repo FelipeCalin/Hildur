@@ -10,3 +10,6 @@
 [submodule "Hildur/vendor/GLFW"]
 	path = Hildur/vendor/GLFW
 	url = https://github.com/FelipeCarlin/glfw.git
+[submodule "Hildur/vendor/Assimp"]
+	path = Hildur/vendor/Assimp
+	url = https://github.com/assimp/assimp.git

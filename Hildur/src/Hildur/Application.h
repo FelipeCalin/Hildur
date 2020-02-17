@@ -32,7 +32,9 @@ namespace Hildur {
 
 	private:
 
-		bool OnWindoClose(WindowCloseEvent& e);
+		bool OnWindowClose(WindowCloseEvent& e);
+
+		void DockUpdate();
 
 	private:
 
@@ -42,6 +44,12 @@ namespace Hildur {
 		LayerStack m_LayerStack;
 
 		float m_LastFrameTime = 0;
+
+		//Test FBO
+
+		uint32_t fbo;
+		uint32_t texture;
+		uint32_t depthrenderbuffer;
 
 	private:
 

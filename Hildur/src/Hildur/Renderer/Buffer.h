@@ -148,5 +148,18 @@ namespace Hildur {
 
 	};
 
+	class FrameBufferObject {
+
+	public:
+
+		virtual ~FrameBufferObject() {}
+
+		virtual void Bind() const = 0;
+		virtual void UnBind() const = 0;
+
+
+
+	};
+
 
 }
