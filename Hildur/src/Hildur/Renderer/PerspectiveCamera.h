@@ -6,19 +6,19 @@
 namespace Hildur {
 
 
-	class OrthographicCamera {
+	class PerspectiveCamera {
 
 	public:
 
-		OrthographicCamera(float left, float right, float bottom, float top);
+		PerspectiveCamera(float fov, float aspectRatio, float nNear, float nFar);
 
-		void SetProjection(float left, float right, float bottom, float top);
+		void SetProjection(float fov, float aspectRatio, float nNear, float nFar);
 
 		const glm::vec3& GetPosition() const { return m_Position; }
 		void SetPosition(glm::vec3 position) { m_Position = position; RecalculateViewMatrix(); }
 
-		float GetRotation() const { return m_Rotation; }
-		void SetRotation(float rotation) { m_Rotation = rotation; RecalculateViewMatrix(); }
+		const glm::vec3& GetRotation() const { return m_Rotation; }
+		void SetRotation(glm::vec3 rotation) { m_Rotation = rotation; RecalculateViewMatrix(); }
 
 		const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
 		const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
@@ -34,10 +34,11 @@ namespace Hildur {
 		glm::mat4 m_ViewMatrix;
 		glm::mat4 m_ViewProjectionMatrix;
 
-		glm::vec3 m_Position = { 0.0, 0.0, 0.0 };
-		float m_Rotation = 0;
+		glm::vec3 m_Position = glm::vec3(0.0f);
+		glm::vec3 m_Rotation = glm::vec3(0.0f);
 
 	};
+
 
 
 }

@@ -12,7 +12,16 @@ namespace Hildur {
 		//:m_ProjectionMatrix(glm::perspective(1.57f, 16.0f / 9.0f, 0.1f, 100.0f)) {
 
 		m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
+
+		m_Position = { 0.0f, 0.0f, 0.0f };
 	
+	}
+
+	void OrthographicCamera::SetProjection(float left, float right, float bottom, float top) {
+
+		m_ProjectionMatrix = glm::ortho(left, right, bottom, top, -1.0f, 1.0f);
+		m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
+
 	}
 
 	void OrthographicCamera::RecalculateViewMatrix() {

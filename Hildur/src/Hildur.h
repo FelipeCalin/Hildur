@@ -16,6 +16,9 @@
 #include "Hildur/KeyCodes.h"
 #include "Hildur/MouseButtonCodes.h"
 
+#include "Hildur/OrthographicCameraController.h"
+#include "Hildur/PerspectiveCameraController.h"
+
 #include "Hildur/ImGui/imGuiLayer.h"
 
 //--------Scene Files------------------
@@ -33,8 +36,8 @@
 #include "Hildur/Renderer/Texture.h"
 #include "Hildur/Renderer/VertexArray.h"
 
-//#include "Hildur/Renderer/PerspectiveCamera.h"
 #include "Hildur/Renderer/OrthographicCamera.h"
+#include "Hildur/Renderer/PerspectiveCamera.h"
 
 #include "Hildur/Renderer/Primitives2D.h"
 

@@ -4,6 +4,7 @@
 #include "Hildur/Renderer/Shader.h"
 
 #include "Hildur/Renderer/OrthographicCamera.h"
+#include "Hildur/Renderer/PerspectiveCamera.h"
 
 
 namespace Hildur {
@@ -16,6 +17,7 @@ namespace Hildur {
 		static void Init();
 
 		static void BeginScene(OrthographicCamera& camera); //TODO: Add camera, light, environment arguments
+		static void BeginScene(PerspectiveCamera& camera); //TODO: Add camera, light, environment arguments
 		static void EndScene();
 
 		static void Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform = glm::mat4(1.0f));

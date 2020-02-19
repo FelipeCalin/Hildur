@@ -18,8 +18,8 @@ namespace Hildur {
 		static void SetCurrentSceneID(uint16_t ID) { s_CurrentSceneID = ID; }
 		static uint32_t GetCurrentSceneID() { return s_CurrentSceneID; }
 
-		static void SetCurrentScene(const Scene& ID) { s_CurrentScene = ID; }
-		static Scene GetCurrentScene() { return s_CurrentScene; }
+		static void SetCurrentScene(const Scene& scene);
+		static Scene& GetCurrentScene() { return s_CurrentScene; }
 
 		uint16_t GetID() { return ID; }
 

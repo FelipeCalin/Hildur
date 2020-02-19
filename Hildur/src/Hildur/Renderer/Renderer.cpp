@@ -24,6 +24,12 @@ namespace Hildur {
 
 	}
 
+	void Renderer::BeginScene(PerspectiveCamera& camera) {
+
+		m_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
+
+	}
+
 	void Renderer::EndScene() {
 
 

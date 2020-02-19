@@ -157,8 +157,6 @@ namespace Hildur {
 		virtual void Bind() const = 0;
 		virtual void UnBind() const = 0;
 
-
-
 	};
 
 

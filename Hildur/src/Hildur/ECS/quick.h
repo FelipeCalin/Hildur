@@ -24,4 +24,4 @@ namespace ECS {
     };
 
 }
-}  // namespace entityx
+}  // namespace Hildur

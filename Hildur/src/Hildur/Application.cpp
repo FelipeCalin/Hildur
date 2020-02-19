@@ -70,10 +70,12 @@ namespace Hildur {
 		glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
 
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-			HR_ASSERT(false, "Could not create FrameBuffer object");
+			HR_CORE_ASSERT(false, "Could not create FrameBuffer object");
 		} else {
-			HR_INFO("FrameBuffer object created");
+			HR_CORE_INFO("FrameBuffer object created");
 		}
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		
 		
 	}
@@ -127,9 +129,14 @@ namespace Hildur {
 			int width = ImGui::GetWindowContentRegionMax().x - ImGui::GetWindowContentRegionMin().x;
 			int height = ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y;
 
-			glViewport(0, 0, ImGui::GetWindowContentRegionMax().x - ImGui::GetWindowContentRegionMin().x, ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y);
+			glViewport(0, 0, width, height);
 
-			ImGui::Image((void*)(intptr_t)texture, ImVec2(width, height), ImVec2(0.0, 1.0), ImVec2(1.0, 0.0));
+			//ImGui::Image((void*)(intptr_t)texture, ImVec2(width, height), ImVec2(0.0, 1.0), ImVec2(1.0, 0.0));
+			ImGui::GetWindowDrawList()->AddImage(
+				(void*)(intptr_t)texture,
+				ImVec2(ImGui::GetCursorScreenPos()),
+				ImVec2(ImGui::GetCursorScreenPos().x + width,
+					ImGui::GetCursorScreenPos().y + height), ImVec2((1.0f / 1960.0f) * width, 0), ImVec2(0, (1.0f / 1080.0f) * height));
 
 			ImGui::End();
 

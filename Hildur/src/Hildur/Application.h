@@ -30,6 +30,8 @@ namespace Hildur {
 		inline Window& GetWindow() { return *m_Window; }
 		inline static Application& Get() { return *s_Instance; }
 
+		//inline static Timestep& GetTimestep() {return }
+
 	private:
 
 		bool OnWindowClose(WindowCloseEvent& e);
