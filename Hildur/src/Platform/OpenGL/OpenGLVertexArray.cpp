@@ -45,7 +45,7 @@ namespace Hildur {
 
 	}
 
-	void OpenGLVertexArray::UnBind() const {
+	void OpenGLVertexArray::Unbind() const {
 
 		glBindVertexArray(0);
 

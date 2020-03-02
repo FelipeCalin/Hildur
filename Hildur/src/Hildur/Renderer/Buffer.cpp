@@ -9,7 +9,7 @@
 namespace Hildur {
 
 
-	VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size) {
+	VertexBuffer* VertexBuffer::Create(Ref<std::vector<Vertex>> vertices, uint32_t size) {
 
 		switch (Renderer::GetAPI()) {
 			
@@ -24,7 +24,7 @@ namespace Hildur {
 
 	}
 
-	IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t size) {
+	IndexBuffer* IndexBuffer::Create(Ref<std::vector<uint32_t>> indices, uint32_t size) {
 
 		switch (Renderer::GetAPI()) {
 

@@ -4,8 +4,8 @@
 
 layout(location = 0) in vec3 a_Pos;
 
-uniform mat4 u_ViewProjection;
-uniform mat4 u_Transform;
+uniform mat4 u_ViewProjectionMat;
+uniform mat4 u_ModelMat;
 
 uniform vec3 u_LightColor;
 
@@ -16,10 +16,10 @@ void main()
 {
 
 	//Variables for fragment shader
-	v_Pos = vec4(u_Transform * vec4(a_Pos, 1.0)).xyz;
+	v_Pos = vec4(u_ModelMat * vec4(a_Pos, 1.0)).xyz;
 
 	//vertex shader
-	gl_Position = u_ViewProjection * u_Transform * vec4(a_Pos, 1.0);
+	gl_Position = u_ViewProjectionMat * u_ModelMat * vec4(a_Pos, 1.0);
 
 }
 

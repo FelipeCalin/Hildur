@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Hildur/Renderer/Buffer.h"
+#include "Hildur/Renderer/Mesh.h"
 
 
 namespace Hildur {
@@ -11,7 +12,7 @@ namespace Hildur {
 
 	public:
 
-		OpenGLVertexBuffer(float* vertices, uint32_t size);
+		OpenGLVertexBuffer(Ref<std::vector<Vertex>> vertices, uint32_t size);
 		virtual ~OpenGLVertexBuffer();
 
 
@@ -35,7 +36,7 @@ namespace Hildur {
 
 	public:
 
-		OpenGLIndexBuffer(uint32_t* indices, uint32_t count);
+		OpenGLIndexBuffer(Ref<std::vector<uint32_t>> indices, uint32_t size);
 		virtual ~OpenGLIndexBuffer();
 
 

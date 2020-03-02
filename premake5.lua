@@ -13,15 +13,19 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
+IncludeDir["Assimp"] = "Hildur/vendor/Assimp/include"
 IncludeDir["GLFW"] = "Hildur/vendor/GLFW/include"
 IncludeDir["Glad"] = "Hildur/vendor/Glad/include"
 IncludeDir["ImGui"] = "Hildur/vendor/imgui"
 IncludeDir["glm"] = "Hildur/vendor/glm"
 IncludeDir["stb_image"] = "Hildur/vendor/stb_image"
 
+group "Dependencies"
+--include "Hildur/vendor/Assimp"
 include "Hildur/vendor/GLFW"
 include "Hildur/vendor/Glad"
 include "Hildur/vendor/imgui"
+group ""
 
 project "Hildur"
 	location "Hildur"
@@ -43,7 +47,7 @@ project "Hildur"
         "%{prj.name}/vendor/stb_image/**.h",
         "%{prj.name}/vendor/stb_image/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
-		"%{prj.name}/vendor/glm/glm/**.inl",
+        "%{prj.name}/vendor/glm/glm/**.inl"
 	}
 
 	defines
@@ -54,20 +58,28 @@ project "Hildur"
 	includedirs
 	{
         "%{prj.name}/src",
-		"%{prj.name}/vendor/spdlog/include",
+        "%{prj.name}/vendor/spdlog/include",
+        "%{IncludeDir.Assimp}",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}"
-	}
+    }
+    
+    libdirs
+    {
+        "%{prj.name}/vendor/Assimp/lib"
+    }
 
 	links 
 	{ 
+        --"Assimp",
+        "assimp-vc142-mtd.lib",
 		"GLFW",
 		"Glad",
 		"ImGui",
-		"opengl32.lib"
+        "opengl32.lib"
 	}
 
 	filter "system:windows"
@@ -115,8 +127,9 @@ project "Sandbox"
 	{
         "Hildur/vendor/spdlog/include",
 		"Hildur/src",
-		"Hildur/vendor",
-		"%{IncludeDir.glm}"
+        "Hildur/vendor",
+        "%{IncludeDir.Assimp}",
+        "%{IncludeDir.glm}"     
 	}
 
 	links

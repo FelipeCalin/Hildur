@@ -12,6 +12,7 @@
 
 
 
+/*
 class Layer2D : public Hildur::Layer {
 
 public:
@@ -248,6 +249,7 @@ private:
 	glm::vec3 m_TrianglePos;
 
 };
+*/
 
 
  /////// Layer 3D //////////////////////////////////////////////////
@@ -259,99 +261,123 @@ class Layer3D : public Hildur::Layer {
 public:
 
 	Layer3D()
-		:Layer("Test3d"), m_CameraController(45.0f, 16.0f / 9.0f, true), m_ObjectPos(0.2f, 0.0f, 0.0f), m_ObjectRot(0.0f, 0.0f, 0.0f)
+		:Layer("Test3d"), m_CameraController(45.0f, 16.0f / 9.0f, true), m_ObjectRot(0.0f, 0.0f, 0.0f)
 	{
 
 		//Cube
 
-		m_QuadVertexArray.reset(Hildur::VertexArray::Create());
+		std::vector<Hildur::Vertex> vertices = {
 
-		float quadVertices[8 * 6 * 6] = {
-
-			//Position             //UVs          //Normals
-			-0.5f, -0.5f, -0.5f,   0.0f,  0.0f,   0.0f,  0.0f,  1.0f,
-			 0.5f, -0.5f, -0.5f,   1.0f,  0.0f,   0.0f,  0.0f,  1.0f,
-			 0.5f,  0.5f, -0.5f,   1.0f,  1.0f,   0.0f,  0.0f,  1.0f,
-			 0.5f,  0.5f, -0.5f,   1.0f,  1.0f,   0.0f,  0.0f,  1.0f,
-			-0.5f,  0.5f, -0.5f,   0.0f,  1.0f,   0.0f,  0.0f,  1.0f,
-			-0.5f, -0.5f, -0.5f,   0.0f,  0.0f,   0.0f,  0.0f,  1.0f,
-								  		 	    	   
-			-0.5f, -0.5f,  0.5f,   0.0f,  0.0f,   0.0f,  0.0f, -1.0f,
-			 0.5f, -0.5f,  0.5f,   1.0f,  0.0f,   0.0f,  0.0f, -1.0f,
-			 0.5f,  0.5f,  0.5f,   1.0f,  1.0f,   0.0f,  0.0f, -1.0f,
-			 0.5f,  0.5f,  0.5f,   1.0f,  1.0f,   0.0f,  0.0f, -1.0f,
-			-0.5f,  0.5f,  0.5f,   0.0f,  1.0f,   0.0f,  0.0f, -1.0f,
-			-0.5f, -0.5f,  0.5f,   0.0f,  0.0f,   0.0f,  0.0f, -1.0f,
-	  							  		 	    	   
-			-0.5f,  0.5f,  0.5f,   1.0f,  0.0f,   1.0f,  0.0f,  0.0f,
-			-0.5f,  0.5f, -0.5f,   1.0f,  1.0f,   1.0f,  0.0f,  0.0f,
-			-0.5f, -0.5f, -0.5f,   0.0f,  1.0f,   1.0f,  0.0f,  0.0f,
-			-0.5f, -0.5f, -0.5f,   0.0f,  1.0f,   1.0f,  0.0f,  0.0f,
-			-0.5f, -0.5f,  0.5f,   0.0f,  0.0f,   1.0f,  0.0f,  0.0f,
-			-0.5f,  0.5f,  0.5f,   1.0f,  0.0f,   1.0f,  0.0f,  0.0f,
- 								  		 	    	   
-			 0.5f,  0.5f,  0.5f,   1.0f,  0.0f,  -1.0f,  0.0f,  0.0f,
-			 0.5f,  0.5f, -0.5f,   1.0f,  1.0f,  -1.0f,  0.0f,  0.0f,
-			 0.5f, -0.5f, -0.5f,   0.0f,  1.0f,  -1.0f,  0.0f,  0.0f,
-			 0.5f, -0.5f, -0.5f,   0.0f,  1.0f,  -1.0f,  0.0f,  0.0f,
-			 0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  -1.0f,  0.0f,  0.0f,
-			 0.5f,  0.5f,  0.5f,   1.0f,  0.0f,  -1.0f,  0.0f,  0.0f,
-								  		 	    	   
-			-0.5f, -0.5f, -0.5f,   0.0f,  1.0f,   0.0f,  1.0f,  0.0f,
-			 0.5f, -0.5f, -0.5f,   1.0f,  1.0f,   0.0f,  1.0f,  0.0f,
-			 0.5f, -0.5f,  0.5f,   1.0f,  0.0f,   0.0f,  1.0f,  0.0f,
-			 0.5f, -0.5f,  0.5f,   1.0f,  0.0f,   0.0f,  1.0f,  0.0f,
-			-0.5f, -0.5f,  0.5f,   0.0f,  0.0f,   0.0f,  1.0f,  0.0f,
-			-0.5f, -0.5f, -0.5f,   0.0f,  1.0f,   0.0f,  1.0f,  0.0f,
-								  		 	    	   
-			-0.5f,  0.5f, -0.5f,   0.0f,  1.0f,   0.0f, -1.0f,  0.0f,
-			 0.5f,  0.5f, -0.5f,   1.0f,  1.0f,   0.0f, -1.0f,  0.0f,
-			 0.5f,  0.5f,  0.5f,   1.0f,  0.0f,   0.0f, -1.0f,  0.0f,
-			 0.5f,  0.5f,  0.5f,   1.0f,  0.0f,   0.0f, -1.0f,  0.0f,
-			-0.5f,  0.5f,  0.5f,   0.0f,  0.0f,   0.0f, -1.0f,  0.0f,
-			-0.5f,  0.5f, -0.5f,   0.0f,  1.0f,   0.0f, -1.0f,  0.0f,
-
+			//Position                        UV                         Normal
+			{glm::vec3(-0.5f, -0.5f, -0.5f),   glm::vec2(0.0f,  0.0f),    glm::vec3(0.0f,  0.0f, -1.0f)},
+			{glm::vec3( 0.5f, -0.5f, -0.5f),   glm::vec2(1.0f,  0.0f),    glm::vec3(0.0f,  0.0f, -1.0f)},
+			{glm::vec3( 0.5f,  0.5f, -0.5f),   glm::vec2(1.0f,  1.0f),    glm::vec3(0.0f,  0.0f, -1.0f)},
+			{glm::vec3( 0.5f,  0.5f, -0.5f),   glm::vec2(1.0f,  1.0f),    glm::vec3(0.0f,  0.0f, -1.0f)},
+			{glm::vec3(-0.5f,  0.5f, -0.5f),   glm::vec2(0.0f,  1.0f),    glm::vec3(0.0f,  0.0f, -1.0f)},
+			{glm::vec3(-0.5f, -0.5f, -0.5f),   glm::vec2(0.0f,  0.0f),    glm::vec3(0.0f,  0.0f, -1.0f)},
+																								  	   
+			{glm::vec3(-0.5f, -0.5f,  0.5f),   glm::vec2(0.0f,  0.0f),    glm::vec3(0.0f,  0.0f,  1.0f)},
+			{glm::vec3( 0.5f, -0.5f,  0.5f),   glm::vec2(1.0f,  0.0f),    glm::vec3(0.0f,  0.0f,  1.0f)},
+			{glm::vec3( 0.5f,  0.5f,  0.5f),   glm::vec2(1.0f,  1.0f),    glm::vec3(0.0f,  0.0f,  1.0f)},
+			{glm::vec3( 0.5f,  0.5f,  0.5f),   glm::vec2(1.0f,  1.0f),    glm::vec3(0.0f,  0.0f,  1.0f)},
+			{glm::vec3(-0.5f,  0.5f,  0.5f),   glm::vec2(0.0f,  1.0f),    glm::vec3(0.0f,  0.0f,  1.0f)},
+			{glm::vec3(-0.5f, -0.5f,  0.5f),   glm::vec2(0.0f,  0.0f),    glm::vec3(0.0f,  0.0f,  1.0f)},
+																								  	   
+			{glm::vec3(-0.5f,  0.5f,  0.5f),   glm::vec2(1.0f,  0.0f),   -glm::vec3(1.0f,  0.0f,  0.0f)},
+			{glm::vec3(-0.5f,  0.5f, -0.5f),   glm::vec2(1.0f,  1.0f),   -glm::vec3(1.0f,  0.0f,  0.0f)},
+			{glm::vec3(-0.5f, -0.5f, -0.5f),   glm::vec2(0.0f,  1.0f),   -glm::vec3(1.0f,  0.0f,  0.0f)},
+			{glm::vec3(-0.5f, -0.5f, -0.5f),   glm::vec2(0.0f,  1.0f),   -glm::vec3(1.0f,  0.0f,  0.0f)},
+			{glm::vec3(-0.5f, -0.5f,  0.5f),   glm::vec2(0.0f,  0.0f),   -glm::vec3(1.0f,  0.0f,  0.0f)},
+			{glm::vec3(-0.5f,  0.5f,  0.5f),   glm::vec2(1.0f,  0.0f),   -glm::vec3(1.0f,  0.0f,  0.0f)},
+																								  	   
+			{glm::vec3( 0.5f,  0.5f,  0.5f),   glm::vec2(1.0f,  0.0f),    glm::vec3(1.0f,  0.0f,  0.0f)},
+			{glm::vec3( 0.5f,  0.5f, -0.5f),   glm::vec2(1.0f,  1.0f),    glm::vec3(1.0f,  0.0f,  0.0f)},
+			{glm::vec3( 0.5f, -0.5f, -0.5f),   glm::vec2(0.0f,  1.0f),    glm::vec3(1.0f,  0.0f,  0.0f)},
+			{glm::vec3( 0.5f, -0.5f, -0.5f),   glm::vec2(0.0f,  1.0f),    glm::vec3(1.0f,  0.0f,  0.0f)},
+			{glm::vec3( 0.5f, -0.5f,  0.5f),   glm::vec2(0.0f,  0.0f),    glm::vec3(1.0f,  0.0f,  0.0f)},
+			{glm::vec3( 0.5f,  0.5f,  0.5f),   glm::vec2(1.0f,  0.0f),    glm::vec3(1.0f,  0.0f,  0.0f)},
+																							  	   
+			{glm::vec3(-0.5f, -0.5f, -0.5f),   glm::vec2(0.0f,  1.0f),    glm::vec3(0.0f, -1.0f,  0.0f)},
+			{glm::vec3( 0.5f, -0.5f, -0.5f),   glm::vec2(1.0f,  1.0f),    glm::vec3(0.0f, -1.0f,  0.0f)},
+			{glm::vec3( 0.5f, -0.5f,  0.5f),   glm::vec2(1.0f,  0.0f),    glm::vec3(0.0f, -1.0f,  0.0f)},
+			{glm::vec3( 0.5f, -0.5f,  0.5f),   glm::vec2(1.0f,  0.0f),    glm::vec3(0.0f, -1.0f,  0.0f)},
+			{glm::vec3(-0.5f, -0.5f,  0.5f),   glm::vec2(0.0f,  0.0f),    glm::vec3(0.0f, -1.0f,  0.0f)},
+			{glm::vec3(-0.5f, -0.5f, -0.5f),   glm::vec2(0.0f,  1.0f),    glm::vec3(0.0f, -1.0f,  0.0f)},
+																								  	   
+			{glm::vec3(-0.5f,  0.5f, -0.5f),   glm::vec2(0.0f,  1.0f),    glm::vec3(0.0f,  1.0f,  0.0f)},
+			{glm::vec3( 0.5f,  0.5f, -0.5f),   glm::vec2(1.0f,  1.0f),    glm::vec3(0.0f,  1.0f,  0.0f)},
+			{glm::vec3( 0.5f,  0.5f,  0.5f),   glm::vec2(1.0f,  0.0f),    glm::vec3(0.0f,  1.0f,  0.0f)},
+			{glm::vec3( 0.5f,  0.5f,  0.5f),   glm::vec2(1.0f,  0.0f),    glm::vec3(0.0f,  1.0f,  0.0f)},
+			{glm::vec3(-0.5f,  0.5f,  0.5f),   glm::vec2(0.0f,  0.0f),    glm::vec3(0.0f,  1.0f,  0.0f)},
+			{glm::vec3(-0.5f,  0.5f, -0.5f),   glm::vec2(0.0f,  1.0f),    glm::vec3(0.0f,  1.0f,  0.0f)},
+			
 		};
 
-
-		Hildur::Ref<Hildur::VertexBuffer> quadVertexBuffer;
-		quadVertexBuffer.reset(Hildur::VertexBuffer::Create(quadVertices, sizeof(quadVertices)));
-
-		Hildur::BufferLayout quadLayout = {
-
-			{ Hildur::ShaderDataType::Float3, "a_Pos" },
-			{ Hildur::ShaderDataType::Float2, "a_TextPos" },
-			{ Hildur::ShaderDataType::Float3, "a_Normal" }
-
-		};
-
-		quadVertexBuffer->SetLayout(quadLayout);
-		m_QuadVertexArray->AddVertexBuffer(quadVertexBuffer);
-
-		uint32_t quadIndices[36] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35 };
-		Hildur::Ref<Hildur::IndexBuffer> quadIndexBuffer;
-		quadIndexBuffer.reset(Hildur::IndexBuffer::Create(quadIndices, sizeof(quadIndices) / sizeof(uint32_t)));
-
-		m_QuadVertexArray->SetIndexBuffer(quadIndexBuffer);
+		std::vector<uint32_t> indices { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35 };
 
 
 		//Shader
 
-		m_TextureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
-		m_LightShader = m_ShaderLibrary.Load("assets/shaders/Light.glsl");
+		Hildur::Ref<Hildur::Shader> m_TextureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
+		Hildur::Ref<Hildur::Shader> m_LightShader = m_ShaderLibrary.Load("assets/shaders/Light.glsl");
+
+		Hildur::Ref<Hildur::Shader> m_ColorShader = m_ShaderLibrary.Load("assets/shaders/Color.glsl");
+
 
 		m_Texture = Hildur::Texture2D::Create("assets/textures/ChernoLogo.png");
 		m_Texture2 = Hildur::Texture2D::Create("assets/textures/Ricardo_Milos.png");
+		m_Texture->type = Hildur::HR_DIFFUSE;
+		m_Texture->type = Hildur::HR_SPECULAR;
+
+		m_Texture->Bind(1);
+		m_Texture2->Bind(2);
+
+		m_Material = Hildur::Material::Create(glm::vec3(0.0f), glm::vec3(0.4f), glm::vec3(0.1), m_Texture, m_Texture2);
+
+		std::vector<Hildur::Ref<Hildur::Texture2D>> textures{
+
+			m_Texture,
+			m_Texture2
+
+		};
+
+		//m_Mesh = Hildur::Mesh::Create(vertices, indices, textures);
+
 
 		std::dynamic_pointer_cast<Hildur::OpenGLShader>(m_TextureShader)->Bind();
 		std::dynamic_pointer_cast<Hildur::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 1);
 		std::dynamic_pointer_cast<Hildur::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture2", 2);
 
-
-		m_Texture->Bind(1);
-		m_Texture2->Bind(2);
-
 		m_CameraController.SetPosition({ 0.0f, 0.0f, -1.5f });
+
+		m_Model = Hildur::Model::Create("assets/models/shaderball.obj");
+		//m_cubeModel = Hildur::Model::Create("assets/models/cube.obj");
+
+		//Test Scene
+		t_Scene = Hildur::Scene::Create();
+		t_Scene2 = Hildur::Scene::Create();
+
+		//t_GameObject = Hildur::GameObject::Create("Pito de ricardo", m_Mesh);
+		//t_GameObject2 = Hildur::GameObject::Create("Pito de ricardo", m_Mesh);
+
+		//t_Scene->AddGameObject(t_GameObject);
+		//t_Scene->AddGameObject(t_GameObject2, t_GameObject->GetID());
+		
+		//t_Scene2->AddGameObject(t_GameObject);
+		//t_Scene2->AddGameObject(t_GameObject2);
+
+		m_ObjectRot.x = 180;
+
+		m_ObjectPos = glm::vec3(0.0f, 0.0f, 5.0f);
+
+		ambient = 0.3f;
+		diffuse = 15.0f;
+		specular = 5.0f;
+
+		LightPos = glm::vec3(-10.f, 0.0f, -10.0f);
+
+		m_CameraController.SetPosition(glm::vec3(0.0f, 0.0f, -4.0f));
+
 
 	}
 
@@ -363,6 +389,7 @@ public:
 
 		m_CameraController.OnUpdate(ts);
 
+		m_ObjectRot.y += translationSpeed * ts * 20;
 
 		if (Hildur::Input::IsKeyPressed(HR_KEY_R))
 			m_ObjectRot.y -= translationSpeed * ts;
@@ -385,46 +412,54 @@ public:
 			LightPos.y += ts * 2;
 
 
-		std::dynamic_pointer_cast<Hildur::OpenGLShader>(m_TextureShader)->UploadUniformFloat3("u_ViewPos", m_CameraController.GetCamera().GetPosition());
-		std::dynamic_pointer_cast<Hildur::OpenGLShader>(m_TextureShader)->UploadUniformFloat3("u_LightPos0", LightPos);
+		std::dynamic_pointer_cast<Hildur::OpenGLShader>(m_ShaderLibrary.Get("Texture"))->UploadUniformFloat3("u_ViewPos", m_CameraController.GetCamera().GetPosition());
+		std::dynamic_pointer_cast<Hildur::OpenGLShader>(m_ShaderLibrary.Get("Texture"))->UploadUniformFloat3("u_LightPos0", LightPos);
 
+		std::dynamic_pointer_cast<Hildur::OpenGLShader>(m_ShaderLibrary.Get("Color"))->UploadUniformFloat3("u_ViewPos", m_CameraController.GetCamera().GetPosition());
+		std::dynamic_pointer_cast<Hildur::OpenGLShader>(m_ShaderLibrary.Get("Color"))->UploadUniformFloat3("u_LightPos0", LightPos);
 
-		//m_ObjectRot.y += 1.0f * ts;
 
 		glm::mat4 lightTransform = glm::translate(glm::mat4(1.0f), LightPos) * glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
 
 		//Render
 
-		glm::mat4 position = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
-		glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), m_ObjectRot.y, glm::vec3(0.0f, 1.0f, 0.0f));
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+		glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), glm::radians(m_ObjectRot.x), glm::vec3(1.0f, 0.0f, 0.0f)) * glm::rotate(glm::mat4(1.0F), glm::radians(m_ObjectRot.y), glm::vec3(0.0f, 1.0f, 0.0f));
+		glm::mat4 position = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f));
 
 		glm::mat4 transform = rotation * scale * position;
-		//glm::mat4 transform = rotation;
 
 
 		Hildur::RenderCommand::SetClearColor({ 0.2f, 0.22f, 0.25f, 1 });
 		Hildur::RenderCommand::Clear();
 
-
 		Hildur::Renderer::BeginScene(m_CameraController.GetCamera());
 
-		auto textureShader = m_ShaderLibrary.Get("Texture");
-		Hildur::Renderer::Submit(textureShader, m_QuadVertexArray, transform);
+		//auto textureShader = m_ShaderLibrary.Get("Texture");
+		//m_Material->SendToShader(textureShader);
+		//Hildur::Renderer::Submit(textureShader, m_Model->GetMeshes()[0]->GetVertexArray(), transform);
+		
+		auto colorShader = m_ShaderLibrary.Get("Color");
+		m_Material->SendToShader(colorShader);
+		Hildur::Renderer::Submit(colorShader, m_Model->GetMeshes()[0]->GetVertexArray(), transform);
+
 
 		auto lightShader = m_ShaderLibrary.Get("Light");
-		Hildur::Renderer::Submit(lightShader, m_QuadVertexArray, lightTransform);
+		//Hildur::Renderer::Submit(lightShader, m_cubeModel->GetMeshes()[0]->GetVertexArray(), lightTransform);
+
+		//Hildur::Renderer::Submit(textureShader, m_Mesh->GetVertexArray(), transform);
+		//Hildur::Renderer::Submit(textureShader, t_Scene->GetMesh(0)->GetVertexArray(), transform);
 
 
-		for (unsigned int i = 0; i < 10; i++)
+	/*	for (unsigned int i = 0; i < 10; i++)
 		{
 			glm::mat4 model = glm::mat4(1.0f);
 			model = glm::translate(model, cubePositions[i]);
 			float angle = 20.0f * i;
 			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-			Hildur::Renderer::Submit(textureShader, m_QuadVertexArray, glm::translate(model, {2.0f, 0.0f, 0.0f}));
-		}
+			Hildur::Renderer::Submit(textureShader, m_Mesh->GetVertexArray(), glm::translate(model, {2.0f, 0.0f, 0.0f}));
+		}*/
 
 
 		Hildur::Renderer::EndScene();
@@ -432,6 +467,9 @@ public:
 	}
 
 	void OnImGuiRender() override {
+
+		Hildur::Ref<Hildur::Shader> m_TextureShader;
+		Hildur::Ref<Hildur::Shader> m_LightShader;
 
 		ImGui::Begin("Debug settings");
 
@@ -442,7 +480,22 @@ public:
 
 		}
 
+		ImGui::SliderFloat("Ambient", &ambient, 0.0f, 50.0f);
+		ImGui::SliderFloat("Diffuse", &diffuse, 0.0f, 50.0f);
+		ImGui::SliderFloat("Specular", &specular, 0.0f, 50.0f);
+
+		ImGui::SliderFloat3("Light Color", (&LightColor.r, &LightColor.g, &LightColor.b), 0.0f, 1.0f);
+		ImGui::ColorEdit3("Light Color", (&LightColor.r, &LightColor.g, &LightColor.b));
+
+		ImGui::SliderFloat3("Light Position", (&LightPos.x, &LightPos.y, &LightPos.z), -100.0f, 100.0f);
+
+		ImGui::SliderFloat("RotationSpeed", &translationSpeed, 0.0f, 50.0f);
+
+
+
 		ImGui::End();
+
+		m_Material = Hildur::Material::Create(glm::vec3(ambient), LightColor * glm::vec3(diffuse), LightColor * glm::vec3(specular), m_Texture, m_Texture2);
 
 	}
 
@@ -456,15 +509,13 @@ private:
 
 	Hildur::ShaderLibrary m_ShaderLibrary;
 
-	Hildur::Ref<Hildur::Shader> m_QuadShader, m_TextureShader, m_LightShader;
-	Hildur::Ref<Hildur::VertexArray> m_QuadVertexArray;
-
 	Hildur::Ref<Hildur::Texture2D> m_Texture;
 	Hildur::Ref<Hildur::Texture2D> m_Texture2;
 
-	Hildur::Ref<Hildur::Shader> m_Shader;
-	Hildur::Ref<Hildur::VertexArray> m_VertexArray;
+	Hildur::Ref<Hildur::Material> m_Material;
 
+	Hildur::Ref<Hildur::Mesh> m_Mesh;
+	
 
 	Hildur::PerspectiveCameraController m_CameraController;
 
@@ -490,6 +541,22 @@ private:
 	};
 
 	glm::vec3 LightPos = glm::vec3(0.0f);
+
+	float ambient = 0;
+	float diffuse = 0;
+	float specular = 0;
+	glm::vec3 LightColor = glm::vec3(1.0f);
+
+	//Model
+	Hildur::Ref<Hildur::Model> m_Model;
+	Hildur::Ref<Hildur::Model> m_cubeModel;
+
+	//Test scene
+	Hildur::Ref<Hildur::Scene> t_Scene;
+	Hildur::Ref<Hildur::Scene> t_Scene2;
+
+	Hildur::Ref<Hildur::GameObject> t_GameObject;
+	Hildur::Ref<Hildur::GameObject> t_GameObject2;
 
 };
 

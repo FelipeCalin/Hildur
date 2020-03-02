@@ -9,6 +9,8 @@
 namespace Hildur {
 
 
+	uint32_t OpenGLTexture2D::m_NextUnit = 1;
+
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path) {
 
 
@@ -21,6 +23,8 @@ namespace Hildur {
 
 		m_Width = width;
 		m_Height = height;
+
+		m_TextureUnit = 0;
 
 
 		GLenum internalFormat = 0, dataFormat = 0;
@@ -55,6 +59,10 @@ namespace Hildur {
 
 
 		stbi_image_free(data);
+
+
+		m_TextureUnit = m_NextUnit++;
+
 	}
 
 	OpenGLTexture2D::~OpenGLTexture2D() {
@@ -65,8 +73,16 @@ namespace Hildur {
 
 	void OpenGLTexture2D::Bind(uint32_t slot) const {
 
-		glActiveTexture((int)GL_TEXTURE0 + slot);
-		glBindTexture(GL_TEXTURE_2D, m_RendererID);
+		if (slot != 0) {
+			glActiveTexture((int)GL_TEXTURE0 + slot);
+			glBindTexture(GL_TEXTURE_2D, m_RendererID);
+		} 
+		else {
+
+			glActiveTexture((int)GL_TEXTURE0 + m_TextureUnit);
+			glBindTexture(GL_TEXTURE_2D, m_RendererID);
+
+		}
 
 	}
 

@@ -20,6 +20,9 @@ namespace Hildur {
 
 	Application::Application() {
 
+		 /// Window initialization /////////////////////////////////////
+		///////////////////////////////////////////////////////////////
+
 		HR_CORE_ASSERT(!s_Instance, "Application already exists")
 		s_Instance = this;
 
@@ -29,15 +32,22 @@ namespace Hildur {
 
 		m_Window->SetVSync(false);
 
+
+		/// Renderer initialization ///////////////////////////////////
+	   ///////////////////////////////////////////////////////////////
 		Renderer::Init();
 
+
+		/// Debug ImGui Layer initialization //////////////////////////
+	   ///////////////////////////////////////////////////////////////
 		//m_ImGuiLayer = std::make_unique<ImGuiLayer>();
 		m_ImGuiLayer = new ImGuiLayer;
 		PushOverlay(m_ImGuiLayer);
 
 
-		//test FBO
-
+		
+		/// Viewport FBO initialization ///////////////////////////////
+	   ///////////////////////////////////////////////////////////////
 		
 		// The framebuffer
 		glGenFramebuffers(1, &fbo);
@@ -48,7 +58,7 @@ namespace Hildur {
 		glGenTextures(1, &texture);
 		glBindTexture(GL_TEXTURE_2D, texture);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1960, 1080, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1960, 1080, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL); //TODO: dynamically create a global Resolution variable  
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -76,7 +86,15 @@ namespace Hildur {
 		}
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		
+
+		/// Entity Component System Initialization ////////////////////
+	   ///////////////////////////////////////////////////////////////
+
+		struct Position {
+			Position(float x = 0.0f, float y = 0.0f, float z = 0.0f) : x(x), y(y), z(z) {}
+
+			float x, y, z;
+		};
 		
 	}
 
@@ -105,6 +123,9 @@ namespace Hildur {
 
 	void Application::Run() {
 
+		/// Main Loop /////////////////////////////////////////////////
+	   ///////////////////////////////////////////////////////////////
+
 		while (m_Running) {
 
 			float time = (float)glfwGetTime(); //TODO Abstract!!
@@ -113,6 +134,8 @@ namespace Hildur {
 
 			glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
+
+			//Update Layers
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate(timestep);
 
@@ -131,7 +154,6 @@ namespace Hildur {
 
 			glViewport(0, 0, width, height);
 
-			//ImGui::Image((void*)(intptr_t)texture, ImVec2(width, height), ImVec2(0.0, 1.0), ImVec2(1.0, 0.0));
 			ImGui::GetWindowDrawList()->AddImage(
 				(void*)(intptr_t)texture,
 				ImVec2(ImGui::GetCursorScreenPos()),
@@ -217,7 +239,9 @@ namespace Hildur {
 
 	}
 
-	//Layer stack handling
+	 /// LayerStack Handling ///////////////////////////////////////
+	///////////////////////////////////////////////////////////////
+
 	void Application::PushLayer(Layer* layer) {
 
 		m_LayerStack.PushLayer(layer);

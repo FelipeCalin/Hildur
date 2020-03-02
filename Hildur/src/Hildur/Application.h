@@ -53,6 +53,8 @@ namespace Hildur {
 		uint32_t texture;
 		uint32_t depthrenderbuffer;
 
+		//ECS
+
 	private:
 
 		static Application* s_Instance;
