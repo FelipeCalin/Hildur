@@ -11,6 +11,7 @@ namespace Hildur {
 	public:
 
 		OpenGLTexture2D(const std::string& path);
+		OpenGLTexture2D(const uint32_t width, const uint32_t height, const uint32_t channels);
 		virtual ~OpenGLTexture2D();
 
 		virtual uint32_t GetWidth() const override { return m_Width; }

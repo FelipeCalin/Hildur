@@ -6,6 +6,7 @@
 #include "Hildur/Window.h"
 #include "Hildur/LayerStack.h"
 #include "Hildur/Events/ApplicationEvent.h"
+#include "Hildur/Renderer/Buffer.h"
 
 #include "Hildur/Core/Timestep.h"
 
@@ -52,6 +53,8 @@ namespace Hildur {
 		uint32_t fbo;
 		uint32_t texture;
 		uint32_t depthrenderbuffer;
+
+		Ref<FrameBuffer> m_FBO;
 
 		//ECS
 

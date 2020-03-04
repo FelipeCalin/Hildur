@@ -49,23 +49,26 @@ namespace Hildur {
 		/// Viewport FBO initialization ///////////////////////////////
 	   ///////////////////////////////////////////////////////////////
 		
-		// The framebuffer
-		glGenFramebuffers(1, &fbo);
-		Hildur::RenderCommand::SetRenderTarget(fbo);
-		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-		
-		//The texture
-		glGenTextures(1, &texture);
-		glBindTexture(GL_TEXTURE_2D, texture);
+		//// The framebuffer
+		//glGenFramebuffers(1, &fbo);
+		//Hildur::RenderCommand::SetRenderTarget(fbo);
+		//glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+		//
+		////The texture
+		//glGenTextures(1, &texture);
+		//glBindTexture(GL_TEXTURE_2D, texture);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1960, 1080, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL); //TODO: dynamically create a global Resolution variable  
+		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1960, 1080, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL); //TODO: dynamically create a global Resolution variable  
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+
+		m_FBO = FrameBuffer::Create(1960, 1080);
+		//texture = m_FBO->GetTexture();
 
 		// The depth buffer
 		glGenRenderbuffers(1, &depthrenderbuffer);
@@ -74,19 +77,14 @@ namespace Hildur {
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);
 
 		// Set "renderedTexture" as our colour attachement #0
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_FBO->GetTexture(), 0);
 
 		GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
 		glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
 
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-			HR_CORE_ASSERT(false, "Could not create FrameBuffer object");
-		} else {
-			HR_CORE_INFO("FrameBuffer object created");
-		}
-
+		// UnBind frame buffer
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
+		
 		/// Entity Component System Initialization ////////////////////
 	   ///////////////////////////////////////////////////////////////
 
@@ -132,14 +130,15 @@ namespace Hildur {
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
-			glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-
+			//glBindFramebuffer(GL_FRAMEBUFFER, m_FBO->GetID());
+			m_FBO->Bind();
 
 			//Update Layers
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate(timestep);
 
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			m_FBO->UnBind();
 
 			m_ImGuiLayer->Begin();
 			DockUpdate();
@@ -155,7 +154,7 @@ namespace Hildur {
 			glViewport(0, 0, width, height);
 
 			ImGui::GetWindowDrawList()->AddImage(
-				(void*)(intptr_t)texture,
+				(void*)(intptr_t)m_FBO->GetTexture(),
 				ImVec2(ImGui::GetCursorScreenPos()),
 				ImVec2(ImGui::GetCursorScreenPos().x + width,
 					ImGui::GetCursorScreenPos().y + height), ImVec2((1.0f / 1960.0f) * width, 0), ImVec2(0, (1.0f / 1080.0f) * height));

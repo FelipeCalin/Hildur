@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Hildur/Renderer/Texture.h"
+
 #include <glm/glm.hpp>
 
 
@@ -140,7 +142,7 @@ namespace Hildur {
 		virtual void Bind() const = 0;
 		virtual void UnBind() const = 0;
 
-		static VertexBuffer* Create(Ref<std::vector<Vertex>> vertices, uint32_t size);
+		static Ref<VertexBuffer> Create(Ref<std::vector<Vertex>> vertices, uint32_t size);
 
 	};
 
@@ -155,7 +157,7 @@ namespace Hildur {
 
 		virtual uint32_t GetCount() const = 0;
 
-		static IndexBuffer* Create(Ref<std::vector<uint32_t>> indices, uint32_t size);
+		static Ref<IndexBuffer> Create(Ref<std::vector<uint32_t>> indices, uint32_t size);
 
 	};
 
@@ -168,7 +170,14 @@ namespace Hildur {
 		virtual void Bind() const = 0;
 		virtual void UnBind() const = 0;
 
-		static FrameBuffer* Create();
+		virtual uint32_t GetID() const = 0;
+
+		virtual uint32_t GetTexture() const = 0;
+		virtual void SetTexture(Ref<Texture2D> texture) = 0;
+
+
+
+		static Ref<FrameBuffer> Create(const uint32_t width, const uint32_t height, uint32_t texture = 0);
 
 	};
 

@@ -52,5 +52,30 @@ namespace Hildur {
 
 	};
 
+	//  Frame Buffer  ////////////////////////////////////////////////////////
+
+	class OpenGLFrameBuffer : public FrameBuffer {
+
+	public:
+
+		OpenGLFrameBuffer(const uint32_t width, const uint32_t height, uint32_t texture = 0);
+		virtual ~OpenGLFrameBuffer();
+
+
+		virtual void Bind() const override;
+		virtual void UnBind() const override;
+
+		virtual uint32_t GetID() const override { return m_RendererID; }
+
+		virtual uint32_t GetTexture() const { return m_Texture; }
+		virtual void SetTexture(Ref<Texture2D> texture) override { m_Texture = texture->GetID(); }
+
+	private:
+
+		uint32_t m_RendererID;
+		uint32_t m_Texture;
+
+	};
+
 
 }

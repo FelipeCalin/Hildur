@@ -81,11 +81,11 @@ namespace Hildur {
 		};
 
 		HR_CORE_INFO("vertices size: {0}", vertices->size());
-		m_VBO.reset(VertexBuffer::Create(vertices, vertices->size()));
+		m_VBO = VertexBuffer::Create(vertices, vertices->size());
 		m_VBO->SetLayout(layout);
 
 		HR_CORE_INFO("indices size: {0}", indices->size());
-		m_IBO.reset(IndexBuffer::Create(indices, indices->size()));
+		m_IBO = IndexBuffer::Create(indices, indices->size());
 
 		m_VAO.reset(VertexArray::Create());
 		m_VAO->AddVertexBuffer(m_VBO);
