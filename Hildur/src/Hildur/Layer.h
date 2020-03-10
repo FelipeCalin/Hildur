@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Hildur/Core.h"
+#include "Hildur/Core/Core.h"
 #include "Hildur/Events/Event.h"
 #include "Hildur/Core/Timestep.h"
 

@@ -11,3 +11,6 @@
 	path = Hildur/vendor/GLFW
 	url = https://github.com/FelipeCarlin/glfw.git
 
+[submodule "Hildur/vendor/zlib"]
+	path = Hildur/vendor/zlib
+	url = https://github.com/madler/zlib.git

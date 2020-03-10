@@ -354,8 +354,8 @@ public:
 		//m_cubeModel = Hildur::Model::Create("assets/models/cube.obj");
 
 		//Test Scene
-		t_Scene = Hildur::Scene::Create();
-		t_Scene2 = Hildur::Scene::Create();
+		//t_Scene = Hildur::Scene::Create();
+		//t_Scene2 = Hildur::Scene::Create();
 
 		//t_GameObject = Hildur::GameObject::Create("Pito de ricardo", m_Mesh);
 		//t_GameObject2 = Hildur::GameObject::Create("Pito de ricardo", m_Mesh);
@@ -552,11 +552,6 @@ private:
 	Hildur::Ref<Hildur::Model> m_cubeModel;
 
 	//Test scene
-	Hildur::Ref<Hildur::Scene> t_Scene;
-	Hildur::Ref<Hildur::Scene> t_Scene2;
-
-	Hildur::Ref<Hildur::GameObject> t_GameObject;
-	Hildur::Ref<Hildur::GameObject> t_GameObject2;
 
 };
 

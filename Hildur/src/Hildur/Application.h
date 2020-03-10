@@ -1,6 +1,8 @@
 #pragma once
 
-#include "Core.h"
+#include "Core/Core.h"
+
+#include "Core/Config.h"
 
 #include "Events/Event.h"
 #include "Hildur/Window.h"
@@ -40,6 +42,8 @@ namespace Hildur {
 		void DockUpdate();
 
 	private:
+
+		Config m_Config;
 
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;

@@ -2,7 +2,7 @@
 
 #include "Hildur/Renderer/Buffer.h"
 #include "Hildur/Renderer/VertexArray.h"
-#include "Hildur/Renderer/Texture.h"
+#include "Hildur/Resource/Texture.h"
 
 #include <glm/glm.hpp>
 
@@ -14,7 +14,15 @@ namespace Hildur {
 
 	public:
 
-		Mesh(Ref<std::vector<Vertex>> vertices, Ref<std::vector<uint32_t>> indices, std::vector<Ref<Texture2D>>);
+		struct Config {
+			bool forceInit;
+
+			Config(bool forceInit = false) :
+				forceInit(forceInit)
+			{}
+		};
+
+		Mesh(Ref<std::vector<Vertex>> vertices, Ref<std::vector<uint32_t>> indices, std::vector<Ref<Texture2D>> textures);
 		~Mesh();
 
 		static Ref<Mesh> Create(Ref<std::vector<Vertex>> vertices, Ref<std::vector<uint32_t>> indices, std::vector<Ref<Texture2D>> textures);

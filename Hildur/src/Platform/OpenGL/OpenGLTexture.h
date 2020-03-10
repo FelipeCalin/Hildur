@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Hildur/Renderer/Texture.h"
+#include "Hildur/Resource/Texture.h"
 
 
 namespace Hildur {

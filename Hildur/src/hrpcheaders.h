@@ -15,13 +15,15 @@
 #include <sstream>
 #include <array>
 #include <vector>
+
+#include <map>
 #include <unordered_map>
 #include <unordered_set>
 
 #include <chrono>
 
 
-#include "Hildur/Log.h"
+#include "Hildur/util/Log.h"
 
 
 #ifdef HR_PLATFORM_WINDOWS

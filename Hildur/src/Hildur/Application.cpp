@@ -1,7 +1,7 @@
 #include "hrpcheaders.h"
 #include "Application.h"
 
-#include "Core.h"
+#include "Core/Core.h"
 #include "Input.h"
 
 #include "Hildur/Renderer/Renderer.h"
@@ -20,6 +20,28 @@ namespace Hildur {
 
 	Application::Application() {
 
+		/// Configuration /////////////////////////////////////////////
+	   ///////////////////////////////////////////////////////////////
+
+		m_Config.readConfig();
+
+		WindowProps props;
+		props.Title = m_Config.profile.appName;
+
+		if (m_Config.profile.fullscreen) {
+
+			props.Width = 1960;
+			props.Height = 1080;
+
+		}
+		else {
+
+			props.Width = m_Config.profile.width;
+			props.Height = m_Config.profile.height;
+
+		}
+
+
 		 /// Window initialization /////////////////////////////////////
 		///////////////////////////////////////////////////////////////
 
@@ -27,10 +49,10 @@ namespace Hildur {
 		s_Instance = this;
 
 		//m_Window = Window::Create();
-		m_Window = std::unique_ptr<Window>(Window::Create());
+		m_Window = std::unique_ptr<Window>(Window::Create(props));
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
-		m_Window->SetVSync(false);
+		m_Window->SetVSync(m_Config.profile.vsync);
 
 
 		/// Renderer initialization ///////////////////////////////////

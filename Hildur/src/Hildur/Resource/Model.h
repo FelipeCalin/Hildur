@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Hildur/Renderer/Mesh.h"
-#include "Hildur/Renderer/Texture.h"
+#include "Hildur/Resource/Mesh.h"
+#include "Hildur/Resource/Texture.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

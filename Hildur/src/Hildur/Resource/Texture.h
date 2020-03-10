@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "Hildur/Core.h"
+#include "Hildur/Core/Core.h"
 
 
 namespace Hildur {

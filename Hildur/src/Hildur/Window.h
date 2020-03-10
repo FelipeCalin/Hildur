@@ -2,7 +2,7 @@
 
 #include "hrpcheaders.h"
 
-#include "Hildur/Core.h"
+#include "Hildur/Core/Core.h"
 #include "Hildur/Events/Event.h"
 
 

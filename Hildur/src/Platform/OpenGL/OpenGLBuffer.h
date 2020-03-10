@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Hildur/Renderer/Buffer.h"
-#include "Hildur/Renderer/Mesh.h"
+#include "Hildur/Resource/Mesh.h"
 
 
 namespace Hildur {

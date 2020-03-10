@@ -1,7 +1,7 @@
 #include "hrpcheaders.h"
 #include "Renderer.h"
 
-#include "Hildur/Renderer/Texture.h"
+#include "Hildur/Resource/Texture.h"
 
 #include "Hildur/Renderer/RenderCommand.h"
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 
 #ifdef HR_PLATFORM_WINDOWS
@@ -33,6 +34,16 @@
 #define BIT(x) (1 << x)
 
 #define HR_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+
+
+namespace Resources
+{
+#ifdef HR_DEBUG
+	const std::string ENGINE_RESOURCES = "../Hildur/res";
+#else
+	const std::string ENGINE_RESOURCES = "./res";
+#endif
+};
 
 
 namespace Hildur {

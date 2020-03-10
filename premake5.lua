@@ -19,12 +19,14 @@ IncludeDir["Glad"] = "Hildur/vendor/Glad/include"
 IncludeDir["ImGui"] = "Hildur/vendor/imgui"
 IncludeDir["glm"] = "Hildur/vendor/glm"
 IncludeDir["stb_image"] = "Hildur/vendor/stb_image"
+IncludeDir["zlib"] = "Hildur/vendor/zlib"
 
 group "Dependencies"
 --include "Hildur/vendor/Assimp"
 include "Hildur/vendor/GLFW"
 include "Hildur/vendor/Glad"
 include "Hildur/vendor/imgui"
+--include "Hildur/vendor/zlib"
 group ""
 
 project "Hildur"
@@ -64,7 +66,8 @@ project "Hildur"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb_image}"
+        "%{IncludeDir.stb_image}",
+        --"%{IncludeDir.zlib}"
     }
     
     libdirs
@@ -78,7 +81,8 @@ project "Hildur"
         "assimp-vc142-mtd.lib",
 		"GLFW",
 		"Glad",
-		"ImGui",
+        "ImGui",
+        --"zlib",
         "opengl32.lib"
 	}
 
@@ -153,7 +157,7 @@ project "Sandbox"
 	filter "configurations:Release"
 		defines "HR_RELEASE"
 		runtime "Release"
-		optimize "on"
+        optimize "on"
 
 	filter "configurations:Dist"
 		defines "HR_DIST"

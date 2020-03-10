@@ -1,12 +1,12 @@
 #pragma once
 
 #include "Hildur/Renderer/RendererAPI.h"
-#include "Hildur/Renderer/Shader.h"
+#include "Hildur/Resource/Shader.h"
 
 #include "Hildur/Renderer/OrthographicCamera.h"
 #include "Hildur/Renderer/PerspectiveCamera.h"
 
-#include "Hildur/Renderer/Mesh.h"
+#include "Hildur/Resource/Mesh.h"
 
 
 namespace Hildur {

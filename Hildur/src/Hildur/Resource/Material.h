@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Hildur/Renderer/Texture.h"
-#include "Hildur/Renderer/Shader.h"
+#include "Hildur/Resource/Texture.h"
+#include "Hildur/Resource/Shader.h"
 
 #include <glm/glm.hpp>
 

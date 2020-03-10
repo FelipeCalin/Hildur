@@ -8,13 +8,13 @@
 
 #include "Hildur/Application.h"
 #include "Hildur/Layer.h"
-#include "Hildur/Log.h"
+#include "Hildur/util/Log.h"
 
 #include "Hildur/Core/Timestep.h"
 
 #include "Hildur/Input.h"
-#include "Hildur/KeyCodes.h"
-#include "Hildur/MouseButtonCodes.h"
+#include "Hildur/util/KeyCodes.h"
+#include "Hildur/util/MouseButtonCodes.h"
 
 #include "Hildur/OrthographicCameraController.h"
 #include "Hildur/PerspectiveCameraController.h"
@@ -23,10 +23,9 @@
 
 //--------Scene Files------------------
 
-#include "Hildur/Scene/GameObject.h"
-#include "Hildur/Scene/Model.h"
+//#include "Hildur/Resource/Scene.h"
 
-#include "Hildur/Scene/Scene.h"
+#include "Hildur/Resource/Model.h"
 
 //-------Renderer Files----------------
 
@@ -34,18 +33,17 @@
 #include "Hildur/Renderer/RenderCommand.h"
 
 #include "Hildur/Renderer/Buffer.h"
-#include "Hildur/Renderer/Shader.h"
-#include "Hildur/Renderer/Texture.h"
 #include "Hildur/Renderer/VertexArray.h"
 
-#include "Hildur/Renderer/Mesh.h"
+#include "Hildur/Resource/Shader.h"
+#include "Hildur/Resource/Texture.h"
 
-#include "Hildur/Renderer/Material.h"
+#include "Hildur/Resource/Mesh.h"
+
+#include "Hildur/Resource/Material.h"
 
 #include "Hildur/Renderer/OrthographicCamera.h"
 #include "Hildur/Renderer/PerspectiveCamera.h"
-
-#include "Hildur/Renderer/Primitives2D.h"
 
 //---------Physics---------------------
 
@@ -53,12 +51,12 @@
 
 //---------ECS Files-------------------
 
-#include "Hildur/ECS/ECS.h"
+#include "Hildur/Component/ECS/ECS.h"
 
 //----------Input----------------------
 
-#include "Hildur/KeyCodes.h"
-#include "Hildur/MouseButtonCodes.h"
+#include "Hildur/util/KeyCodes.h"
+#include "Hildur/util/MouseButtonCodes.h"
 
 //--------EntryPoint-------------------
 

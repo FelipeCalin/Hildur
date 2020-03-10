@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Hildur/Renderer/Shader.h"
+#include "Hildur/Resource/Shader.h"
 
 #include <string>
 

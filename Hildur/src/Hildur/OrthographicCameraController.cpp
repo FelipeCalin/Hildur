@@ -2,7 +2,7 @@
 #include "OrthographicCameraController.h"
 
 #include "Hildur/Input.h"
-#include "Hildur/KeyCodes.h"
+#include "Hildur/util/KeyCodes.h"
 
 
 namespace Hildur {
