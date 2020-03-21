@@ -1,7 +1,7 @@
 #include "hrpcheaders.h"
 #include "OrthographicCameraController.h"
 
-#include "Hildur/Input.h"
+#include "Hildur/Core/Input.h"
 #include "Hildur/util/KeyCodes.h"
 
 

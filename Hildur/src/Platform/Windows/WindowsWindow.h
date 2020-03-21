@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Hildur/Window.h"
+#include "Hildur/Core/Window.h"
 #include "Hildur/Renderer/GraphicsContext.h"
 
 #include <GLFW/glfw3.h>

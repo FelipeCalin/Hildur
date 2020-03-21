@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core/Core.h"
-#include "Layer.h"
+#include "Hildur/Core/Core.h"
+#include "Hildur/Resource/Layer.h"
 
 #include <vector>
 

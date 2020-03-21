@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Hildur/Input.h"
+#include "Hildur/Core/Input.h"
 
 namespace Hildur {
 

@@ -1,7 +1,7 @@
 #include "hrpcheaders.h"
 #include "Buffer.h"
 
-#include "Hildur/Renderer/Renderer.h"
+#include "Hildur/Core/System/Renderer.h"
 
 #include "Platform/OpenGL/OpenGLBuffer.h"
 

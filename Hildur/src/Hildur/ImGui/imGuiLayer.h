@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Hildur/Layer.h"
+#include "Hildur/Resource/Layer.h"
 
 #include "Hildur/Events/ApplicationEvent.h"
 #include "Hildur/Events/KeyEvent.h"

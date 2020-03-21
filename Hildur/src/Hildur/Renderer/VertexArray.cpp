@@ -1,7 +1,7 @@
 #include "hrpcheaders.h"
 #include "VertexArray.h"
 
-#include "Hildur/Renderer/Renderer.h"
+#include "Hildur/Core/System/Renderer.h"
 
 #include "Platform/OpenGL/OpenGLVertexArray.h"
 

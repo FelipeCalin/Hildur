@@ -41,7 +41,6 @@ namespace Hildur {
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc) 
 		: m_Name(name) {
 		
-
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
 		sources[GL_FRAGMENT_SHADER] = fragmentSrc;
@@ -165,8 +164,12 @@ namespace Hildur {
 
 			glDeleteProgram(program);
 
-			for (auto id : glShaderIDs)
+			for (auto id : glShaderIDs) {
+			
+				glDetachShader(program, id);
 				glDeleteShader(id);
+
+			}
 
 			HR_CORE_ERROR("{0}", infoLog.data());
 			HR_CORE_ASSERT(false, "Shader link failure!");

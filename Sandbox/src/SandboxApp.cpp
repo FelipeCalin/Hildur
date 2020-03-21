@@ -1,261 +1,466 @@
 #include <Hildur.h>
 
-#include <GLM/gtc/matrix_transform.hpp>
 
 #include "Platform/OpenGL/OpenGLShader.h"
 
 #include <ImGui/imgui.h>
 #include <GLFW/include/GLFW/glfw3.h>
 
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 //#include <Glad/include/glad/glad.h>
 #include <stb_image/stb_image.h>
 
 
+//class ExampleLayer : public Hildur::Layer
+//{
+//public:
+//	ExampleLayer()
+//		: Layer("Example"), m_CameraController(1280.0f / 720.0f)
+//	{
+//		m_VertexArray.reset(Hildur::VertexArray::Create());
+//
+//		std::vector<Hildur::Vertex> vertices = {
+//			{glm::vec3(-0.5f, -0.5f,  0.0f),   glm::vec2(0.0f,  0.0f),    glm::vec3(0.0f,  0.0f, -1.0f)},
+//			{glm::vec3(0.5f,  -0.5f,  0.0f),   glm::vec2(1.0f,  0.0f),    glm::vec3(0.0f,  0.0f, -1.0f)},
+//			{glm::vec3(0.5f,   0.5f,  0.0f),   glm::vec2(1.0f,  1.0f),    glm::vec3(0.0f,  0.0f, -1.0f)},
+//			{glm::vec3(0.5f,   0.5f,  0.0f),   glm::vec2(1.0f,  1.0f),    glm::vec3(0.0f,  0.0f, -1.0f)},
+//			{glm::vec3(-0.5f,  0.5f,  0.0f),   glm::vec2(0.0f,  1.0f),    glm::vec3(0.0f,  0.0f, -1.0f)},
+//			{glm::vec3(-0.5f, -0.5f,  0.0f),   glm::vec2(0.0f,  0.0f),    glm::vec3(0.0f,  0.0f, -1.0f)}
+//		};
+//
+//		Hildur::Ref<Hildur::VertexBuffer> vertexBuffer;
+//		vertexBuffer = Hildur::VertexBuffer::Create(vertices, sizeof(vertices)));
+//		Hildur::BufferLayout layout = {
+//			{ Hildur::ShaderDataType::Float3, "a_Position" },
+//			{ Hildur::ShaderDataType::Float4, "a_Color" }
+//		};
+//		vertexBuffer->SetLayout(layout);
+//		m_VertexArray->AddVertexBuffer(vertexBuffer);
+//
+//		std::vector<uint32_t> indices = { 0, 1, 2 };
+//		Hildur::Ref<Hildur::IndexBuffer> indexBuffer;
+//		indexBuffer = Hildur::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+//		m_VertexArray->SetIndexBuffer(indexBuffer);
+//
+//		m_SquareVA.reset(Hildur::VertexArray::Create());
+//
+//		float squareVertices[5 * 4] = {
+//			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+//			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+//			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+//			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
+//		};
+//
+//		Hildur::Ref<Hildur::VertexBuffer> squareVB;
+//		squareVB = Hildur::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+//		squareVB->SetLayout({
+//			{ Hildur::ShaderDataType::Float3, "a_Position" },
+//			{ Hildur::ShaderDataType::Float2, "a_TexCoord" }
+//			});
+//		m_SquareVA->AddVertexBuffer(squareVB);
+//
+//		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
+//		Hildur::Ref<Hildur::IndexBuffer> squareIB;
+//		squareIB = Hildur::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+//		m_SquareVA->SetIndexBuffer(squareIB);
+//
+//		std::string vertexSrc = R"(
+//			#version 330 core
+//			
+//			layout(location = 0) in vec3 a_Position;
+//			layout(location = 1) in vec4 a_Color;
+//			uniform mat4 u_ViewProjection;
+//			uniform mat4 u_Transform;
+//			out vec3 v_Position;
+//			out vec4 v_Color;
+//			void main()
+//			{
+//				v_Position = a_Position;
+//				v_Color = a_Color;
+//				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
+//			}
+//		)";
+//
+//		std::string fragmentSrc = R"(
+//			#version 330 core
+//			
+//			layout(location = 0) out vec4 color;
+//			in vec3 v_Position;
+//			in vec4 v_Color;
+//			void main()
+//			{
+//				color = vec4(v_Position * 0.5 + 0.5, 1.0);
+//				color = v_Color;
+//			}
+//		)";
+//
+//		m_Shader = Hildur::Shader::Create("VertexPosColor", vertexSrc, fragmentSrc);
+//
+//		std::string flatColorShaderVertexSrc = R"(
+//			#version 330 core
+//			
+//			layout(location = 0) in vec3 a_Position;
+//			uniform mat4 u_ViewProjection;
+//			uniform mat4 u_Transform;
+//			out vec3 v_Position;
+//			void main()
+//			{
+//				v_Position = a_Position;
+//				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
+//			}
+//		)";
+//
+//		std::string flatColorShaderFragmentSrc = R"(
+//			#version 330 core
+//			
+//			layout(location = 0) out vec4 color;
+//			in vec3 v_Position;
+//			
+//			uniform vec3 u_Color;
+//			void main()
+//			{
+//				color = vec4(u_Color, 1.0);
+//			}
+//		)";
+//
+//		m_FlatColorShader = Hildur::Shader::Create("FlatColor", flatColorShaderVertexSrc, flatColorShaderFragmentSrc);
+//
+//		auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
+//
+//		m_Texture = Hildur::Texture2D::Create("assets/textures/Checkerboard.png");
+//		m_ChernoLogoTexture = Hildur::Texture2D::Create("assets/textures/ChernoLogo.png");
+//
+//		std::dynamic_pointer_cast<Hildur::OpenGLShader>(textureShader)->Bind();
+//		std::dynamic_pointer_cast<Hildur::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
+//	}
+//
+//	void OnUpdate(Hildur::Timestep ts) override
+//	{
+//		// Update
+//		m_CameraController.OnUpdate(ts);
+//
+//		// Render
+//		Hildur::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+//		Hildur::RenderCommand::Clear();
+//
+//		Hildur::Renderer::BeginScene(m_CameraController.GetCamera());
+//
+//		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+//
+//		std::dynamic_pointer_cast<Hildur::OpenGLShader>(m_FlatColorShader)->Bind();
+//		std::dynamic_pointer_cast<Hildur::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color", m_SquareColor);
+//
+//		for (int y = 0; y < 20; y++)
+//		{
+//			for (int x = 0; x < 20; x++)
+//			{
+//				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
+//				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+//				Hildur::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
+//			}
+//		}
+//
+//		auto textureShader = m_ShaderLibrary.Get("Texture");
+//
+//		m_Texture->Bind();
+//		Hildur::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+//		m_ChernoLogoTexture->Bind();
+//		Hildur::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+//
+//		// Triangle
+//		// Hildur::Renderer::Submit(m_Shader, m_VertexArray);
+//
+//		Hildur::Renderer::EndScene();
+//	}
+//
+//	virtual void OnImGuiRender() override
+//	{
+//		ImGui::Begin("Settings");
+//		ImGui::ColorEdit3("Square Color", glm::value_ptr(m_SquareColor));
+//		ImGui::End();
+//	}
+//
+//	void OnEvent(Hildur::Event& e) override
+//	{
+//		m_CameraController.OnEvent(e);
+//
+//		if (e.GetEventType() == Hildur::EventType::WindowResize) {
+//
+//			auto& re = (Hildur::WindowResizeEvent&)e;
+//
+//			float zoom = (float)re.GetWidth() / 1960;
+//
+//			m_CameraController.SetZoomLevel(re.GetWidth)
+//
+//		}
+//	}
+//private:
+//	Hildur::ShaderLibrary m_ShaderLibrary;
+//	Hildur::Ref<Hildur::Shader> m_Shader;
+//	Hildur::Ref<Hildur::VertexArray> m_VertexArray;
+//
+//	Hildur::Ref<Hildur::Shader> m_FlatColorShader;
+//	Hildur::Ref<Hildur::VertexArray> m_SquareVA;
+//
+//	Hildur::Ref<Hildur::Texture2D> m_Texture, m_ChernoLogoTexture;
+//
+//	Hildur::OrthographicCameraController m_CameraController;
+//	glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
+//};
+//
+//
+//class Layer2D : public Hildur::Layer {
+//
+//public:
+//
+//	Layer2D()
+//		:Layer("Example"), m_CameraController(16.0f / 9.0f, true), m_TrianglePos(0.2f, 0.0f, 0.0f)
+//	{
+//
+//		m_VertexArray.reset(Hildur::VertexArray::Create());
+//
+//		std::vector<Hildur::Vertex> vertices = {
+//
+//			//Position                        UV                         Normal
+//			{glm::vec3(-0.5f, -0.5f,  0.0f),   glm::vec2(0.0f,  0.0f),    glm::vec3(0.0f,  0.0f, -1.0f)},
+//			{glm::vec3(0.5f,  -0.5f,  0.0f),   glm::vec2(1.0f,  0.0f),    glm::vec3(0.0f,  0.0f, -1.0f)},
+//			{glm::vec3(0.5f,   0.5f,  0.0f),   glm::vec2(1.0f,  1.0f),    glm::vec3(0.0f,  0.0f, -1.0f)},
+//			{glm::vec3(0.5f,   0.5f,  0.0f),   glm::vec2(1.0f,  1.0f),    glm::vec3(0.0f,  0.0f, -1.0f)},
+//			{glm::vec3(-0.5f,  0.5f,  0.0f),   glm::vec2(0.0f,  1.0f),    glm::vec3(0.0f,  0.0f, -1.0f)},
+//			{glm::vec3(-0.5f, -0.5f,  0.0f),   glm::vec2(0.0f,  0.0f),    glm::vec3(0.0f,  0.0f, -1.0f)}
+//
+//		};
+//
+//		std::vector<uint32_t> indices = { 0, 1, 2, 3, 4, 5 };
+//
+//		Hildur::Ref<Hildur::VertexBuffer> vertexBuffer;
+//		vertexBuffer = Hildur::VertexBuffer::Create(vertices, sizeof(vertices));
+//		Hildur::BufferLayout layout = {
+//			{ Hildur::ShaderDataType::Float3, "a_Position" },
+//			{ Hildur::ShaderDataType::Float4, "a_Color" }
+//		};
+//		vertexBuffer->SetLayout(layout);
+//		m_VertexArray->AddVertexBuffer(vertexBuffer);
+//
+//		Hildur::Ref<Hildur::IndexBuffer> indexBuffer;
+//		indexBuffer = Hildur::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+//		m_VertexArray->SetIndexBuffer(indexBuffer);
+//
+//
+//		//quad
+//
+//		m_QuadVertexArray.reset(Hildur::VertexArray::Create());
+//
+//
+//		float quadVertices[4 * 5] = {
+//
+//			-0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+//			 0.5f, -0.5f,  1.0f,  1.0f,  0.0f,
+//			 0.5f,  0.5f,  1.0f,  1.0f,  1.0f,
+//			-0.5f,  0.5f,  1.0f,  0.0f,  1.0f,
+//
+//		};
+//
+//		Hildur::Ref<Hildur::VertexBuffer> quadVertexBuffer;
+//		quadVertexBuffer.reset(Hildur::VertexBuffer::Create(quadVertices, sizeof(quadVertices)));
+//
+//		Hildur::BufferLayout quadLayout = {
+//
+//			{ Hildur::ShaderDataType::Float3, "a_Pos" },
+//			{ Hildur::ShaderDataType::Float2, "a_TextPos" }
+//
+//		};
+//
+//		quadVertexBuffer->SetLayout(quadLayout);
+//		m_QuadVertexArray->AddVertexBuffer(quadVertexBuffer);
+//
+//		uint32_t quadIndices[6] = { 0, 1, 2, 2, 3, 0 };
+//		Hildur::Ref<Hildur::IndexBuffer> quadIndexBuffer;
+//		quadIndexBuffer.reset(Hildur::IndexBuffer::Create(quadIndices, sizeof(quadIndices) / sizeof(uint32_t)));
+//
+//		m_QuadVertexArray->SetIndexBuffer(quadIndexBuffer);
+//
+//		//Shader
+//
+//		std::string vertexSrc = R"(
+//			#version 140 core
+//			#extension GL_ARB_explicit_attrib_location : require
+//
+//			
+//			layout(location = 0) in vec3 a_Position;
+//			layout(location = 1) in vec4 a_Color;
+//
+//			uniform mat4 u_ViewProjection;
+//			uniform mat4 u_Transform;
+//
+//			out vec3 v_Position;
+//			out vec4 v_Color;
+//
+//			void main()
+//			{
+//				v_Position = a_Position;
+//				v_Color = a_Color;
+//				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
+//			}
+//		)";
+//
+//		std::string fragmentSrc = R"(
+//			#version 140 core
+//			#extension GL_ARB_explicit_attrib_location : require
+//
+//			
+//			layout(location = 0) out vec4 color;
+//
+//			in vec3 v_Position;
+//			in vec4 v_Color;
+//
+//			void main()
+//			{
+//				color = vec4(v_Position * 0.5 + 0.5, 1.0);
+//				color = v_Color;
+//			}
+//		)";
+//
+//		m_Shader = Hildur::Shader::Create("shader", vertexSrc, fragmentSrc);
+//
+//
+//		//Shader Texture test
+//
+//		std::string textureVertexSrc = R"(
+//
+//			#version 140 core
+//			#extension GL_ARB_explicit_attrib_location : require
+//
+//			layout(location = 0) in vec3 a_Position;
+//			layout(location = 1) in vec2 a_TexCoord;
+//
+//			uniform mat4 u_ViewProjection;
+//			uniform mat4 u_Transform;
+//
+//			out vec2 v_TexCoord;
+//
+//			void main()
+//			{
+//				v_TexCoord = a_TexCoord;
+//				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
+//			}
+//
+//		)";
+//
+//		std::string textureFragmentSrc = R"(
+//
+//			#version 140 core
+//			#extension GL_ARB_explicit_attrib_location : require
+//
+//			layout(location = 0) out vec4 color;
+//			in vec2 v_TexCoord;
+//			
+//			uniform sampler2D u_Texture;
+//			uniform sampler2D u_Texture2;
+//
+//			void main()
+//			{
+//				color = mix(texture(u_Texture, v_TexCoord), texture(u_Texture2, v_TexCoord), 0.2);
+//				//color = texture(u_Texture2, v_TexCoord);
+//				//color = vec4(0.8, 0.2, 0.3, 1.0);
+//				//color = vec4(v_TexCoord, 0.0, 1.0);
+//			}
+//
+//		)";
+//
+//		m_TextureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
+//
+//		m_Texture = Hildur::Texture2D::Create("assets/textures/ChernoLogo.png");
+//		m_Texture2 = Hildur::Texture2D::Create("assets/textures/Checkerboard.png");
+//
+//		std::dynamic_pointer_cast<Hildur::OpenGLShader>(m_TextureShader)->Bind();
+//		std::dynamic_pointer_cast<Hildur::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 1);
+//		std::dynamic_pointer_cast<Hildur::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture2", 2);
+//
+//		m_Texture->Bind(1);
+//		m_Texture2->Bind(2);
+//
+//	}
+//
+//	void OnUpdate(Hildur::Timestep ts) override {
+//
+//		//HR_TRACE("Delta Shit: {0}, ({1}ms)", ts.GetTimeSeconds(), ts.GetTimeMiliseconds());
+//
+//		//Update
+//
+//		m_CameraController.OnUpdate(ts);
+//
+//		//Render
+//
+//
+//		glm::mat4 position = glm::translate(glm::mat4(1.0f), m_TrianglePos);
+//		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f));
+//		glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), rot, glm::vec3(0.0f, 0.0f, 1.0f));
+//
+//		glm::mat4 transform = rotation * position * scale;
+//
+//
+//		Hildur::RenderCommand::SetClearColor({ 0.2f, 0.22f, 0.25f, 1 });
+//		Hildur::RenderCommand::Clear();
+//
+//
+//		Hildur::Renderer::BeginScene(m_CameraController.GetCamera());
+//
+//		// Triangle
+//		Hildur::Renderer::Submit(m_Shader, m_VertexArray);
+//
+//		auto textureShader = m_ShaderLibrary.Get("Texture");
+//		Hildur::Renderer::Submit(textureShader, m_QuadVertexArray, transform);
+//
+//
+//		Hildur::Renderer::EndScene();
+//
+//	}
+//
+//	void OnImGuiRender() override {
+//
+//
+//
+//	}
+//
+//	void OnEvent(Hildur::Event& e) override {
+//
+//		m_CameraController.OnEvent(e);
+//
+//	}
+//
+//private:
+//
+//	Hildur::ShaderLibrary m_ShaderLibrary;
+//
+//	Hildur::Ref<Hildur::Shader> m_QuadShader, m_TextureShader;
+//	Hildur::Ref<Hildur::VertexArray> m_QuadVertexArray;
+//
+//	Hildur::Ref<Hildur::Texture2D> m_Texture;
+//	Hildur::Ref<Hildur::Texture2D> m_Texture2;
+//
+//	Hildur::Ref<Hildur::Shader> m_Shader;
+//	Hildur::Ref<Hildur::VertexArray> m_VertexArray;
+//
+//
+//	Hildur::OrthographicCameraController m_CameraController;
+//
+//	float DeltaX = 0;
+//	float DeltaY = 0;
+//	float rot = 0;
+//
+//	glm::vec3 m_TrianglePos;
+//
+//};
 
-/*
-class Layer2D : public Hildur::Layer {
-
-public:
-
-	Layer2D()
-		:Layer("Example"), m_CameraController(16.0f / 9.0f, true), m_TrianglePos(0.2f, 0.0f, 0.0f)
-	{
-
-		m_VertexArray.reset(Hildur::VertexArray::Create());
-
-		float vertices[3 * 7] = {
-			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
-			 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
-			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
-		};
-
-		Hildur::Ref<Hildur::VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(Hildur::VertexBuffer::Create(vertices, sizeof(vertices)));
-		Hildur::BufferLayout layout = {
-			{ Hildur::ShaderDataType::Float3, "a_Position" },
-			{ Hildur::ShaderDataType::Float4, "a_Color" }
-		};
-		vertexBuffer->SetLayout(layout);
-		m_VertexArray->AddVertexBuffer(vertexBuffer);
-
-		uint32_t indices[3] = { 0, 1, 2 };
-		Hildur::Ref<Hildur::IndexBuffer> indexBuffer;
-		indexBuffer.reset(Hildur::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
-		m_VertexArray->SetIndexBuffer(indexBuffer);
-
-
-		//quad
-
-		m_QuadVertexArray.reset(Hildur::VertexArray::Create());
-
-
-		float quadVertices[4 * 5] = {
-
-			-0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-			 0.5f, -0.5f,  1.0f,  1.0f,  0.0f,
-			 0.5f,  0.5f,  1.0f,  1.0f,  1.0f,
-			-0.5f,  0.5f,  1.0f,  0.0f,  1.0f,
-
-		};
-
-		Hildur::Ref<Hildur::VertexBuffer> quadVertexBuffer;
-		quadVertexBuffer.reset(Hildur::VertexBuffer::Create(quadVertices, sizeof(quadVertices)));
-
-		Hildur::BufferLayout quadLayout = {
-
-			{ Hildur::ShaderDataType::Float3, "a_Pos" },
-			{ Hildur::ShaderDataType::Float2, "a_TextPos" }
-
-		};
-
-		quadVertexBuffer->SetLayout(quadLayout);
-		m_QuadVertexArray->AddVertexBuffer(quadVertexBuffer);
-
-		uint32_t quadIndices[6] = { 0, 1, 2, 2, 3, 0 };
-		Hildur::Ref<Hildur::IndexBuffer> quadIndexBuffer;
-		quadIndexBuffer.reset(Hildur::IndexBuffer::Create(quadIndices, sizeof(quadIndices) / sizeof(uint32_t)));
-
-		m_QuadVertexArray->SetIndexBuffer(quadIndexBuffer);
-
-		//Shader
-
-		std::string vertexSrc = R"(
-			#version 140 core
-			#extension GL_ARB_explicit_attrib_location : require
-
-			
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec4 a_Color;
-
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
-
-			out vec3 v_Position;
-			out vec4 v_Color;
-
-			void main()
-			{
-				v_Position = a_Position;
-				v_Color = a_Color;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
-			}
-		)";
-
-		std::string fragmentSrc = R"(
-			#version 140 core
-			#extension GL_ARB_explicit_attrib_location : require
-
-			
-			layout(location = 0) out vec4 color;
-
-			in vec3 v_Position;
-			in vec4 v_Color;
-
-			void main()
-			{
-				color = vec4(v_Position * 0.5 + 0.5, 1.0);
-				color = v_Color;
-			}
-		)";
-
-		m_Shader = Hildur::Shader::Create("shader", vertexSrc, fragmentSrc);
-
-
-		//Shader Texture test
-
-		std::string textureVertexSrc = R"(
-
-			#version 140 core
-			#extension GL_ARB_explicit_attrib_location : require
-
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec2 a_TexCoord;
-
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
-
-			out vec2 v_TexCoord;
-
-			void main()
-			{
-				v_TexCoord = a_TexCoord;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
-			}
-
-		)";
-
-		std::string textureFragmentSrc = R"(
-
-			#version 140 core
-			#extension GL_ARB_explicit_attrib_location : require
-
-			layout(location = 0) out vec4 color;
-			in vec2 v_TexCoord;
-			
-			uniform sampler2D u_Texture;
-			uniform sampler2D u_Texture2;
-
-			void main()
-			{
-				color = mix(texture(u_Texture, v_TexCoord), texture(u_Texture2, v_TexCoord), 0.2);
-				//color = texture(u_Texture2, v_TexCoord);
-				//color = vec4(0.8, 0.2, 0.3, 1.0);
-				//color = vec4(v_TexCoord, 0.0, 1.0);
-			}
-
-		)";
-
-		m_TextureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
-
-		m_Texture = Hildur::Texture2D::Create("assets/textures/ChernoLogo.png");
-		m_Texture2 = Hildur::Texture2D::Create("assets/textures/Checkerboard.png");
-
-		std::dynamic_pointer_cast<Hildur::OpenGLShader>(m_TextureShader)->Bind();
-		std::dynamic_pointer_cast<Hildur::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 1);
-		std::dynamic_pointer_cast<Hildur::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture2", 2);
-
-		m_Texture->Bind(1);
-		m_Texture2->Bind(2);
-
-	}
-
-	void OnUpdate(Hildur::Timestep ts) override {
-
-		//HR_TRACE("Delta Shit: {0}, ({1}ms)", ts.GetTimeSeconds(), ts.GetTimeMiliseconds());
-
-		//Update
-
-		m_CameraController.OnUpdate(ts);
-
-		//Render
-
-
-		glm::mat4 position = glm::translate(glm::mat4(1.0f), m_TrianglePos);
-		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f));
-		glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), rot, glm::vec3(0.0f, 0.0f, 1.0f));
-
-		glm::mat4 transform = rotation * position * scale;
-
-
-		Hildur::RenderCommand::SetClearColor({ 0.2f, 0.22f, 0.25f, 1 });
-		Hildur::RenderCommand::Clear();
-
-
-		Hildur::Renderer::BeginScene(m_CameraController.GetCamera());
-
-		// Triangle
-		Hildur::Renderer::Submit(m_Shader, m_VertexArray);
-
-		auto textureShader = m_ShaderLibrary.Get("Texture");
-		Hildur::Renderer::Submit(textureShader, m_QuadVertexArray, transform);
-
-
-		Hildur::Renderer::EndScene();
-
-	}
-
-	void OnImGuiRender() override {
-
-
-
-	}
-
-	void OnEvent(Hildur::Event& e) override {
-
-		m_CameraController.OnEvent(e);
-
-	}
-
-private:
-
-	Hildur::ShaderLibrary m_ShaderLibrary;
-
-	Hildur::Ref<Hildur::Shader> m_QuadShader, m_TextureShader;
-	Hildur::Ref<Hildur::VertexArray> m_QuadVertexArray;
-
-	Hildur::Ref<Hildur::Texture2D> m_Texture;
-	Hildur::Ref<Hildur::Texture2D> m_Texture2;
-
-	Hildur::Ref<Hildur::Shader> m_Shader;
-	Hildur::Ref<Hildur::VertexArray> m_VertexArray;
-
-
-	Hildur::OrthographicCameraController m_CameraController;
-
-	float DeltaX = 0;
-	float DeltaY = 0;
-	float rot = 0;
-
-	glm::vec3 m_TrianglePos;
-
-};
-*/
 
 
  /////// Layer 3D //////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////// 
 
-
+/*
 class Layer3D : public Hildur::Layer {
 
 public:
@@ -452,14 +657,14 @@ public:
 		//Hildur::Renderer::Submit(textureShader, t_Scene->GetMesh(0)->GetVertexArray(), transform);
 
 
-	/*	for (unsigned int i = 0; i < 10; i++)
-		{
-			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, cubePositions[i]);
-			float angle = 20.0f * i;
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-			Hildur::Renderer::Submit(textureShader, m_Mesh->GetVertexArray(), glm::translate(model, {2.0f, 0.0f, 0.0f}));
-		}*/
+		//for (unsigned int i = 0; i < 10; i++)
+		//{
+		//	glm::mat4 model = glm::mat4(1.0f);
+		//	model = glm::translate(model, cubePositions[i]);
+		//	float angle = 20.0f * i;
+		//	model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+		//	Hildur::Renderer::Submit(textureShader, m_Mesh->GetVertexArray(), glm::translate(model, {2.0f, 0.0f, 0.0f}));
+		//}
 
 
 		Hildur::Renderer::EndScene();
@@ -554,6 +759,7 @@ private:
 	//Test scene
 
 };
+*/
 
 
 class ImGuiLayer : public Hildur::ImGuiLayer {
@@ -574,6 +780,60 @@ public:
 
 };
 
+class ImaginaryScene : public Hildur::Scene {
+
+
+public:
+
+	void Load() {
+
+		Hildur::Entity* mike = Scene::instantiate("manuel");
+		mike->getComponent<Hildur::Transform>()->setPosition(glm::vec3(8.0f, 3.0f, 6.0f));
+
+		glm::vec3 pos = mike->getComponent<Hildur::Transform>()->getPosition();
+
+		HR_CORE_TRACE("Mike's position is: {0}, {1}, {2}", pos.x, pos.y, pos.z);
+
+	}
+
+};
+
+class SuperScene : public Hildur::Scene {
+
+
+public:
+
+	void Load() {
+
+		Hildur::Entity* manuel = Scene::instantiate("manuel");
+		manuel->getComponent<Hildur::Transform>()->setPosition(glm::vec3(1.0f, 12.0f, 5.0f));
+
+		glm::vec3 pos = manuel->getComponent<Hildur::Transform>()->getPosition();
+
+		HR_CORE_TRACE("Manuel's position is: {0}, {1}, {2}", pos.x, pos.y, pos.z);
+
+	}
+
+};
+
+class MegaScene : public Hildur::Scene {
+
+
+public:
+
+	void Load() {
+
+		Hildur::Entity* peter = Scene::instantiate("manuel");
+		peter->getComponent<Hildur::Transform>()->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+
+		glm::vec3 pos = peter->getComponent<Hildur::Transform>()->getPosition();
+
+		HR_CORE_TRACE("Peter's position is: {0}, {1}, {2}", pos.x, pos.y, pos.z);
+
+	}
+
+};
+
 
 class Sandbox : public Hildur::Application {
 
@@ -582,7 +842,14 @@ public:
 	Sandbox() {
 
 		//PushLayer(new Layer2D());
-		PushLayer(new Layer3D());
+		//PushLayer(new Layer3D());
+
+		std::map<std::string, Hildur::Scene*> scenes;
+		scenes["ImaginaryScene"] = new ImaginaryScene();
+		scenes["SuperScene"] = new SuperScene();
+		scenes["MegaScene"] = new MegaScene();
+
+		Init(scenes);
 
 	}
 

@@ -6,15 +6,19 @@
 
 //---------Core Files------------------
 
-#include "Hildur/Application.h"
-#include "Hildur/Layer.h"
+#include "Hildur/Core/Application.h"
+#include "Hildur/Resource/Layer.h"
 #include "Hildur/util/Log.h"
 
 #include "Hildur/Core/Timestep.h"
 
-#include "Hildur/Input.h"
+#include "Hildur/Core/Input.h"
 #include "Hildur/util/KeyCodes.h"
 #include "Hildur/util/MouseButtonCodes.h"
+
+#include "Hildur/Core/Entity.h"
+#include "Hildur/Resource/Scene.h"
+#include "Hildur/Core/System/SceneManager.h"
 
 #include "Hildur/OrthographicCameraController.h"
 #include "Hildur/PerspectiveCameraController.h"
@@ -23,13 +27,13 @@
 
 //--------Scene Files------------------
 
-//#include "Hildur/Resource/Scene.h"
+#include "Hildur/Resource/Scene.h"
 
 #include "Hildur/Resource/Model.h"
 
 //-------Renderer Files----------------
 
-#include "Hildur/Renderer/Renderer.h"
+#include "Hildur/Core/System/Renderer.h"
 #include "Hildur/Renderer/RenderCommand.h"
 
 #include "Hildur/Renderer/Buffer.h"
@@ -49,10 +53,6 @@
 
 //#include "Hildur/Physics/Physics.h"
 
-//---------ECS Files-------------------
-
-#include "Hildur/Component/ECS/ECS.h"
-
 //----------Input----------------------
 
 #include "Hildur/util/KeyCodes.h"
@@ -60,4 +60,4 @@
 
 //--------EntryPoint-------------------
 
-#include "Hildur/EntryPoint.h"
+#include "Hildur/Core/EntryPoint.h"

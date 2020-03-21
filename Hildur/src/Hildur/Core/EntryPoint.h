@@ -10,9 +10,8 @@ int main(int argc, char** argv) {
 	Hildur::Log::Init();
 
 	HR_INFO("Client logger working");
-	HR_CORE_ERROR("Core logger initialized");
+	HR_CORE_INFO("Core logger initialized");
 
-	printf("Hildur engine online\n");
 	auto app = Hildur::CreateApplication();
 	app->Run();
 	delete app;

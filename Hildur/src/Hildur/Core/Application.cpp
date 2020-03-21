@@ -1,11 +1,12 @@
 #include "hrpcheaders.h"
 #include "Application.h"
 
-#include "Core/Core.h"
+#include "Hildur/Core/Core.h"
 #include "Input.h"
 
-#include "Hildur/Renderer/Renderer.h"
+#include "Hildur/Core/System/Renderer.h"
 #include "Hildur/Renderer/RenderCommand.h"
+#include "Hildur/Core/Entity.h"
 
 #include <imgui.h>
 #include <glad/glad.h>
@@ -21,7 +22,6 @@ namespace Hildur {
 	Application::Application() {
 
 		/// Configuration /////////////////////////////////////////////
-	   ///////////////////////////////////////////////////////////////
 
 		m_Config.readConfig();
 
@@ -41,27 +41,27 @@ namespace Hildur {
 
 		}
 
+		/// System Singleton Instacing ////////////////////////////////
+
+		m_Window = std::unique_ptr<Window>(Window::Create(props));
+		m_SceneManager = std::unique_ptr<SceneManager>();
+
 
 		 /// Window initialization /////////////////////////////////////
-		///////////////////////////////////////////////////////////////
 
 		HR_CORE_ASSERT(!s_Instance, "Application already exists")
 		s_Instance = this;
 
-		//m_Window = Window::Create();
-		m_Window = std::unique_ptr<Window>(Window::Create(props));
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
 		m_Window->SetVSync(m_Config.profile.vsync);
 
 
 		/// Renderer initialization ///////////////////////////////////
-	   ///////////////////////////////////////////////////////////////
 		Renderer::Init();
 
 
 		/// Debug ImGui Layer initialization //////////////////////////
-	   ///////////////////////////////////////////////////////////////
 		//m_ImGuiLayer = std::make_unique<ImGuiLayer>();
 		m_ImGuiLayer = new ImGuiLayer;
 		PushOverlay(m_ImGuiLayer);
@@ -69,28 +69,9 @@ namespace Hildur {
 
 		
 		/// Viewport FBO initialization ///////////////////////////////
-	   ///////////////////////////////////////////////////////////////
 		
 		//// The framebuffer
-		//glGenFramebuffers(1, &fbo);
-		//Hildur::RenderCommand::SetRenderTarget(fbo);
-		//glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-		//
-		////The texture
-		//glGenTextures(1, &texture);
-		//glBindTexture(GL_TEXTURE_2D, texture);
-
-		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1960, 1080, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL); //TODO: dynamically create a global Resolution variable  
-
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
-
 		m_FBO = FrameBuffer::Create(1960, 1080);
-		//texture = m_FBO->GetTexture();
 
 		// The depth buffer
 		glGenRenderbuffers(1, &depthrenderbuffer);
@@ -106,15 +87,7 @@ namespace Hildur {
 
 		// UnBind frame buffer
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		
-		/// Entity Component System Initialization ////////////////////
-	   ///////////////////////////////////////////////////////////////
 
-		struct Position {
-			Position(float x = 0.0f, float y = 0.0f, float z = 0.0f) : x(x), y(y), z(z) {}
-
-			float x, y, z;
-		};
 		
 	}
 
@@ -124,10 +97,17 @@ namespace Hildur {
 
 	}
 
+	void Application::Init(std::map<std::string, Scene*>& sceneMap) {
+
+		m_SceneManager->SetSceneMap(sceneMap);
+
+	}
+
 	void Application::OnEvent(Event& e) {
 
 		EventDispatcher distpatcher(e);
 		distpatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
+		distpatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize));
 
 		//HR_CORE_TRACE("{0}", e);
 
@@ -152,14 +132,17 @@ namespace Hildur {
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
-			//glBindFramebuffer(GL_FRAMEBUFFER, m_FBO->GetID());
+
 			m_FBO->Bind();
 
-			//Update Layers
-			for (Layer* layer : m_LayerStack)
-				layer->OnUpdate(timestep);
+			if (!m_Minimized) {
 
-			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+				//Update Layers
+				for (Layer* layer : m_LayerStack)
+					layer->OnUpdate(timestep);
+
+			}
+
 			m_FBO->UnBind();
 
 			m_ImGuiLayer->Begin();
@@ -184,10 +167,20 @@ namespace Hildur {
 			ImGui::End();
 
 
+			ImGui::Begin("Current Scene");
+			//std::string currentSceneName = m_SceneManager->GetCurrentName();
+			ImGui::TextUnformatted(m_SceneManager->GetCurrentName().c_str());
+			ImGui::End();
+
+
 			ImGui::Begin("Hierarchy");
 			ImGui::End();
 
+			m_SceneManager->DrawSceneList();
+
 			m_ImGuiLayer->End();
+
+			m_SceneManager->LoadQueuedScene();
 
 			m_Window->OnUpdate();
 
@@ -200,6 +193,23 @@ namespace Hildur {
 		m_Running = false;
 
 		return true;
+
+	}
+
+	bool Application::OnWindowResize(WindowResizeEvent& e) {
+
+		if (e.GetWidth() == 0 || e.GetHeight() == 0) {
+
+			m_Minimized = true;
+
+			return false;
+
+		}
+
+		m_Minimized = false;
+		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+
+		return false;
 
 	}
 

@@ -1,7 +1,7 @@
 #include "hrpcheaders.h"
 #include "WindowsInput.h"
 
-#include "Hildur/Application.h"
+#include "Hildur/Core/Application.h"
 
 #include <GLFW/glfw3.h>
 
