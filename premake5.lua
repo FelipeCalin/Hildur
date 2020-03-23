@@ -7,6 +7,11 @@ workspace "Hildur"
 		"Debug",
 		"Release",
 		"Dist"
+    }
+    
+    flags
+	{
+		"MultiProcessorCompile"
 	}
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
@@ -91,7 +96,6 @@ project "Hildur"
 
 		defines
 		{
-			"HR_PLATFORM_WINDOWS",
 			"HR_BUILD_DLL",
 			"GLFW_INCLUDE_NONE"
 		}
@@ -144,10 +148,7 @@ project "Sandbox"
 	filter "system:windows"
 		systemversion "latest"
 
-		defines
-		{
-			"HR_PLATFORM_WINDOWS"
-		}
+		defines {}
 
 	filter "configurations:Debug"
 		defines "HR_DEBUG"

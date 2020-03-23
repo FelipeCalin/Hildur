@@ -52,6 +52,13 @@ namespace Hildur {
 
 	}
 
+	void OrthographicCameraController::SetResize(uint32_t width, uint32_t height) {
+
+		m_AspectRatio = (float)width / (float)height;
+		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+
+	}
+
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e) {
 
 		m_ZoomLevel -= e.GetYOffset() * 0.2f;
@@ -64,8 +71,9 @@ namespace Hildur {
 
 	bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e) {
 
-		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+		//overriden by manual function that takes the viewport size instead of screen space.
+		/*m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
+		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);*/
 
 		return false;
 

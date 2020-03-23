@@ -1,16 +1,14 @@
 #include <Hildur.h>
-
+#include <Hildur/Core/EntryPoint.h>
 
 #include "Platform/OpenGL/OpenGLShader.h"
 
 #include <ImGui/imgui.h>
-#include <GLFW/include/GLFW/glfw3.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-//#include <Glad/include/glad/glad.h>
-#include <stb_image/stb_image.h>
+#include "Sandbox2D.h"
 
 
 //class ExampleLayer : public Hildur::Layer
@@ -844,12 +842,14 @@ public:
 		//PushLayer(new Layer2D());
 		//PushLayer(new Layer3D());
 
-		std::map<std::string, Hildur::Scene*> scenes;
-		scenes["ImaginaryScene"] = new ImaginaryScene();
-		scenes["SuperScene"] = new SuperScene();
-		scenes["MegaScene"] = new MegaScene();
+		//std::map<std::string, Hildur::Scene*> scenes;
+		//scenes["ImaginaryScene"] = new ImaginaryScene();
+		//scenes["SuperScene"] = new SuperScene();
+		//scenes["MegaScene"] = new MegaScene();
 
-		Init(scenes);
+		//Init(scenes);
+
+		PushLayer(new Sandbox2D());
 
 	}
 

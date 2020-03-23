@@ -57,7 +57,3 @@
 
 #include "Hildur/util/KeyCodes.h"
 #include "Hildur/util/MouseButtonCodes.h"
-
-//--------EntryPoint-------------------
-
-#include "Hildur/Core/EntryPoint.h"

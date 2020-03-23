@@ -70,14 +70,14 @@ namespace Hildur {
 		
 		/// Viewport FBO initialization ///////////////////////////////
 		
-		//// The framebuffer
+		// The framebuffer
 		m_FBO = FrameBuffer::Create(1960, 1080);
 
 		// The depth buffer
-		glGenRenderbuffers(1, &depthrenderbuffer);
+		/*glGenRenderbuffers(1, &depthrenderbuffer);
 		glBindRenderbuffer(GL_RENDERBUFFER, depthrenderbuffer);
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 1960, 1080);
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);*/
 
 		// Set "renderedTexture" as our colour attachement #0
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_FBO->GetTexture(), 0);
@@ -153,16 +153,16 @@ namespace Hildur {
 			//Viewport
 			ImGui::Begin("ViewPort");
 
-			int width = ImGui::GetWindowContentRegionMax().x - ImGui::GetWindowContentRegionMin().x;
-			int height = ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y;
+			m_ViewportWidth = ImGui::GetWindowContentRegionMax().x - ImGui::GetWindowContentRegionMin().x;
+			m_ViewportHeight = ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y;
 
-			glViewport(0, 0, width, height);
+			glViewport(0, 0, m_ViewportWidth, m_ViewportHeight);
 
 			ImGui::GetWindowDrawList()->AddImage(
 				(void*)(intptr_t)m_FBO->GetTexture(),
 				ImVec2(ImGui::GetCursorScreenPos()),
-				ImVec2(ImGui::GetCursorScreenPos().x + width,
-					ImGui::GetCursorScreenPos().y + height), ImVec2((1.0f / 1960.0f) * width, 0), ImVec2(0, (1.0f / 1080.0f) * height));
+				ImVec2(ImGui::GetCursorScreenPos().x + m_ViewportWidth,
+					ImGui::GetCursorScreenPos().y + m_ViewportHeight), ImVec2((1.0f / 1960.0f) * m_ViewportWidth, 0), ImVec2(0, (1.0f / 1080.0f) * m_ViewportHeight));
 
 			ImGui::End();
 
@@ -172,11 +172,10 @@ namespace Hildur {
 			ImGui::TextUnformatted(m_SceneManager->GetCurrentName().c_str());
 			ImGui::End();
 
+			m_SceneManager->DrawSceneList();
 
 			ImGui::Begin("Hierarchy");
 			ImGui::End();
-
-			m_SceneManager->DrawSceneList();
 
 			m_ImGuiLayer->End();
 
@@ -276,14 +275,13 @@ namespace Hildur {
 	void Application::PushLayer(Layer* layer) {
 
 		m_LayerStack.PushLayer(layer);
-		layer->OnAttach();
 
 	}
 
 	void Application::PushOverlay(Layer* layer) {
 
 		m_LayerStack.PushOverlay(layer);
-		layer->OnAttach();
+
 	}
 
 }

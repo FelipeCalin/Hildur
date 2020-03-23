@@ -33,11 +33,16 @@ namespace Hildur {
 		glGetIntegerv(GL_MINOR_VERSION, &minor);
 		glGetIntegerv(GL_MAJOR_VERSION, &major);
 
-		HR_CORE_INFO("OpenGL Minimum version is: {0}", minor);
-		HR_CORE_INFO("OpenGl Maximum version is: {0}", major);
+		HR_CORE_INFO("OpenGl version is: {0},{1}", major, minor);
 		HR_CORE_INFO("Graphical vendor is: {0}", glGetString(GL_VENDOR));
 		HR_CORE_INFO("Graphical Renderer name is: {0}", glGetString(GL_RENDERER));
 		HR_CORE_INFO("Shading lenguage version: {0}", glGetString(GL_SHADING_LANGUAGE_VERSION));
+
+#ifdef HR_ENABLE_ASSERTS
+
+		HR_CORE_ASSERT(major > 3 || (major == 3 && minor >= 1), "Hildur Requires OpenGL 3.1 or later.");
+
+#endif 
 
 	}
 

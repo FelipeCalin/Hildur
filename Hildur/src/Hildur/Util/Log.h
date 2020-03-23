@@ -30,16 +30,16 @@ namespace Hildur {
 
 //Core log macros
 
-#define HR_CORE_TRACE(...)   ::Hildur::Log::GetCoreLogger()->trace(__VA_ARGS__)
-#define HR_CORE_INFO(...)    ::Hildur::Log::GetCoreLogger()->info(__VA_ARGS__)
-#define HR_CORE_WARN(...)    ::Hildur::Log::GetCoreLogger()->warn(__VA_ARGS__)
-#define HR_CORE_ERROR(...)   ::Hildur::Log::GetCoreLogger()->error(__VA_ARGS__)
-#define HR_CORE_FATAL(...)   ::Hildur::Log::GetCoreLogger()->fatal(__VA_ARGS__)
+#define HR_CORE_TRACE(...)    ::Hildur::Log::GetCoreLogger()->trace(__VA_ARGS__)
+#define HR_CORE_INFO(...)     ::Hildur::Log::GetCoreLogger()->info(__VA_ARGS__)
+#define HR_CORE_WARN(...)     ::Hildur::Log::GetCoreLogger()->warn(__VA_ARGS__)
+#define HR_CORE_ERROR(...)    ::Hildur::Log::GetCoreLogger()->error(__VA_ARGS__)
+#define HZ_CORE_CRITICAL(...) ::Hildur::Log::GetCoreLogger()->critical(__VA_ARGS__)
 
 //App log macros
 
-#define HR_TRACE(...)        ::Hildur::Log::GetClientLogger()->trace(__VA_ARGS__)
-#define HR_INFO(...)         ::Hildur::Log::GetClientLogger()->info(__VA_ARGS__)
-#define HR_WARN(...)         ::Hildur::Log::GetClientLogger()->warn(__VA_ARGS__)
-#define HR_ERROR(...)        ::Hildur::Log::GetClientLogger()->error(__VA_ARGS__)
-#define HR_FATAL(...)        ::Hildur::Log::GetClientLogger()->fatal(__VA_ARGS__)
+#define HR_TRACE(...)         ::Hildur::Log::GetClientLogger()->trace(__VA_ARGS__)
+#define HR_INFO(...)          ::Hildur::Log::GetClientLogger()->info(__VA_ARGS__)
+#define HR_WARN(...)          ::Hildur::Log::GetClientLogger()->warn(__VA_ARGS__)
+#define HR_ERROR(...)         ::Hildur::Log::GetClientLogger()->error(__VA_ARGS__)
+#define HZ_CRITICAL(...)      ::Hildur::Log::GetClientLogger()->critical(__VA_ARGS__)

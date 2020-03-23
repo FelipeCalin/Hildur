@@ -87,7 +87,7 @@ namespace Hildur {
 		HR_CORE_INFO("indices size: {0}", indices->size());
 		m_IBO = IndexBuffer::Create(indices, indices->size());
 
-		m_VAO.reset(VertexArray::Create());
+		m_VAO = VertexArray::Create();
 		m_VAO->AddVertexBuffer(m_VBO);
 		m_VAO->SetIndexBuffer(m_IBO);
 

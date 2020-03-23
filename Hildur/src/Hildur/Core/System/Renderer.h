@@ -37,7 +37,7 @@ namespace Hildur {
 
 		};
 
-		static SceneData* m_SceneData;
+		static Scope<SceneData> s_SceneData;
 
 	};
 

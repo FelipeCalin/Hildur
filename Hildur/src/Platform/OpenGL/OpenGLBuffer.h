@@ -12,7 +12,8 @@ namespace Hildur {
 
 	public:
 
-		OpenGLVertexBuffer(Ref<std::vector<Vertex>> vertices, uint32_t size);
+		OpenGLVertexBuffer(float* vertices, uint32_t count);
+		OpenGLVertexBuffer(Ref<std::vector<Vertex>> vertices, uint32_t count);
 		virtual ~OpenGLVertexBuffer();
 
 
@@ -36,7 +37,8 @@ namespace Hildur {
 
 	public:
 
-		OpenGLIndexBuffer(Ref<std::vector<uint32_t>> indices, uint32_t size);
+		OpenGLIndexBuffer(uint32_t* indices, uint32_t count);
+		OpenGLIndexBuffer(Ref<std::vector<uint32_t>> indices, uint32_t count);
 		virtual ~OpenGLIndexBuffer();
 
 

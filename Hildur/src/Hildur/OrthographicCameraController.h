@@ -24,6 +24,8 @@ namespace Hildur {
 		float GetZoomLevel() const { return m_ZoomLevel; }
 		void SetZoomLevel(float level) { m_ZoomLevel = level; }
 
+		void SetResize(uint32_t width, uint32_t height);
+
 	private:
 
 		bool OnMouseScrolled(MouseScrolledEvent& e);
