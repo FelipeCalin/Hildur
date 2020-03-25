@@ -20,9 +20,7 @@ private:
 
 	Hildur::OrthographicCameraController m_CameraController;
 
-	// Temp
-	Hildur::Ref<Hildur::VertexArray> m_SquareVA;
-	Hildur::Ref<Hildur::Shader> m_FlatColorShader;
+	Hildur::Ref<Hildur::Texture2D> m_TextureCherno;
 
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 

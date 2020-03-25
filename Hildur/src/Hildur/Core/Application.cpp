@@ -162,7 +162,7 @@ namespace Hildur {
 				(void*)(intptr_t)m_FBO->GetTexture(),
 				ImVec2(ImGui::GetCursorScreenPos()),
 				ImVec2(ImGui::GetCursorScreenPos().x + m_ViewportWidth,
-					ImGui::GetCursorScreenPos().y + m_ViewportHeight), ImVec2((1.0f / 1960.0f) * m_ViewportWidth, 0), ImVec2(0, (1.0f / 1080.0f) * m_ViewportHeight));
+					ImGui::GetCursorScreenPos().y + m_ViewportHeight), ImVec2(0, (1.0f / 1080.0f) * m_ViewportHeight), ImVec2((1.0f / 1960.0f) * m_ViewportWidth, 0));
 
 			ImGui::End();
 

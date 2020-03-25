@@ -4,6 +4,7 @@
 #include "Hildur/Resource/Texture.h"
 
 #include "Hildur/Renderer/RenderCommand.h"
+#include "Hildur/Core/System/Renderer2D.h"
 
 #include "Platform/OpenGL/OpenGLShader.h"
 
@@ -17,6 +18,7 @@ namespace Hildur {
 	void Renderer::Init() {
 
 		RenderCommand::Init();
+		Renderer2D::Init();
 
 	}
 

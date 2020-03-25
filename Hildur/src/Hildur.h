@@ -34,6 +34,7 @@
 //-------Renderer Files----------------
 
 #include "Hildur/Core/System/Renderer.h"
+#include "Hildur/Core/System/Renderer2D.h"
 #include "Hildur/Renderer/RenderCommand.h"
 
 #include "Hildur/Renderer/Buffer.h"

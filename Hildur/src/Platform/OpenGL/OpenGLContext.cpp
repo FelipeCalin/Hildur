@@ -22,10 +22,6 @@ namespace Hildur {
 		int status = gladLoadGLLoader((GLADloadproc)wglGetProcAddress);
 		HR_CORE_ASSERT(status, "Falied to initialize Glad!");
 
-		//GL options
-
-		glEnable(GL_DEPTH_TEST);
-
 		//GL Checking
 
 		int minor, major = 0;
