@@ -23,7 +23,7 @@ void Sandbox2D::OnUpdate(Hildur::Timestep ts)
 {
 	// Update
 	m_CameraController.OnUpdate(ts);
-	m_CameraController.SetResize(Hildur::Application::Get().GetRenderWidth(), Hildur::Application::Get().GetRenderHeight());
+	//m_CameraController.SetResize(Hildur::Application::Get().GetRenderWidth(), Hildur::Application::Get().GetRenderHeight());
 
 	// Render
 	Hildur::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });

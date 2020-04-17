@@ -92,7 +92,7 @@ namespace Hildur {
 
 		// Create a framebuffer
 		glGenFramebuffers(1, &m_RendererID);
-		RenderCommand::SetRenderTarget(m_RendererID);
+		//RenderCommand::SetRenderTarget(m_RendererID);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
 
 		// Create a texure if not provided

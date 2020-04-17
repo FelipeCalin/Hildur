@@ -38,9 +38,6 @@ namespace Hildur {
 		inline Window& GetWindow() { return *m_Window; }
 		inline static Application& Get() { return *s_Instance; }
 
-		uint32_t GetRenderWidth() const { return m_ViewportWidth; }
-		uint32_t GetRenderHeight() const { return m_ViewportHeight; }
-
 		//inline static Timestep& GetTimestep() {return }
 
 	private:
@@ -65,9 +62,9 @@ namespace Hildur {
 
 		//Test FBO
 
-		uint32_t m_ViewportWidth;
-		uint32_t m_ViewportHeight;
-		Ref<FrameBuffer> m_FBO;
+		//uint32_t m_ViewportWidth;
+		//uint32_t m_ViewportHeight;
+		//Ref<FrameBuffer> m_FBO;
 
 	private:
 
