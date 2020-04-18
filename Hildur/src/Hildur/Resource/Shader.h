@@ -8,8 +8,8 @@
 namespace Hildur {
 
 
-	class Shader {
-
+	class Shader 
+	{
 	public:
 
 		virtual ~Shader() = default;
@@ -32,8 +32,8 @@ namespace Hildur {
 
 	};
 
-	class ShaderLibrary {
-
+	class ShaderLibrary 
+	{
 	public:
 
 		void Add(const std::string& name, const Ref<Shader>& shader);
@@ -55,7 +55,6 @@ namespace Hildur {
 	private:
 
 		std::unordered_map<std::string, Ref<Shader>> m_Shaders;
-
 	};
 
 

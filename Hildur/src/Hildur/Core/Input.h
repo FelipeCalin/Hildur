@@ -5,9 +5,10 @@
 namespace Hildur {
 
 
-	class HILDUR_API Input {
-
+	class HILDUR_API Input 
+	{
 	protected:
+
 		Input() = default;
 
 	public:
@@ -34,7 +35,6 @@ namespace Hildur {
 	private:
 
 		static Scope<Input> s_Instance;
-
 	};
 
 

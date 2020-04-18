@@ -15,12 +15,15 @@
 
 namespace Hildur {
 
+
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
+
 
 	Application* Application::s_Instance = nullptr;
 
-	Application::Application() {
 
+	Application::Application()
+	{
 		/// Configuration /////////////////////////////////////////////
 
 		m_Config.readConfig();
@@ -28,17 +31,15 @@ namespace Hildur {
 		WindowProps props;
 		props.Title = m_Config.profile.appName;
 
-		if (m_Config.profile.fullscreen) {
-
+		if (m_Config.profile.fullscreen) 
+		{
 			props.Width = 1960;
 			props.Height = 1080;
-
 		}
-		else {
-
+		else 
+		{
 			props.Width = m_Config.profile.width;
 			props.Height = m_Config.profile.height;
-
 		}
 
 		/// System Singleton Instacing ////////////////////////////////
@@ -87,47 +88,40 @@ namespace Hildur {
 
 		//// UnBind frame buffer
 		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		
 	}
 
-	Application::~Application() {
-
-
-
+	Application::~Application()
+	{
 	}
 
-	void Application::Init(std::map<std::string, Scene*>& sceneMap) {
-
+	void Application::Init(std::map<std::string, Scene*>& sceneMap) 
+	{
 		m_SceneManager->SetSceneMap(sceneMap);
-
 	}
 
-	void Application::OnEvent(Event& e) {
-
+	void Application::OnEvent(Event& e)
+	{
 		EventDispatcher distpatcher(e);
 		distpatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
 		distpatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize));
 
 		//HR_CORE_TRACE("{0}", e);
 
-		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
-
+		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) 
+		{
 			(*--it)->OnEvent(e);
 			if (e.Handled)
 				break;
-
 		}
-
 	}
 
-	void Application::Run() {
-
+	void Application::Run() 
+	{
 		/// Main Loop /////////////////////////////////////////////////
 	   ///////////////////////////////////////////////////////////////
 
-		while (m_Running) {
-
+		while (m_Running)
+		{
 			float time = (float)glfwGetTime(); //TODO Abstract!!
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
@@ -135,12 +129,11 @@ namespace Hildur {
 
 			//m_FBO->Bind();
 
-			if (!m_Minimized) {
-
+			if (!m_Minimized)
+			{
 				//Update Layers
 				for (Layer* layer : m_LayerStack)
 					layer->OnUpdate(timestep);
-
 			}
 
 			//m_FBO->UnBind();
@@ -182,34 +175,29 @@ namespace Hildur {
 			m_SceneManager->LoadQueuedScene();
 
 			m_Window->OnUpdate();
-
 		}
-
 	}
 
-	bool Application::OnWindowClose(WindowCloseEvent& e) {
-
+	bool Application::OnWindowClose(WindowCloseEvent& e)
+	{
 		m_Running = false;
 
 		return true;
-
 	}
 
 	bool Application::OnWindowResize(WindowResizeEvent& e) {
 
-		if (e.GetWidth() == 0 || e.GetHeight() == 0) {
-
+		if (e.GetWidth() == 0 || e.GetHeight() == 0) 
+		{
 			m_Minimized = true;
 
 			return false;
-
 		}
 
 		m_Minimized = false;
 		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
 
 		return false;
-
 	}
 
 	//void Application::DockUpdate() {
@@ -272,16 +260,15 @@ namespace Hildur {
 	 /// LayerStack Handling ///////////////////////////////////////
 	///////////////////////////////////////////////////////////////
 
-	void Application::PushLayer(Layer* layer) {
-
+	void Application::PushLayer(Layer* layer)
+	{
 		m_LayerStack.PushLayer(layer);
-
 	}
 
-	void Application::PushOverlay(Layer* layer) {
-
+	void Application::PushOverlay(Layer* layer)
+	{
 		m_LayerStack.PushOverlay(layer);
-
 	}
+
 
 }

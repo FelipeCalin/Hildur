@@ -4,14 +4,13 @@
 namespace Hildur {
 
 
-	class Timestep {
-
+	class Timestep 
+	{
 	public:
 
 		Timestep(float time = 0.0f)
-			:m_Time(time) {
-
-
+			:m_Time(time) 
+		{
 		}
 
 		operator float() const { return m_Time; }
@@ -22,7 +21,6 @@ namespace Hildur {
 	private:
 
 		float m_Time;
-
 	};
 
 

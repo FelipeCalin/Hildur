@@ -10,6 +10,7 @@ namespace Hildur {
 	class Config
 	{
 	public:
+
 		struct Profile
 		{
 			std::string appName = "Hildur Engine";
@@ -31,7 +32,6 @@ namespace Hildur {
 	private:
 
 		void split(const std::string& line, const std::string& delimiter, std::vector<std::string>& output);
-
 	};
 
 

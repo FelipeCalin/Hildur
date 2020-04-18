@@ -10,16 +10,18 @@
 namespace Hildur {
 
 
-	class Mesh {
-
+	class Mesh 
+	{
 	public:
 
-		struct Config {
+		struct Config
+		{
 			bool forceInit;
 
 			Config(bool forceInit = false) :
 				forceInit(forceInit)
-			{}
+			{
+			}
 		};
 
 		Mesh(Ref<std::vector<Vertex>> vertices, Ref<std::vector<uint32_t>> indices, std::vector<Ref<Texture2D>> textures);
@@ -53,7 +55,6 @@ namespace Hildur {
 
 		Ref<Texture2D> m_DiffuseTex;
 		Ref<Texture2D> m_SpecularTex;
-
 	};
 
 

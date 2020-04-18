@@ -9,8 +9,8 @@
 namespace Hildur {
 
 
-	class Material {
-
+	class Material 
+	{
 	public:
 
 		Material(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, Ref<Texture> diffuseTex, Ref<Texture> specularTex);
@@ -27,7 +27,6 @@ namespace Hildur {
 		glm::vec3 m_Specular;
 		Ref<Texture> m_DiffuseTex;
 		Ref<Texture> m_SpecularTex;
-
 	};
 
 

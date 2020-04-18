@@ -9,8 +9,8 @@
 namespace Hildur {
 
 
-	class HILDUR_API LayerStack {
-
+	class HILDUR_API LayerStack 
+	{
 	public:
 
 		LayerStack();
@@ -28,7 +28,6 @@ namespace Hildur {
 
 		std::vector<Layer*> m_Layers;
 		uint32_t m_LayerInsertIndex = 0;
-
 	};
 
 

@@ -6,8 +6,8 @@
 namespace Hildur {
 
 
-	class Filepath {
-
+	class Filepath
+	{
 	public:
 		
 		Filepath() {}
@@ -24,7 +24,6 @@ namespace Hildur {
 		std::string _path;
 		std::string _name;
 		std::string _extension;
-	
 	};
 
 

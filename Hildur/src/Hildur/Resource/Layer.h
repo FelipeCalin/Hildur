@@ -8,8 +8,8 @@
 namespace Hildur {
 
 
-	class HILDUR_API Layer {
-
+	class HILDUR_API Layer
+	{
 	public:
 
 		Layer(const std::string& name = "Layer");
@@ -27,7 +27,6 @@ namespace Hildur {
 	protected:
 
 		std::string m_DebugName;
-
 	};
 
 

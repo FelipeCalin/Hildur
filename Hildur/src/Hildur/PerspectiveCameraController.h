@@ -10,8 +10,8 @@
 namespace Hildur {
 
 
-	class PerspectiveCameraController {
-
+	class PerspectiveCameraController
+	{
 	public:
 
 		PerspectiveCameraController(float fov, float aspectRatio, bool rotation = false);
@@ -42,7 +42,6 @@ namespace Hildur {
 		glm::vec3 m_CameraPosition = glm::vec3(1.0f);
 		glm::vec3 m_CameraRotation = glm::vec3(1.0f);
 		float m_CameraTranslationSpeed = 1.0f;
-
 	};
 
 

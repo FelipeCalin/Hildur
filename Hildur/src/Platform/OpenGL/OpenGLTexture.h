@@ -8,8 +8,8 @@
 namespace Hildur {
 
 
-	class OpenGLTexture2D : public Texture2D {
-
+	class OpenGLTexture2D : public Texture2D 
+	{
 	public:
 
 		OpenGLTexture2D(uint32_t width, uint32_t height);
@@ -31,7 +31,6 @@ namespace Hildur {
 		uint32_t m_Width, m_Height;
 		uint32_t m_RendererID;
 		GLenum m_InternalFomat, m_DataFormat;
-
 	};
 
 

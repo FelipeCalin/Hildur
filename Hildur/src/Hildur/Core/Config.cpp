@@ -105,6 +105,7 @@ namespace Hildur {
 			output.push_back(token);
 			s.erase(0, pos + delimiter.length());
 		}
+
 		output.push_back(s);
 	}
 

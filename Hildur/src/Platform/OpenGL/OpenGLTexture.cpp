@@ -8,8 +8,8 @@ namespace Hildur {
 
 
 	OpenGLTexture2D::OpenGLTexture2D(const uint32_t width, const uint32_t height)
-		: m_Width(width), m_Height(height) {
-
+		: m_Width(width), m_Height(height)
+	{
 		m_InternalFomat = GL_RGBA8;
 		m_DataFormat = GL_RGBA;
 
@@ -21,12 +21,10 @@ namespace Hildur {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
 	}
 
-	OpenGLTexture2D::OpenGLTexture2D(const std::string& path) {
-
-
+	OpenGLTexture2D::OpenGLTexture2D(const std::string& path) 
+	{
 		stbi_set_flip_vertically_on_load(true);
 
 		int width, height, channels;
@@ -68,31 +66,27 @@ namespace Hildur {
 		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_Width, m_Height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
 
 		stbi_image_free(data);
-
 	}
 
-	OpenGLTexture2D::~OpenGLTexture2D() {
-
+	OpenGLTexture2D::~OpenGLTexture2D() 
+	{
 		glDeleteTextures(1, &m_RendererID);
-
 	}
 
-	void OpenGLTexture2D::SetData(void* data, uint32_t size) {
-
+	void OpenGLTexture2D::SetData(void* data, uint32_t size) 
+	{
 		uint32_t bpp = m_DataFormat == GL_RGBA ? 4 : 3;
 
 		HR_CORE_ASSERT(size == m_Width * m_Width * bpp, "Data must be entire texture!");
 
 		glBindTexture(GL_TEXTURE_2D, m_RendererID);
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
-
 	}
 
-	void OpenGLTexture2D::Bind(uint32_t slot) const {
-
+	void OpenGLTexture2D::Bind(uint32_t slot) const 
+	{
 		glActiveTexture((int)GL_TEXTURE0 + slot);
 		glBindTexture(GL_TEXTURE_2D, m_RendererID);
-
 	}
 
 

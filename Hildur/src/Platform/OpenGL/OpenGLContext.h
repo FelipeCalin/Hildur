@@ -8,8 +8,8 @@ struct GLFWwindow;
 namespace Hildur {
 
 
-	class OpenGLContext : public GraphicsContext {
-
+	class OpenGLContext : public GraphicsContext 
+	{
 	public:
 
 		OpenGLContext(GLFWwindow* windowHandle);
@@ -20,7 +20,6 @@ namespace Hildur {
 	private:
 
 		GLFWwindow* m_WindowHandle;
-
 	};
 
 

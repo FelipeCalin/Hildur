@@ -22,9 +22,6 @@ namespace Hildur {
 
 		void Begin();
 		void End();
-
-	private:
-
 	};
 
 

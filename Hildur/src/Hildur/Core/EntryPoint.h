@@ -5,8 +5,8 @@
 
 extern Hildur::Application* Hildur::CreateApplication();
 
-int main(int argc, char** argv) {
-
+int main(int argc, char** argv) 
+{
 	Hildur::Log::Init();
 
 	HR_CORE_INFO("Core logger initialized");
@@ -14,7 +14,6 @@ int main(int argc, char** argv) {
 	auto app = Hildur::CreateApplication();
 	app->Run();
 	delete app;
-
 }
 
 

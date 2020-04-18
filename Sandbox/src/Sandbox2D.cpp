@@ -6,26 +6,21 @@
 
 
 Sandbox2D::Sandbox2D()
-	: Layer("Sandbox2D"), m_CameraController(1280.0f / 720.0f) {
-
-
-
+	: Layer("Sandbox2D"), m_CameraController(1280.0f / 720.0f)
+{
 }
 
-void Sandbox2D::OnAttach() {
-
+void Sandbox2D::OnAttach() 
+{
 	m_TextureCherno = Hildur::Texture2D::Create("assets/textures/Checkerboard.png");
-
 }
 
-void Sandbox2D::OnDetach() {
-
-
-
+void Sandbox2D::OnDetach() 
+{
 }
 
-void Sandbox2D::OnUpdate(Hildur::Timestep ts) {
-
+void Sandbox2D::OnUpdate(Hildur::Timestep ts) 
+{
 	// Update
 	m_CameraController.OnUpdate(ts);
 	//m_CameraController.SetResize(Hildur::Application::Get().GetRenderWidth(), Hildur::Application::Get().GetRenderHeight());
@@ -41,19 +36,16 @@ void Sandbox2D::OnUpdate(Hildur::Timestep ts) {
 	Hildur::Renderer2D::DrawQuad({ 0.0f, 1.0f }, { 0.8f, 0.8f }, m_SquareColor);
 
 	Hildur::Renderer2D::EndScene();
-
 }
 
-void Sandbox2D::OnImGuiRender() {
-
+void Sandbox2D::OnImGuiRender() 
+{
 	ImGui::Begin("Settings");
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 	ImGui::End();
-
 }
 
-void Sandbox2D::OnEvent(Hildur::Event& e) {
-
+void Sandbox2D::OnEvent(Hildur::Event& e) 
+{
 	m_CameraController.OnEvent(e);
-
 }

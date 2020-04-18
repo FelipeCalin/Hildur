@@ -6,8 +6,8 @@
 namespace Hildur {
 
 
-	class OpenGLVertexArray : public VertexArray {
-
+	class OpenGLVertexArray : public VertexArray
+	{
 	public:
 
 		OpenGLVertexArray();
@@ -29,8 +29,7 @@ namespace Hildur {
 		uint32_t m_VertexBufferIndex = 0;
 
 		std::vector<Ref<VertexBuffer>> m_VertexBuffers;
-		Ref<IndexBuffer> m_IndexBuffer;
-		
+		Ref<IndexBuffer> m_IndexBuffer;	
 	};
 
 

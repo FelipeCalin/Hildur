@@ -6,8 +6,8 @@
 namespace Hildur {
 
 
-	class ISystem {
-
+	class ISystem 
+	{
 	public:
 		
 		virtual void Init(Config::Profile profile) {}

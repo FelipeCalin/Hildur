@@ -14,8 +14,8 @@ typedef unsigned int GLenum;
 namespace Hildur {
 
 
-	class OpenGLShader : public Shader {
-
+	class OpenGLShader : public Shader
+	{
 	public:
 
 		OpenGLShader(const std::string& filepath);
@@ -56,7 +56,6 @@ namespace Hildur {
 
 		uint32_t m_RendererID;
 		std::string m_Name;
-
 	};
 
 

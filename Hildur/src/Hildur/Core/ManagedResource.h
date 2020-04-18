@@ -4,8 +4,8 @@
 namespace Hildur {
 
 
-	class ManagedResource {
-
+	class ManagedResource
+	{
 	public:
 
 		// PLAN:
@@ -20,7 +20,6 @@ namespace Hildur {
 		// resources from the global map according to the local set.
 
 		virtual ~ManagedResource() {}
-
 	};
 
 

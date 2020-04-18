@@ -16,8 +16,8 @@ namespace Hildur {
 		HR_CORE_ASSERT(windowHandle, "Window handle is null!")
 	}
 
-	void OpenGLContext::Init() {
-
+	void OpenGLContext::Init() 
+	{
 		glfwMakeContextCurrent(m_WindowHandle);
 		int status = gladLoadGLLoader((GLADloadproc)wglGetProcAddress);
 		HR_CORE_ASSERT(status, "Falied to initialize Glad!");
@@ -39,13 +39,11 @@ namespace Hildur {
 		HR_CORE_ASSERT(major > 3 || (major == 3 && minor >= 1), "Hildur Requires OpenGL 3.1 or later.");
 
 #endif 
-
 	}
 
-	void OpenGLContext::SwapBuffers() {
-
+	void OpenGLContext::SwapBuffers() 
+	{
 		glfwSwapBuffers(m_WindowHandle);
-
 	}
 
 

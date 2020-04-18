@@ -15,6 +15,7 @@ namespace Hildur {
 	class Transform : public Component
 	{
 	public:
+
 		void setPosition(glm::vec3 position);
 		void setRotation(glm::vec3 rotation);
 		void setRotation(glm::quat rotation);
@@ -41,7 +42,9 @@ namespace Hildur {
 		Transform* getParent();
 		std::vector<Transform*> getChildren();
 		void renderHandels();
+
 	private:
+
 		unsigned long int _lastChangedTick = -1;
 		bool _isMatrixCached = false;
 		glm::vec3 _position = glm::vec3(0.0f);

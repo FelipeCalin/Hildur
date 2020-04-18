@@ -8,18 +8,17 @@
 namespace Hildur {
 
 
-	class LazyLoadable {
-
+	class LazyLoadable 
+	{
 	public:
 
-		enum State {
-
+		enum State 
+		{
 			UNSET,
 			LOADING,
 			LOADED,
 			FAILED,
 			INITIALIZED
-		
 		};
 
 		virtual ~LazyLoadable() {}
@@ -53,7 +52,6 @@ namespace Hildur {
 
 		State m_State = State::UNSET;
 		bool m_Rogue = false;
-
 	};
 
 

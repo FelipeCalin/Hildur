@@ -27,40 +27,36 @@ namespace Hildur {
 		return 0;
 	}
 
-	OpenGLVertexArray::OpenGLVertexArray() {
-	
-		glGenVertexArrays(1, &m_RendererID);
-		
+	OpenGLVertexArray::OpenGLVertexArray() 
+	{
+		glGenVertexArrays(1, &m_RendererID);	
 	}
 
-	OpenGLVertexArray::~OpenGLVertexArray() {
-
+	OpenGLVertexArray::~OpenGLVertexArray() 
+	{
 		glDeleteVertexArrays(1, &m_RendererID);
-
 	}
 
-	void OpenGLVertexArray::Bind() const {
-
+	void OpenGLVertexArray::Bind() const 
+	{
 		glBindVertexArray(m_RendererID);
-
 	}
 
-	void OpenGLVertexArray::Unbind() const {
-
+	void OpenGLVertexArray::Unbind() const 
+	{
 		glBindVertexArray(0);
-
 	}
 
-	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) {
-
+	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) 
+	{
 		HR_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no layout!");
 
 		glBindVertexArray(m_RendererID);
 		vertexBuffer->Bind();
 
 		const auto& layout = vertexBuffer->GetLayout();
-		for (const auto& element : vertexBuffer->GetLayout()) {
-
+		for (const auto& element : vertexBuffer->GetLayout()) 
+		{
 			glEnableVertexAttribArray(m_VertexBufferIndex);
 			glVertexAttribPointer(m_VertexBufferIndex,
 				element.GetComponentCount(),
@@ -70,20 +66,17 @@ namespace Hildur {
 				(const void*)(intptr_t)element.Offset);
 
 			m_VertexBufferIndex++;
-
 		}
 
 		m_VertexBuffers.push_back(vertexBuffer);
-
 	}
 
-	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer) {
-
+	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer) 
+	{
 		glBindVertexArray(m_RendererID);
 		indexBuffer->Bind();
 
 		m_IndexBuffer = indexBuffer;
-
 	}
 
 

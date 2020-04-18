@@ -15,8 +15,8 @@ class Scene;
 namespace Hildur {
 
 
-	class SceneManager : public ISystem {
-
+	class SceneManager : public ISystem
+	{
 	public:
 
 		static void AddScene(const std::string name, Scene* scene);
@@ -35,6 +35,7 @@ namespace Hildur {
 		void LoadQueuedScene();
 		bool SceneQueued() { return m_InQueue; }
 		void DrawSceneList();
+
 	private:
 
 		static std::string m_NewScene;
@@ -42,7 +43,6 @@ namespace Hildur {
 		static bool m_InQueue;
 		static Scene* m_CurrentScene;
 		static std::map<std::string, Scene*> m_SceneMap;
-
 	};
 
 

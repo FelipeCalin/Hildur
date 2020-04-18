@@ -6,8 +6,8 @@
 namespace Hildur {
 
 
-	class OpenGLRendererAPI : public RendererAPI {
-
+	class OpenGLRendererAPI : public RendererAPI
+	{
 	public:
 
 		virtual void Init() override;
@@ -20,7 +20,6 @@ namespace Hildur {
 		virtual int GetRenderTarget() override { return RendererAPI::m_TargetID; }
 
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) override;
-
 	};
 
 

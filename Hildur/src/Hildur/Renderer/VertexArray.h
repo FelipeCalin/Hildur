@@ -8,8 +8,8 @@
 namespace Hildur {
 
 
-	class VertexArray {
-
+	class VertexArray
+	{
 	public:
 
 		virtual ~VertexArray() {}
@@ -24,7 +24,7 @@ namespace Hildur {
 		virtual const std::shared_ptr<IndexBuffer>& GetIndexBuffer() const = 0;
 
 		static Ref<VertexArray> Create();
-
 	};
+
 
 }

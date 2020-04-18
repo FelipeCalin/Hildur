@@ -11,8 +11,8 @@
 namespace Hildur {
 
 
-	class Model {
-
+	class Model
+	{
 	public:
 
 		Model(const std::string& path);

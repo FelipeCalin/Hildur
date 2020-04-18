@@ -8,8 +8,8 @@
 namespace Hildur {
 
 
-	class WindowsWindow : public Window {
-
+	class WindowsWindow : public Window 
+	{
 	public:
 
 		WindowsWindow(const WindowProps& props);
@@ -37,8 +37,8 @@ namespace Hildur {
 		GLFWwindow* m_Window;
 		Scope<GraphicsContext> m_Context;
 
-		struct WindowData {
-
+		struct WindowData 
+		{
 			std::string Title;
 			unsigned int Width, Height;
 			bool VSync;
@@ -47,7 +47,6 @@ namespace Hildur {
 		};
 
 		WindowData m_Data;
-
 	};
 
 

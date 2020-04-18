@@ -5,8 +5,8 @@
 namespace Hildur {
 
 
-	class WindowsInput : public Input {
-
+	class WindowsInput : public Input
+	{
 	protected:
 
 		virtual bool IsKeyPressedImpl(int keycode) override;
@@ -15,7 +15,6 @@ namespace Hildur {
 		virtual std::pair<float, float> GetMousePositionImpl() override;
 		virtual float GetMouseXImpl() override;
 		virtual float GetMouseYImpl() override;
-
 	};
 
 

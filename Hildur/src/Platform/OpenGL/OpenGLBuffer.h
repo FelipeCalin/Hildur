@@ -8,8 +8,8 @@ namespace Hildur {
 
 	//  Vertex Buffer  ///////////////////////////////////////////////////////
 
-	class OpenGLVertexBuffer : public VertexBuffer {
-
+	class OpenGLVertexBuffer : public VertexBuffer 
+	{
 	public:
 
 		OpenGLVertexBuffer(float* vertices, uint32_t count);
@@ -27,14 +27,13 @@ namespace Hildur {
 
 		uint32_t m_RendererID;
 		BufferLayout m_Layout;
-
 	};
 
 
 	//  Index Buffer  ////////////////////////////////////////////////////////
 
-	class OpenGLIndexBuffer : public IndexBuffer {
-
+	class OpenGLIndexBuffer : public IndexBuffer 
+	{
 	public:
 
 		OpenGLIndexBuffer(uint32_t* indices, uint32_t count);
@@ -51,13 +50,12 @@ namespace Hildur {
 
 		uint32_t m_RendererID;
 		uint32_t m_Count;
-
 	};
 
 	//  Frame Buffer  ////////////////////////////////////////////////////////
 
-	class OpenGLFrameBuffer : public FrameBuffer {
-
+	class OpenGLFrameBuffer : public FrameBuffer 
+	{
 	public:
 
 		OpenGLFrameBuffer(const uint32_t width, const uint32_t height, uint32_t texture = 0);
@@ -76,7 +74,6 @@ namespace Hildur {
 
 		uint32_t m_RendererID;
 		uint32_t m_Texture;
-
 	};
 
 

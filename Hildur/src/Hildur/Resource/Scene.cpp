@@ -21,12 +21,14 @@ namespace Hildur {
 			(*it)->destroyComponents();
 			delete (*it);
 		}
+
 		m_EntityList.clear();
 
 		for (std::vector<std::string>::iterator it = m_Resources.begin(); it != m_Resources.end(); ++it)
 		{
 			ResourceManager::DeleteResource(*it);
 		}
+
 		m_Resources.clear();
 	}
 
@@ -50,6 +52,7 @@ namespace Hildur {
 				return *obj;
 			}
 		}
+
 		return nullptr;
 	}
 

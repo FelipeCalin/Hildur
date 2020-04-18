@@ -8,15 +8,14 @@
 namespace Hildur {
 
 
-	class RendererAPI {
-
+	class RendererAPI
+	{
 	public:
 
-		enum class API {
-
+		enum class API 
+		{
 			None = 0,
 			OpenGL = 1
-
 		};
 
 	public:
@@ -41,7 +40,6 @@ namespace Hildur {
 	protected:
 
 		static int m_TargetID;
-
 	};
 
 

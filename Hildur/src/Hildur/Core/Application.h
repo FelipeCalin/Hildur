@@ -20,8 +20,8 @@
 namespace Hildur {
 
 
-	class HILDUR_API Application {
-
+	class HILDUR_API Application
+	{
 	public:
 
 		Application();
@@ -69,10 +69,10 @@ namespace Hildur {
 	private:
 
 		static Application* s_Instance;
-
 	};
 
 	//To be defined in CLIENT
 	Application* CreateApplication();
+
 
 }

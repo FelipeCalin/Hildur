@@ -9,8 +9,8 @@
 namespace Hildur {
 
 
-	struct WindowProps {
-
+	struct WindowProps 
+	{
 		std::string Title;
 
 		unsigned int Width;
@@ -30,22 +30,18 @@ namespace Hildur {
 
 	// Interface representing a desktop system based window
 
-	class HILDUR_API Window {
-
+	class HILDUR_API Window
+	{
 	public:
 
 		using EventCallbackFn = std::function<void(Event&)>;
 
-
 		virtual ~Window() = default;
-
 
 		virtual void OnUpdate() = 0;
 
-
 		virtual unsigned int GetWidth() const = 0;
 		virtual unsigned int GetHeight() const = 0;
-
 
 
 		// Window attributes
@@ -56,7 +52,6 @@ namespace Hildur {
 		virtual void* GetNativeWindow() const = 0;
 
 		static Window* Create(const WindowProps& props = WindowProps());
-
 	};
 
 

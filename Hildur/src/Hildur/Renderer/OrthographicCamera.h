@@ -6,8 +6,8 @@
 namespace Hildur {
 
 
-	class OrthographicCamera {
-
+	class OrthographicCamera
+	{
 	public:
 
 		OrthographicCamera(float left, float right, float bottom, float top);
@@ -36,7 +36,6 @@ namespace Hildur {
 
 		glm::vec3 m_Position = { 0.0, 0.0, 0.0 };
 		float m_Rotation = 0;
-
 	};
 
 

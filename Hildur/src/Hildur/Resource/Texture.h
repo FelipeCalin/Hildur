@@ -7,15 +7,15 @@
 
 namespace Hildur {
 
-	enum TextureType {
 
+	enum TextureType 
+	{
 		HR_DIFFUSE = 0,
 		HR_SPECULAR = 1
-
 	};
 
-	class Texture {
-
+	class Texture 
+	{
 	public:
 
 		virtual ~Texture() = default;
@@ -31,8 +31,8 @@ namespace Hildur {
 
 	};
 
-	class Texture2D : public Texture {
-
+	class Texture2D : public Texture 
+	{
 	public:
 
 		static Ref<Texture2D> Create(uint32_t width, uint32_t height);
@@ -41,7 +41,7 @@ namespace Hildur {
 		TextureType type;
 		uint32_t id;
 		std::string path;
-
 	};
+
 
 }

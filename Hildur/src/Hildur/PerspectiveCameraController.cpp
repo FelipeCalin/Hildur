@@ -9,14 +9,12 @@ namespace Hildur {
 
 
 	PerspectiveCameraController::PerspectiveCameraController(float fov, float aspectRatio, bool rotation)
-		: m_AspectRatio(aspectRatio), m_Fov(fov), m_ZoomLevel(2.5f), m_Camera(glm::radians(m_Fov* m_ZoomLevel * 20), aspectRatio, 0.1f, 100.0f), m_Rotation(rotation) {
-
-
-
+		: m_AspectRatio(aspectRatio), m_Fov(fov), m_ZoomLevel(2.5f), m_Camera(glm::radians(m_Fov* m_ZoomLevel * 20), aspectRatio, 0.1f, 100.0f), m_Rotation(rotation) 
+	{
 	}
 
-	void PerspectiveCameraController::OnUpdate(Timestep ts) {
-
+	void PerspectiveCameraController::OnUpdate(Timestep ts) 
+	{
 		if (Input::IsKeyPressed(HR_KEY_A))
 			m_CameraPosition.x -= m_CameraTranslationSpeed * ts;
 		else if (Input::IsKeyPressed(HR_KEY_D))
@@ -36,35 +34,31 @@ namespace Hildur {
 		m_Camera.SetPosition(m_CameraPosition);
 
 		//m_CameraTranslationSpeed = m_ZoomLevel / 2;
-
 	}
 
-	void PerspectiveCameraController::OnEvent(Event& e) {
-
+	void PerspectiveCameraController::OnEvent(Event& e)
+	{
 		EventDispatcher dispatcher(e);
 
 		dispatcher.Dispatch<MouseScrolledEvent>(HR_BIND_EVENT_FN(PerspectiveCameraController::OnMouseScrolled));
 		dispatcher.Dispatch<WindowResizeEvent>(HR_BIND_EVENT_FN(PerspectiveCameraController::OnWindowResized));
-
 	}
 
-	bool PerspectiveCameraController::OnMouseScrolled(MouseScrolledEvent& e) {
-
+	bool PerspectiveCameraController::OnMouseScrolled(MouseScrolledEvent& e) 
+	{
 		m_ZoomLevel -= e.GetYOffset() * 0.2f;
 		m_ZoomLevel = std::max(m_ZoomLevel, 0.25f);
 		m_Camera.SetProjection(glm::radians(m_Fov * m_ZoomLevel * 20), m_AspectRatio, 0.1f, 100.0f);
 
 		return false;
-
 	}
 
-	bool PerspectiveCameraController::OnWindowResized(WindowResizeEvent& e) {
-
+	bool PerspectiveCameraController::OnWindowResized(WindowResizeEvent& e) 
+	{
 		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
 		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 
 		return false;
-
 	}
 
 

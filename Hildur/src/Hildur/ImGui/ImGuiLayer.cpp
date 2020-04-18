@@ -1,29 +1,29 @@
 #include "hrpcheaders.h"
 #include "ImGuiLayer.h"
 
-#include "imgui.h"
-#include "examples/imgui_impl_glfw.h"
-#include "examples/imgui_impl_opengl3.h"
-
 #include "Hildur/Core/Application.h"
+
+#include <imgui.h>
+#include <examples/imgui_impl_glfw.h>
+#include <examples/imgui_impl_opengl3.h>
 
 // TEMPORARY
 #include <GLFW/glfw3.h>
-#include <glad/glad.h>
+
 
 namespace Hildur {
 
 	ImGuiLayer::ImGuiLayer()
-		: Layer("ImGuiLayer") {
-
+		: Layer("ImGuiLayer") 
+	{
 	}
 
-	ImGuiLayer::~ImGuiLayer() {
-
+	ImGuiLayer::~ImGuiLayer()
+	{
 	}
 
-	void ImGuiLayer::OnAttach() {
-
+	void ImGuiLayer::OnAttach() 
+	{
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 
@@ -38,17 +38,14 @@ namespace Hildur {
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
-		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();
-		//ImGui::StyleColorsClassic();
 
 		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
 		ImGuiStyle& style = ImGui::GetStyle();
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) 
+		{
 			style.WindowRounding = 0.0f;
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-
 		}
 
 		Application& app = Application::Get();
@@ -57,27 +54,24 @@ namespace Hildur {
 		// Setup Platform/Renderer bindings
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init("#version 140");
-
 	}
 
-	void ImGuiLayer::OnDetach() {
-
+	void ImGuiLayer::OnDetach()
+	{
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
-
 	}
 
-	void ImGuiLayer::Begin() {
-
+	void ImGuiLayer::Begin()
+	{
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-
 	}
 
-	void ImGuiLayer::End() {
-
+	void ImGuiLayer::End() 
+	{
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
 		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
@@ -86,21 +80,17 @@ namespace Hildur {
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
 			GLFWwindow* backup_current_context = glfwGetCurrentContext();
 			ImGui::UpdatePlatformWindows();
 			ImGui::RenderPlatformWindowsDefault();
 			glfwMakeContextCurrent(backup_current_context);
-
 		}
-
 	}
 
-	void ImGuiLayer::OnImGuiRender() {
-
-
-
+	void ImGuiLayer::OnImGuiRender()
+	{
 	}
 
 }

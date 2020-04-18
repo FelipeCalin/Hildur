@@ -8,26 +8,21 @@ namespace Hildur {
 
 
 	Material::Material(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, Ref<Texture> diffuseTex, Ref<Texture> specularTex)
-		: m_Ambient(ambient), m_Diffuse(diffuse), m_Specular(specular), m_DiffuseTex(diffuseTex), m_SpecularTex(specularTex) {
-
-
-
+		: m_Ambient(ambient), m_Diffuse(diffuse), m_Specular(specular), m_DiffuseTex(diffuseTex), m_SpecularTex(specularTex) 
+	{
 	}
 
-	Material::~Material() {
-
-
-
+	Material::~Material() 
+	{
 	}
 
-	Ref<Material> Material::Create(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, Ref<Texture> diffuseTex, Ref<Texture> specularTex) {
-
+	Ref<Material> Material::Create(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, Ref<Texture> diffuseTex, Ref<Texture> specularTex) 
+	{
 		return CreateRef<Material>(ambient, diffuse, specular, diffuseTex, specularTex);
-
 	}
 
-	void Material::SendToShader(Ref<Shader> shader) {
-
+	void Material::SendToShader(Ref<Shader> shader) 
+	{
 		shader->Bind();
 
 		std::dynamic_pointer_cast<Hildur::OpenGLShader>(shader)->UploadUniformFloat3("material.ambient", m_Ambient);
@@ -37,7 +32,6 @@ namespace Hildur {
 		std::dynamic_pointer_cast<Hildur::OpenGLShader>(shader)->UploadUniformInt("specularTex", 1);
 
 		shader->UnBind();
-
 	}
 
 

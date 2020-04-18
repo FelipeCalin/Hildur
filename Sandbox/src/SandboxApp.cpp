@@ -760,85 +760,71 @@ private:
 */
 
 
-class ImGuiLayer : public Hildur::ImGuiLayer {
-
+class ImGuiLayer : public Hildur::ImGuiLayer
+{
 public:
 
-	ImGuiLayer() {
-
-
-
+	ImGuiLayer() 
+	{
 	}
 
-	~ImGuiLayer() {
-
-
-
+	~ImGuiLayer() 
+	{
 	}
-
 };
 
-class ImaginaryScene : public Hildur::Scene {
-
-
+class ImaginaryScene : public Hildur::Scene 
+{
 public:
 
-	void Load() {
-
+	void Load() 
+	{
 		Hildur::Entity* mike = Scene::instantiate("manuel");
 		mike->getComponent<Hildur::Transform>()->setPosition(glm::vec3(8.0f, 3.0f, 6.0f));
 
 		glm::vec3 pos = mike->getComponent<Hildur::Transform>()->getPosition();
 
 		HR_CORE_TRACE("Mike's position is: {0}, {1}, {2}", pos.x, pos.y, pos.z);
-
 	}
-
 };
 
-class SuperScene : public Hildur::Scene {
-
-
+class SuperScene : public Hildur::Scene 
+{
 public:
 
-	void Load() {
-
+	void Load()
+	{
 		Hildur::Entity* manuel = Scene::instantiate("manuel");
 		manuel->getComponent<Hildur::Transform>()->setPosition(glm::vec3(1.0f, 12.0f, 5.0f));
 
 		glm::vec3 pos = manuel->getComponent<Hildur::Transform>()->getPosition();
 
 		HR_CORE_TRACE("Manuel's position is: {0}, {1}, {2}", pos.x, pos.y, pos.z);
-
 	}
-
 };
 
-class MegaScene : public Hildur::Scene {
-
-
+class MegaScene : public Hildur::Scene 
+{
 public:
 
-	void Load() {
-
+	void Load()
+	{
 		Hildur::Entity* peter = Scene::instantiate("manuel");
 		peter->getComponent<Hildur::Transform>()->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
 		glm::vec3 pos = peter->getComponent<Hildur::Transform>()->getPosition();
 
 		HR_CORE_TRACE("Peter's position is: {0}, {1}, {2}", pos.x, pos.y, pos.z);
-
 	}
-
 };
 
 
-class Sandbox : public Hildur::Application {
-
+class Sandbox : public Hildur::Application 
+{
 public:
 
-	Sandbox() {
-
+	Sandbox() 
+	{
 		//PushLayer(new Layer2D());
 		//PushLayer(new Layer3D());
 
@@ -850,19 +836,14 @@ public:
 		//Init(scenes);
 
 		PushLayer(new Sandbox2D());
-
 	}
 
-	~Sandbox() {
-
-
-
+	~Sandbox() 
+	{
 	}
-
 };
 
-Hildur::Application* Hildur::CreateApplication() {
-
+Hildur::Application* Hildur::CreateApplication()
+{
 	return new Sandbox;
-
 }

@@ -7,23 +7,24 @@
 namespace Hildur {
 
 
-	class HILDUR_API WindowResizeEvent : public Event {
-
+	class HILDUR_API WindowResizeEvent : public Event
+	{
 	public:
 
 		WindowResizeEvent(unsigned int width, unsigned int height)
-			: m_Width(width), m_Height(height) {}
+			: m_Width(width), m_Height(height) 
+		{
+		}
 
 
 		inline unsigned int GetWidth() const { return m_Width; }
 		inline unsigned int GetHeight() const { return m_Height; }
 
-		std::string ToString() const override {
-
+		std::string ToString() const override
+		{
 			std::stringstream ss;
 			ss << "WindowResize: " << m_Width << ", " << m_Height;
 			return ss.str();
-
 		}
 
 		EVENT_CLASS_TYPE(WindowResize)
@@ -32,11 +33,10 @@ namespace Hildur {
 	private:
 
 		unsigned int m_Width, m_Height;
-
 	};
 
-	class HILDUR_API WindowCloseEvent : public Event {
-
+	class HILDUR_API WindowCloseEvent : public Event
+	{
 	public:
 
 		WindowCloseEvent() {}
@@ -46,8 +46,8 @@ namespace Hildur {
 
 	};
 
-	class HILDUR_API AppTickEvent : public Event {
-
+	class HILDUR_API AppTickEvent : public Event 
+	{
 	public:
 
 		AppTickEvent() {}
@@ -57,8 +57,8 @@ namespace Hildur {
 
 	};
 
-	class HILDUR_API AppUpdateEvent : public Event {
-
+	class HILDUR_API AppUpdateEvent : public Event
+	{
 	public:
 
 		AppUpdateEvent() {}
@@ -68,8 +68,8 @@ namespace Hildur {
 
 	};
 
-	class HILDUR_API AppRenderEvent : public Event {
-
+	class HILDUR_API AppRenderEvent : public Event 
+	{
 	public:
 
 		AppRenderEvent() {}

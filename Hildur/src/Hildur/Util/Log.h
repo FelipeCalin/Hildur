@@ -10,8 +10,9 @@
 
 namespace Hildur {
 
-	class HILDUR_API Log {
 
+	class HILDUR_API Log
+	{
 	public:
 
 		static void Init();
@@ -23,8 +24,8 @@ namespace Hildur {
 
 		static std::shared_ptr<spdlog::logger> s_CoreLogger;
 		static std::shared_ptr<spdlog::logger> s_ClientLogger;
-
 	};
+
 
 }
 

@@ -15,8 +15,8 @@ class ManagedResource;
 namespace Hildur {
 
 
-	class ResourceManager {
-
+	class ResourceManager 
+	{
 	public:
 
 		static unsigned int max_loadtime;
@@ -26,25 +26,23 @@ namespace Hildur {
 		void Destroy();
 
 		template <class T, typename D>
-		static T* CreateResource(std::string name, D data) {
-
+		static T* CreateResource(std::string name, D data)
+		{
 			//TODO: create hildur static assertions
 			static_assert(std::is_base_of<ManagedResource, T>::value, "T must inherit from ManagedResource");
 
 			T* resource;
 
-			if (m_ResourceMap.find(name) == m_ResourceMap.end()) {
-
+			if (m_ResourceMap.find(name) == m_ResourceMap.end()) 
+			{
 				resource = new T(data);
 				m_ResourceMap[name] = { 1, resource };
-
 			}
-			else {
-
+			else 
+			{
 				CountedResource* cr = &m_ResourceMap[name];
 				++cr->count;
 				resource = (T*)cr->managedResource;
-
 			}
 
 			return resource;
@@ -52,78 +50,69 @@ namespace Hildur {
 		}
 
 		template <class T>
-		static T* CreateResource(std::string name) {
-
+		static T* CreateResource(std::string name) 
+		{
 			static_assert(std::is_base_of<ManagedResource, T>::value, "T must inherit from ManagedResource");
 
 			T* resource;
 
-			if (m_ResourceMap.find(name) == m_ResourceMap.end()) {
-
+			if (m_ResourceMap.find(name) == m_ResourceMap.end()) 
+			{
 				resource = new T();
 				m_ResourceMap[name] = { 1, resource };
-
 			}
-			else {
-
+			else 
+			{
 				CountedResource* cr = &m_ResourceMap[name];
 				++cr->count;
 				resource = (T*)cr->managedResource;
-
 			}
 
 			return resource;
-
 		}
 
 		template <class T, typename C>
-		static T* CreateResource(Filepath path, C config) {
-
+		static T* CreateResource(Filepath path, C config)
+		{
 			static_assert(std::is_base_of<ManagedResource, T>::value, "T must inherit from ManagedResource");
 
 			T* resource;
 
-			if (m_ResourceMap.find(path.getAbsolutePath()) == m_ResourceMap.end()) {
-
+			if (m_ResourceMap.find(path.getAbsolutePath()) == m_ResourceMap.end())
+			{
 				resource = new T(path, config);
 				m_ResourceMap[path.getAbsolutePath()] = { 1, resource };
-
 			}
-			else {
-
+			else
+			{
 				CountedResource* cr = &m_ResourceMap[path.getAbsolutePath()];
 				++cr->count;
 				resource = (T*)cr->managedResource;
-
 			}
 
 			return resource;
-
 		}
 
 		template <class T>
-		static T* CreateResource(Filepath path) {
-
+		static T* CreateResource(Filepath path) 
+		{
 			static_assert(std::is_base_of<ManagedResource, T>::value, "T must inherit from ManagedResource");
-
+			
 			T* resource;
 
-			if (m_ResourceMap.find(path.getAbsolutePath()) == m_ResourceMap.end()) {
-
+			if (m_ResourceMap.find(path.getAbsolutePath()) == m_ResourceMap.end()) 
+			{
 				resource = new T(path);
 				m_ResourceMap[path.getAbsolutePath()] = { 1, resource };
-
 			}
-			else {
-
+			else 
+			{
 				CountedResource* cr = &m_ResourceMap[path.getAbsolutePath()];
 				++cr->count;
 				resource = (T*)cr->managedResource;
-
 			}
 
 			return resource;
-
 		}
 
 		static void DeleteResource(Filepath path);
@@ -134,17 +123,15 @@ namespace Hildur {
 
 	private:
 
-		struct CountedResource {
-
+		struct CountedResource
+		{
 			int count;
 			ManagedResource* managedResource;
-
 		};
 
 		static std::map<std::string, CountedResource> m_ResourceMap;
 		static std::vector<LazyLoadable*> m_InitializationList;
 		static std::vector<LazyLoadable*> m_ReadyList;
-
 	};
 
 

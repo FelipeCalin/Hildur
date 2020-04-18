@@ -11,25 +11,23 @@ namespace Hildur {
 	//In the Hildur engine events block the main loop, waiting to be attended there.
 	//In the future, add buffer, and an event stage in the update stack.
 
-	enum class EventType {
-
+	enum class EventType 
+	{
 		None = 0,
 		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
 		AppTick, AppUpdate, AppRender,
 		KeyPressed, KeyReleased, KeyTyped,
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
-
 	};
 
-	enum EventCategory {
-
+	enum EventCategory
+	{
 		None=0,
 		EventCategoryApplication  = BIT(0),
 		EventCategoryInput        = BIT(1),
 		EventCategoryKeyboard     = BIT(2),
 		EventCategoryMouse        = BIT(3),
 		EventCategoryMouseButton  = BIT(4)
-
 	};
 
 
@@ -40,8 +38,8 @@ namespace Hildur {
 #define EVENT_CLASS_CATEGORY(category) virtual int GetCategoryFlags() const override { return category; }
 
 
-	class HILDUR_API Event {
-
+	class HILDUR_API Event 
+	{
 		friend class EventDispatcher;
 
 	public:
@@ -54,51 +52,44 @@ namespace Hildur {
 		virtual int GetCategoryFlags() const = 0;
 		virtual std::string ToString() const { return GetName(); }
 
-		inline bool IsInCategory(EventCategory category) {
-
+		inline bool IsInCategory(EventCategory category)
+		{
 			return GetCategoryFlags() & category;
-
 		}
-
-	protected:
-
-
 	};
 
-	class EventDispatcher {
-
+	class EventDispatcher
+	{
 	public:
 
 		EventDispatcher(Event& event)
-			: m_Event(event) {}
+			: m_Event(event)
+		{
+		}
 
 
 		// F will be deduced by the compiler
 		template<typename T, typename F>
-		bool Dispatch(const F& func) {
-
-			if (m_Event.GetEventType() == T::GetStaticType()) {
-
+		bool Dispatch(const F& func)
+		{
+			if (m_Event.GetEventType() == T::GetStaticType())
+			{
 				m_Event.Handled = func(static_cast<T&>(m_Event));
 
 				return true;
-
 			}
 
 			return false;
-
 		}
 
 	private:
 
 		Event& m_Event;
-
 	};
 
-	inline std::ostream& operator<<(std::ostream& os, const Event& e) {
-
+	inline std::ostream& operator<<(std::ostream& os, const Event& e) 
+	{
 		return os << e.ToString();
-
 	}
 
 

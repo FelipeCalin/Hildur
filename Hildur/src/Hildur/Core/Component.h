@@ -10,8 +10,8 @@ namespace Hildur {
 	class Entity;
 	class Transform;
 
-	class Component {
-
+	class Component 
+	{
 	public:
 
 		void setEnable(bool enable);
@@ -20,12 +20,11 @@ namespace Hildur {
 		Transform* getTransform();
 		Entity* getEntity();
 
-		void setup(Entity* entity, Transform* transform) {
-
+		void setup(Entity* entity, Transform* transform)
+		{
 			this->entity = entity;
 			this->transform = transform;
 			init();
-
 		}
 
 		virtual ~Component() = 0;
@@ -43,7 +42,6 @@ namespace Hildur {
 	private:
 
 		bool m_IsEnabled = true;
-
 	};
 
 
