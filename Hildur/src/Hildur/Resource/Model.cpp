@@ -23,7 +23,7 @@ namespace Hildur {
 
 	Ref<Model> Model::Create(const std::string& path) {
 
-		return std::make_shared<Model>(path);
+		return CreateRef<Model>(path);
 
 	}
 
@@ -119,7 +119,7 @@ namespace Hildur {
 			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 		}	
 
-		return std::make_shared<Mesh>(vertices, indices, textures);
+		return CreateRef<Mesh>(vertices, indices, textures);
 
 	}
 

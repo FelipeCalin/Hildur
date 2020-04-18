@@ -9,12 +9,12 @@
 namespace Hildur {
 
 
-	Ref<Texture2D> Texture2D::Create(const std::string& path) {
+	Ref<Texture2D> Texture2D::Create(uint32_t width, uint32_t height) {
 
 		switch (Renderer::GetAPI()) {
 
-			case RendererAPI::API::None:    HR_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
-			case RendererAPI::API::OpenGL:  return std::make_shared<OpenGLTexture2D>(path);
+		case RendererAPI::API::None:    HR_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
+		case RendererAPI::API::OpenGL:  return CreateRef<OpenGLTexture2D>(width, height);
 
 		}
 
@@ -24,12 +24,12 @@ namespace Hildur {
 
 	}
 
-	Ref<Texture2D> Texture2D::Create(const uint32_t width, const uint32_t height, const uint32_t channels) {
+	Ref<Texture2D> Texture2D::Create(const std::string& path) {
 
 		switch (Renderer::GetAPI()) {
 
-		case RendererAPI::API::None:    HR_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
-		case RendererAPI::API::OpenGL:  return std::make_shared<OpenGLTexture2D>(width, height, channels);
+			case RendererAPI::API::None:    HR_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
+			case RendererAPI::API::OpenGL:  return CreateRef<OpenGLTexture2D>(path);
 
 		}
 

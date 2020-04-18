@@ -64,8 +64,8 @@ namespace Hildur {
 		std::dynamic_pointer_cast<OpenGLShader> (shader)->UploadUniformMat4("u_ModelMat", transform);
 
 
-		mesh->GetDiffuseTex()->Bind(mesh->GetDiffuseTex()->GetTextureUnit());
-		std::dynamic_pointer_cast<OpenGLShader> (shader)->UploadUniformInt("diffuseTex1", mesh->GetDiffuseTex()->GetTextureUnit());
+		//mesh->GetDiffuseTex()->Bind(mesh->GetDiffuseTex()->GetTextureUnit());
+		//std::dynamic_pointer_cast<OpenGLShader> (shader)->UploadUniformInt("diffuseTex1", mesh->GetDiffuseTex()->GetTextureUnit());
 
 
 		mesh->GetVertexArray()->Bind();

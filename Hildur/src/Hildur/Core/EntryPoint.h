@@ -9,7 +9,6 @@ int main(int argc, char** argv) {
 
 	Hildur::Log::Init();
 
-	HR_INFO("Client logger working");
 	HR_CORE_INFO("Core logger initialized");
 
 	auto app = Hildur::CreateApplication();

@@ -12,15 +12,11 @@ uniform mat4 u_ViewProjectionMat;
 uniform mat4 u_ModelMat;
 
 out vec2 v_TexCoord;
-out float v_ZPos;
 
-void main()
+void main() 
 {
 	v_TexCoord = a_TexCoord;
-
 	gl_Position = u_ViewProjectionMat * u_ModelMat * vec4(a_Position, 1.0);
-
-	v_ZPos = a_Position.z;
 }
 
 
@@ -32,13 +28,13 @@ void main()
 layout(location = 0) out vec4 color;
 
 in vec2 v_TexCoord;
-in float v_ZPos;
 
+uniform vec4 u_Color;
 uniform sampler2D u_Texture;
 
 void main()
 {
 	//Output
-	color = texture(u_Texture, v_TexCoord);
+	color = texture(u_Texture, v_TexCoord * 10) * u_Color;
 
 }

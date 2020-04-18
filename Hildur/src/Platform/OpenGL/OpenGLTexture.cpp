@@ -3,13 +3,26 @@
 
 #include <stb_image.h>
 
-#include <glad/glad.h>
-
 
 namespace Hildur {
 
 
-	uint32_t OpenGLTexture2D::m_NextUnit = 1;
+	OpenGLTexture2D::OpenGLTexture2D(const uint32_t width, const uint32_t height)
+		: m_Width(width), m_Height(height) {
+
+		m_InternalFomat = GL_RGBA8;
+		m_DataFormat = GL_RGBA;
+
+		glGenTextures(1, &m_RendererID);
+		glBindTexture(GL_TEXTURE_2D, m_RendererID);
+		glTexImage2D(GL_TEXTURE_2D, 0, m_InternalFomat, m_Width, m_Height, 0, m_DataFormat, GL_UNSIGNED_BYTE, NULL);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	}
 
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path) {
 
@@ -24,9 +37,6 @@ namespace Hildur {
 		m_Width = width;
 		m_Height = height;
 
-		m_TextureUnit = 0;
-
-
 		GLenum internalFormat = 0, dataFormat = 0;
 
 		if (channels == 3) {
@@ -42,69 +52,22 @@ namespace Hildur {
 
 		}
 
-		HR_CORE_ASSERT(internalFormat & dataFormat, "Data format not supported!");
+		m_InternalFomat = internalFormat;
+		m_DataFormat = dataFormat;
 
+		HR_CORE_ASSERT(internalFormat & dataFormat, "Data format not supported!");
 		
 		glGenTextures(1, &m_RendererID);
 		glBindTexture(GL_TEXTURE_2D, m_RendererID);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		
 
 		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_Width, m_Height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
 
 		stbi_image_free(data);
-
-
-		m_TextureUnit = m_NextUnit++;
-
-	}
-
-	OpenGLTexture2D::OpenGLTexture2D(const uint32_t width, const uint32_t height, const uint32_t channels) {
-
-		m_Width = width;
-		m_Height = height;
-
-		m_TextureUnit = 0;
-
-
-		GLenum internalFormat = 0, dataFormat = 0;
-
-		if (channels == 3) {
-
-			internalFormat = GL_RGB8;
-			dataFormat = GL_RGB;
-
-		}
-		else if (channels == 4) {
-
-			internalFormat = GL_RGBA8;
-			dataFormat = GL_RGBA;
-
-		}
-
-		HR_CORE_ASSERT(internalFormat & dataFormat, "Data format not supported!");
-
-
-		glGenTextures(1, &m_RendererID);
-		glBindTexture(GL_TEXTURE_2D, m_RendererID);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-
-		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_Width, m_Height, 0, dataFormat, GL_UNSIGNED_BYTE, NULL);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-
-		m_TextureUnit = m_NextUnit++;
 
 	}
 
@@ -114,18 +77,21 @@ namespace Hildur {
 
 	}
 
+	void OpenGLTexture2D::SetData(void* data, uint32_t size) {
+
+		uint32_t bpp = m_DataFormat == GL_RGBA ? 4 : 3;
+
+		HR_CORE_ASSERT(size == m_Width * m_Width * bpp, "Data must be entire texture!");
+
+		glBindTexture(GL_TEXTURE_2D, m_RendererID);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
+
+	}
+
 	void OpenGLTexture2D::Bind(uint32_t slot) const {
 
-		if (slot != 0) {
-			glActiveTexture((int)GL_TEXTURE0 + slot);
-			glBindTexture(GL_TEXTURE_2D, m_RendererID);
-		} 
-		else {
-
-			glActiveTexture((int)GL_TEXTURE0 + m_TextureUnit);
-			glBindTexture(GL_TEXTURE_2D, m_RendererID);
-
-		}
+		glActiveTexture((int)GL_TEXTURE0 + slot);
+		glBindTexture(GL_TEXTURE_2D, m_RendererID);
 
 	}
 

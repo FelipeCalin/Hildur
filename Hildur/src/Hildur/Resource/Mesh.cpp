@@ -38,7 +38,7 @@ namespace Hildur {
 
 	Ref<Mesh> Mesh::Create(Ref<std::vector<Vertex>> vertices, Ref<std::vector<uint32_t>> indices, std::vector<Ref<Texture2D>> textures) {
 
-		return std::make_shared<Mesh>(vertices, indices, textures);
+		return CreateRef<Mesh>(vertices, indices, textures);
 
 	}
 
