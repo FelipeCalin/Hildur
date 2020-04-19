@@ -17,6 +17,11 @@ namespace Hildur {
 	std::map<std::string, Scene*> SceneManager::m_SceneMap;
 	std::string SceneManager::m_CurrentSceneName;
 
+	Scope<SceneManager> SceneManager::Create()
+	{
+		return CreateScope<SceneManager>();
+	}
+
 	void SceneManager::SetSceneMap(std::map<std::string, Scene*>& sceneMap) 
 	{
 		m_SceneMap = sceneMap;

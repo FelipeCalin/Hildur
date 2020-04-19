@@ -11,10 +11,14 @@ namespace Hildur {
 	OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool rotation) 
 		: m_AspectRatio(aspectRatio), m_Camera(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel), m_Rotation(rotation)
 	{
+		HR_PROFILE_FUNCTION()
+
 	}
 
 	void OrthographicCameraController::OnUpdate(Timestep ts) 
 	{
+		HR_PROFILE_FUNCTION()
+
 		if (Input::IsKeyPressed(HR_KEY_A))
 			m_CameraPosition.x -= m_CameraTranslationSpeed * ts;
 		else if (Input::IsKeyPressed(HR_KEY_D))
@@ -42,6 +46,8 @@ namespace Hildur {
 
 	void OrthographicCameraController::OnEvent(Event& e) 
 	{
+		HR_PROFILE_FUNCTION()
+
 		EventDispatcher dispatcher(e);
 
 		dispatcher.Dispatch<MouseScrolledEvent>(HR_BIND_EVENT_FN(OrthographicCameraController::OnMouseScrolled));
@@ -50,6 +56,8 @@ namespace Hildur {
 
 	void OrthographicCameraController::SetResize(uint32_t width, uint32_t height) 
 	{
+		HR_PROFILE_FUNCTION()
+
 		m_AspectRatio = (float)width / (float)height;
 		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 	}

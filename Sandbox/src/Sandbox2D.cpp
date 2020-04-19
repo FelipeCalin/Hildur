@@ -19,23 +19,30 @@ void Sandbox2D::OnDetach()
 {
 }
 
-void Sandbox2D::OnUpdate(Hildur::Timestep ts) 
+void Sandbox2D::OnUpdate(Hildur::Timestep ts)
 {
-	// Update
+	HR_PROFILE_FUNCTION();
+
 	m_CameraController.OnUpdate(ts);
-	//m_CameraController.SetResize(Hildur::Application::Get().GetRenderWidth(), Hildur::Application::Get().GetRenderHeight());
 
-	// Render
-	Hildur::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-	Hildur::RenderCommand::Clear();
+	rotation += 1.0f * ts.GetTimeSeconds();
 
-	Hildur::Renderer2D::BeginScene(m_CameraController.GetCamera());
+	{
+		HR_PROFILE_SCOPE("Renderer::Prep");
+		Hildur::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+		Hildur::RenderCommand::Clear();
+	}
 
-	Hildur::Renderer2D::DrawQuad({ 0.5f, 1.0f }, { 1.0f, 1.0f }, {0.8f, 0.3f, 0.7f, 1.0f});
-	Hildur::Renderer2D::DrawQuad({ 0.0f, 5.0f, -0.5f }, { 10.0f, 10.0f }, m_TextureCherno);
-	Hildur::Renderer2D::DrawQuad({ 0.0f, 1.0f }, { 0.8f, 0.8f }, m_SquareColor);
+	{
+		HR_PROFILE_SCOPE("Renderer::Render");
+		Hildur::Renderer2D::BeginScene(m_CameraController.GetCamera());
+		
+		Hildur::Renderer2D::DrawRotatedQuad({ 0.5f, 1.0f }, { 1.0f, 1.0f }, rotation, { 0.8f, 0.3f, 0.7f, 1.0f });
+		Hildur::Renderer2D::DrawQuad({ 0.0f, 5.0f, -0.5f }, { 10.0f, 10.0f }, m_TextureCherno, 10.0f, {0.2f, 0.8f, 1.0f, 1.0f});
+		Hildur::Renderer2D::DrawQuad({ 0.0f, 1.0f }, { 0.8f, 0.8f }, m_SquareColor);
 
-	Hildur::Renderer2D::EndScene();
+		Hildur::Renderer2D::EndScene();
+	}
 }
 
 void Sandbox2D::OnImGuiRender() 

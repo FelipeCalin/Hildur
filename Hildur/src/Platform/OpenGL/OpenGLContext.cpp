@@ -18,6 +18,8 @@ namespace Hildur {
 
 	void OpenGLContext::Init() 
 	{
+		HR_PROFILE_FUNCTION();
+		
 		glfwMakeContextCurrent(m_WindowHandle);
 		int status = gladLoadGLLoader((GLADloadproc)wglGetProcAddress);
 		HR_CORE_ASSERT(status, "Falied to initialize Glad!");
@@ -35,14 +37,14 @@ namespace Hildur {
 		HR_CORE_INFO("Shading lenguage version: {0}", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 #ifdef HR_ENABLE_ASSERTS
-
 		HR_CORE_ASSERT(major > 3 || (major == 3 && minor >= 1), "Hildur Requires OpenGL 3.1 or later.");
-
 #endif 
 	}
 
 	void OpenGLContext::SwapBuffers() 
 	{
+		HR_PROFILE_FUNCTION();
+		
 		glfwSwapBuffers(m_WindowHandle);
 	}
 

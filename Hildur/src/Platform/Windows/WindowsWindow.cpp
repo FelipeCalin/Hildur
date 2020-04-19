@@ -17,23 +17,29 @@ namespace Hildur {
 		HR_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
 
-	Window* Window::Create(const WindowProps& props) 
+	Scope<Window> Window::Create(const WindowProps& props) 
 	{
-		return new WindowsWindow(props);
+		return CreateScope<WindowsWindow>(props);
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props) 
 	{
+		HR_PROFILE_FUNCTION();
+
 		Init(props);
 	}
 
 	WindowsWindow::~WindowsWindow() 
 	{
+		HR_PROFILE_FUNCTION();
+
 		Shutdown();
 	}
 
 	void WindowsWindow::Init(const WindowProps& props) 
 	{
+		HR_PROFILE_FUNCTION();
+
 		m_Data.Title = props.Title;
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
@@ -42,6 +48,8 @@ namespace Hildur {
 
 		if (!s_GLFWInitialized) 
 		{
+			HR_PROFILE_SCOPE("glfwInit")
+
 			// TODO: glfwTerminate on system shutdown
 			int success = glfwInit();
 			HR_CORE_ASSERT(success, "Could not intialize GLFW!");
@@ -49,10 +57,11 @@ namespace Hildur {
 			s_GLFWInitialized = true;
 		}
 
-		//AntiAlasing (2 samples)
-		//glfwWindowHint(GLFW_SAMPLES, 2);
+		{
+			HR_PROFILE_SCOPE("glfwCreateWindow")
 
-		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+			m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+		}
 
 		m_Context = CreateScope<OpenGLContext>(m_Window);
 		m_Context->Init();
@@ -153,17 +162,23 @@ namespace Hildur {
 
 	void WindowsWindow::Shutdown() 
 	{
+		HR_PROFILE_FUNCTION();
+		
 		glfwDestroyWindow(m_Window);
 	}
 
 	void WindowsWindow::OnUpdate() 
 	{
+		HR_PROFILE_FUNCTION();
+		
 		glfwPollEvents();
 		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled) 
 	{
+		HR_PROFILE_FUNCTION();
+		
 		if (enabled)
 			glfwSwapInterval(1);
 		else

@@ -1,7 +1,5 @@
 #pragma once
 
-#define _CRT_SECURE_NO_WARNINGS
-
 #include <cstdlib>
 
 #include <iostream>
@@ -23,7 +21,10 @@
 #include <chrono>
 
 
+#include "Defines.h"
+
 #include "Hildur/util/Log.h"
+#include "Hildur/Debug/Instrumentor.h"
 
 
 #ifdef HR_PLATFORM_WINDOWS

@@ -36,6 +36,8 @@ namespace Hildur {
 		bool SceneQueued() { return m_InQueue; }
 		void DrawSceneList();
 
+		static Scope<SceneManager> Create();
+
 	private:
 
 		static std::string m_NewScene;

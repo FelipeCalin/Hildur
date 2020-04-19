@@ -42,8 +42,8 @@ namespace Hildur {
 
 	private:
 
-		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
+		bool OnWindowClose(WindowCloseEvent& e);
 
 		void DockUpdate();
 

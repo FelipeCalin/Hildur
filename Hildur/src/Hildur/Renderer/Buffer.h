@@ -151,23 +151,5 @@ namespace Hildur {
 		static Ref<IndexBuffer> Create(Ref<std::vector<uint32_t>> indices, uint32_t size);
 	};
 
-	class FrameBuffer 
-	{
-	public:
-
-		virtual ~FrameBuffer() {}
-
-		virtual void Bind() const = 0;
-		virtual void UnBind() const = 0;
-
-		virtual uint32_t GetID() const = 0;
-
-		virtual uint32_t GetTexture() const = 0;
-		virtual void SetTexture(Ref<Texture2D> texture) = 0;
-
-
-		static Ref<FrameBuffer> Create(const uint32_t width, const uint32_t height, uint32_t texture = 0);
-	};
-
 
 }

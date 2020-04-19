@@ -3,6 +3,8 @@
 #include <memory>
 #include <string>
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #ifdef _WIN32
 /* Windows x64/x86 */
 	#ifdef _WIN64

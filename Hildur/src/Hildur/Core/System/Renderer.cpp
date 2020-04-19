@@ -17,22 +17,30 @@ namespace Hildur {
 
 	void Renderer::Init() 
 	{
+		HR_PROFILE_FUNCTION();
+		
 		RenderCommand::Init();
 		Renderer2D::Init();
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height) 
 	{
+		HR_PROFILE_RENDERER_FUNCTION()
+
 		RenderCommand::SetViewport(0, 0, width, height);
 	}
 
 	void Renderer::BeginScene(OrthographicCamera& camera) 
 	{
+		HR_PROFILE_RENDERER_FUNCTION()
+
 		s_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
 	}
 
 	void Renderer::BeginScene(PerspectiveCamera& camera) 
 	{
+		HR_PROFILE_RENDERER_FUNCTION()
+
 		s_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
 	}
 
@@ -42,6 +50,8 @@ namespace Hildur {
 
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform) 
 	{
+		HR_PROFILE_RENDERER_FUNCTION()
+
 		shader->Bind();
 		std::dynamic_pointer_cast<OpenGLShader> (shader)->UploadUniformMat4("u_ViewProjectionMat", s_SceneData->ViewProjectionMatrix);
 		std::dynamic_pointer_cast<OpenGLShader> (shader)->UploadUniformMat4("u_ModelMat", transform);
@@ -52,6 +62,8 @@ namespace Hildur {
 
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<Mesh>& mesh, const glm::mat4& transform) 
 	{
+		HR_PROFILE_RENDERER_FUNCTION()
+
 		shader->Bind();
 		std::dynamic_pointer_cast<OpenGLShader> (shader)->UploadUniformMat4("u_ViewProjectionMat", s_SceneData->ViewProjectionMatrix);
 		std::dynamic_pointer_cast<OpenGLShader> (shader)->UploadUniformMat4("u_ModelMat", transform);
