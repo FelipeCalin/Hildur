@@ -200,6 +200,41 @@ namespace Hildur {
 		glUseProgram(0);
 	}
 
+	void OpenGLShader::SetUniform(const std::string& name, uint32_t value)
+	{
+		SetInt(name, value);
+	}
+
+	void OpenGLShader::SetUniform(const std::string& name, float value)
+	{
+		SetFloat(name, value);
+	}
+
+	void OpenGLShader::SetUniform(const std::string& name, const glm::vec2& values)
+	{
+		SetFloat2(name, values);
+	}
+
+	void OpenGLShader::SetUniform(const std::string& name, const glm::vec3& values)
+	{
+		SetFloat3(name, values);
+	}
+
+	void OpenGLShader::SetUniform(const std::string& name, const glm::vec4& values)
+	{
+		SetFloat4(name, values);
+	}
+
+	void OpenGLShader::SetUniform(const std::string& name, const glm::mat3& matrix)
+	{
+		SetMat3(name, matrix);
+	}
+
+	void OpenGLShader::SetUniform(const std::string& name, const glm::mat4& matrix)
+	{
+		SetMat4(name, matrix);
+	}
+
 	void OpenGLShader::SetInt(const std::string& name, uint32_t value) 
 	{
 		HR_PROFILE_FUNCTION()

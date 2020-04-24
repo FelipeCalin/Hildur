@@ -8,8 +8,9 @@
 //#include "PhotonBox/core/system/ResourceManager.h"
 
 #include "Hildur/Core/Entity.h"
-#include "Hildur/Resource/Filepath.h"
 #include "Hildur/Core/System/ResourceManager.h"
+
+#include "Hildur/Resource/Filepath.h"
 
 #include <vector>
 #include <map>

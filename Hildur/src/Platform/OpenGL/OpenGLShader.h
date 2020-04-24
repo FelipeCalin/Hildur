@@ -25,6 +25,14 @@ namespace Hildur {
 		virtual void Bind() const override;
 		virtual void UnBind() const override;
 
+		virtual void SetUniform(const std::string& name, uint32_t value) override;
+		virtual void SetUniform(const std::string& name, float value) override;
+		virtual void SetUniform(const std::string& name, const glm::vec2& values) override;
+		virtual void SetUniform(const std::string& name, const glm::vec3& values) override;
+		virtual void SetUniform(const std::string& name, const glm::vec4& values) override;
+		virtual void SetUniform(const std::string& name, const glm::mat3& matrix) override;
+		virtual void SetUniform(const std::string& name, const glm::mat4& matrix) override;
+
 		virtual void SetInt(const std::string& name, uint32_t value) override;
 		virtual void SetFloat(const std::string& name, float value) override;
 		virtual void SetFloat2(const std::string& name, const glm::vec2& values) override;

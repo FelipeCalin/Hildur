@@ -14,25 +14,25 @@ namespace Hildur {
 	{
 	public:
 
-		void setEnable(bool enable);
-		std::string getName();
-		bool getEnable();
-		Transform* getTransform();
-		Entity* getEntity();
+		void SetEnable(bool enable);
+		std::string GetName();
+		bool GetEnable();
+		Transform* GetTransform();
+		Entity* GetEntity();
 
-		void setup(Entity* entity, Transform* transform)
+		void Setup(Entity* entity, Transform* transform)
 		{
 			this->entity = entity;
 			this->transform = transform;
-			init();
+			Init();
 		}
 
 		virtual ~Component() = 0;
-		virtual void init() {}
+		virtual void Init() {}
 		virtual void OnEnable();
 		virtual void OnDisable();
-		virtual void destroy();
-		virtual std::type_index getBaseType();
+		virtual void Destroy();
+		virtual std::type_index GetBaseType();
 
 	protected:
 

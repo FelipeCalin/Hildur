@@ -2,6 +2,7 @@
 
 #include "Hildur/Renderer/RendererAPI.h"
 #include "Hildur/Resource/Shader.h"
+#include "Hildur/Resource/Material.h"
 
 #include "Hildur/Renderer/OrthographicCamera.h"
 #include "Hildur/Renderer/PerspectiveCamera.h"
@@ -11,6 +12,13 @@
 
 namespace Hildur {
 
+
+	class Renderable;
+
+	enum RenderType
+	{
+		RT_OPAQUE, RT_CUTOUT, RT_TRANSPARENT
+	};
 
 	class Renderer 
 	{
@@ -25,17 +33,13 @@ namespace Hildur {
 
 		static void Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform = glm::mat4(1.0f));
 		static void Submit(const Ref<Shader>& shader, const Ref<Mesh>& mesh, const glm::mat4& transform = glm::mat4(1.0f));
+		static void Submit(const Ref<Material>& material, const Ref<Mesh>& mesh, const glm::mat4& transform = glm::mat4(1.0f));
+
+		static void AddToRenderQueue(Renderable* renderable);
+		static void RemoveFromRenderQueue(Renderable* renderable);
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 
-	private:
-
-		struct SceneData 
-		{
-			glm::mat4 ViewProjectionMatrix;
-		};
-
-		static Scope<SceneData> s_SceneData;
 	};
 
 

@@ -2,18 +2,30 @@
 #include "Renderer.h"
 
 #include "Hildur/Resource/Texture.h"
+#include "Hildur/Component/Renderable.h" 
 
 #include "Hildur/Renderer/RenderCommand.h"
 #include "Hildur/Core/System/Renderer2D.h"
 
 #include "Platform/OpenGL/OpenGLShader.h"
 
+#include <glm/gtc/type_ptr.hpp>
+
 
 namespace Hildur {
 
 
-	Scope<Renderer::SceneData> Renderer::s_SceneData = CreateScope<Renderer::SceneData>();
+	struct RendererStorage
+	{
+		Ref<VertexArray> QuadVertexArray;
+		Ref<Shader> TextureShader;
+		Ref<Texture2D> WhiteTexture;
 
+		std::vector<Renderable*> RenderList;
+	};
+
+	static RendererStorage* s_Data;
+	static glm::mat4 s_ViewProjectionMat;
 
 	void Renderer::Init() 
 	{
@@ -34,14 +46,14 @@ namespace Hildur {
 	{
 		HR_PROFILE_RENDERER_FUNCTION()
 
-		s_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
+		s_ViewProjectionMat = camera.GetViewProjectionMatrix();
 	}
 
 	void Renderer::BeginScene(PerspectiveCamera& camera) 
 	{
 		HR_PROFILE_RENDERER_FUNCTION()
 
-		s_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
+		s_ViewProjectionMat = camera.GetViewProjectionMatrix();
 	}
 
 	void Renderer::EndScene() 
@@ -53,7 +65,7 @@ namespace Hildur {
 		HR_PROFILE_RENDERER_FUNCTION()
 
 		shader->Bind();
-		std::dynamic_pointer_cast<OpenGLShader> (shader)->UploadUniformMat4("u_ViewProjectionMat", s_SceneData->ViewProjectionMatrix);
+		std::dynamic_pointer_cast<OpenGLShader> (shader)->UploadUniformMat4("u_ViewProjectionMat", s_ViewProjectionMat);
 		std::dynamic_pointer_cast<OpenGLShader> (shader)->UploadUniformMat4("u_ModelMat", transform);
 
 		vertexArray->Bind();
@@ -65,15 +77,39 @@ namespace Hildur {
 		HR_PROFILE_RENDERER_FUNCTION()
 
 		shader->Bind();
-		std::dynamic_pointer_cast<OpenGLShader> (shader)->UploadUniformMat4("u_ViewProjectionMat", s_SceneData->ViewProjectionMatrix);
+		std::dynamic_pointer_cast<OpenGLShader> (shader)->UploadUniformMat4("u_ViewProjectionMat", s_ViewProjectionMat);
 		std::dynamic_pointer_cast<OpenGLShader> (shader)->UploadUniformMat4("u_ModelMat", transform);
-
-		//mesh->GetDiffuseTex()->Bind(mesh->GetDiffuseTex()->GetTextureUnit());
-		//std::dynamic_pointer_cast<OpenGLShader> (shader)->UploadUniformInt("diffuseTex1", mesh->GetDiffuseTex()->GetTextureUnit());
 
 		mesh->GetVertexArray()->Bind();
 
 		RenderCommand::DrawIndexed(mesh->GetVertexArray());
+	}
+
+	void Renderer::Submit(const Ref<Material>& material, const Ref<Mesh>& mesh, const glm::mat4& transform)
+	{
+		HR_PROFILE_RENDERER_FUNCTION()
+
+		Ref<Shader> shader = material->GetShader();
+
+		shader->Bind();
+		material->UpdateUniforms();
+		shader->SetMat4("u_ViewProjectionMat", s_ViewProjectionMat);
+		shader->SetMat4("u_ModelMat", transform);
+
+		mesh->GetVertexArray()->Bind();
+
+		RenderCommand::DrawIndexed(mesh->GetVertexArray());
+	}
+
+
+	void Renderer::AddToRenderQueue(Renderable* renderable)
+	{
+		s_Data->RenderList.push_back(renderable);
+	}
+
+	void Renderer::RemoveFromRenderQueue(Renderable* renderable)
+	{
+		s_Data->RenderList.erase(std::remove(s_Data->RenderList.begin(), s_Data->RenderList.end(), renderable), s_Data->RenderList.end());
 	}
 
 

@@ -31,6 +31,12 @@
 
 #include "Hildur/Resource/Model.h"
 
+//-------Component Files---------------
+
+#include "Hildur/Component/Transform.h"
+#include "Hildur/Component/Camera.h"
+#include "Hildur/Component/Sprite.h"
+
 //-------Renderer Files----------------
 
 #include "Hildur/Core/System/Renderer.h"

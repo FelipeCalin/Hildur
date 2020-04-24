@@ -5,7 +5,7 @@
 namespace Hildur {
 
 
-	void Component::setEnable(bool enable)
+	void Component::SetEnable(bool enable)
 	{
 		if (enable)
 			OnEnable();
@@ -14,23 +14,23 @@ namespace Hildur {
 		m_IsEnabled = enable;
 	}
 
-	std::string Component::getName()
+	std::string Component::GetName()
 	{
 		std::string s = typeid(*this).name();
 		return s.substr(6);
 	}
 
-	bool Component::getEnable()
+	bool Component::GetEnable()
 	{
 		return m_IsEnabled;
 	}
 
-	Transform* Component::getTransform()
+	Transform* Component::GetTransform()
 	{
 		return transform;
 	}
 
-	Entity* Component::getEntity()
+	Entity* Component::GetEntity()
 	{
 		return entity;
 	}
@@ -43,11 +43,11 @@ namespace Hildur {
 	{
 	}
 
-	void Component::destroy() 
+	void Component::Destroy() 
 	{
 	}
 
-	std::type_index Component::getBaseType() 
+	std::type_index Component::GetBaseType() 
 	{
 		return typeid(Component);
 	}

@@ -85,5 +85,5 @@ void main()
 	//Output
 	color = vec4(0.1, 0.5, 0.8, 1.0)
 		* (vec4(ambLight, 1.0f) + vec4(diffuseFinal, 1.0f) + vec4(specularFinal, 1.0f));
-	
+	//color = vec4(1.0, 1.0, 1.0, 1.0);
 }

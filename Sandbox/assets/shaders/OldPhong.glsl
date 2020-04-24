@@ -8,6 +8,7 @@ layout(location = 2) in vec3 a_Normal;
 
 uniform mat4 u_ViewProjectionMat;
 uniform mat4 u_ModelMat;
+uniform vec3 u_ViewPos;
 
 out vec3 v_Pos;
 out vec2 v_TexCoord;
@@ -18,10 +19,13 @@ out vec3 v_ViewPos;
 
 void main()
 {
+
 	//Variables for fragment shader
 	v_Pos = vec4(u_ModelMat * vec4(a_Pos, 1.0)).xyz;
 	v_TexCoord = a_TexCoord;
 	v_Normal = mat3(u_ModelMat) * a_Normal;
+
+	v_ViewPos = u_ViewPos;
 
 	//vertex shader
 	gl_Position = u_ViewProjectionMat * u_ModelMat * vec4(a_Pos, 1.0);
@@ -38,17 +42,13 @@ layout(location = 0) out vec4 color;
 
 
 //Material
-uniform vec3 ambient;
-uniform vec3 diffuse;
-uniform vec3 specular;
+struct Material {
 
-//Uniforms
-//uniform sampler2D albedoMap;
-//uniform sampler2D normalMap;
-//uniform sampler2D roughnessMap;
-//uniform sampler2D aoMap;
-//uniform sampler2D metallicMap;
-//uniform sampler2D emissionMap;
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+
+};
 
 
 //Variables from vertex shader
@@ -56,32 +56,41 @@ in vec3 v_Pos;
 in vec2 v_TexCoord;
 in vec3 v_Normal;
 
-uniform vec3 u_ViewPos;
-uniform vec3 u_LightPos;
-uniform vec3 u_LightColor;
+in vec3 v_ViewPos;
 
+//Uniforms
+uniform Material material;
+
+uniform sampler2D diffuseTex;
+uniform sampler2D specularTex;
+
+//textures (diffuse, specular)
+uniform sampler2D u_Texture;
+uniform sampler2D u_Texture2;
+
+uniform vec3 u_LightPos0;
 
 void main()
 {
+
 	//Ambient light
-	vec3 ambLight = ambient;
+	vec3 ambLight = material.ambient;
 
 	//Diffuse light
-	vec3 PosToLightDirVec = normalize(u_LightPos - v_Pos);
-	//vec3 diffuseCol = vec3(1.0f, 1.0f, 1.0f);
-	float diffuseValue = clamp(dot(PosToLightDirVec, v_Normal), 0, 1);
-	vec3 diffuseFinal = diffuse * diffuseValue * u_LightColor;
+	vec3 PosToLightDirVec = normalize(u_LightPos0 - v_Pos);
+	vec3 diffuseCol = vec3(1.0f, 1.0f, 1.0f);
+	float diffuse = clamp(dot(PosToLightDirVec, v_Normal), 0, 1);
+	vec3 diffuseFinal = material.diffuse * diffuse;
 
 	//Specular light
-	vec3 lightToPosDirVec = normalize(v_Pos - u_LightPos);
+	vec3 lightToPosDirVec = normalize(v_Pos - u_LightPos0);
 	vec3 refectDirDirVec = normalize(reflect(lightToPosDirVec, normalize(v_Normal)));
-	vec3 posToViewVecDirVec = normalize(u_ViewPos - v_Pos);
+	vec3 posToViewVecDirVec = normalize(v_ViewPos - v_Pos);
 	float specularConstant = pow(max(dot(posToViewVecDirVec, refectDirDirVec), 0), 35);
-	vec3 specularFinal = specular * specularConstant;
+	vec3 specularFinal = material.specular * specularConstant;
 
 	//Output
-//	color = mix(texture(diffuseTex, v_TexCoord), texture(specularTex, v_TexCoord), 1.0)
-//		* (vec4(ambLight, 1.0f) + vec4(diffuseFinal, 1.0f) + vec4(specularFinal, 1.0f));
-
-	color = vec4(ambLight, 1.0f) + vec4(diffuseFinal, 1.0f) + vec4(specularFinal, 1.0f);
+	color = mix(texture(diffuseTex, v_TexCoord), texture(specularTex, v_TexCoord), 1.0)
+		* (vec4(ambLight, 1.0f) + vec4(diffuseFinal, 1.0f) + vec4(specularFinal, 1.0f));
+	
 }

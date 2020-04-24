@@ -18,7 +18,7 @@ namespace Hildur {
 		OnUnload();
 		for (std::vector<Entity*>::iterator it = m_EntityList.begin(); it != m_EntityList.end(); ++it)
 		{
-			(*it)->destroyComponents();
+			(*it)->DestroyComponents();
 			delete (*it);
 		}
 
@@ -58,7 +58,7 @@ namespace Hildur {
 
 	void Scene::Destroy(Entity* go)
 	{
-		go->destroy();
+		go->Destroy();
 	}
 
 	void Scene::AddToList(Entity* go)

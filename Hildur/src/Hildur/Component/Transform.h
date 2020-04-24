@@ -16,47 +16,47 @@ namespace Hildur {
 	{
 	public:
 
-		void setPosition(glm::vec3 position);
-		void setRotation(glm::vec3 rotation);
-		void setRotation(glm::quat rotation);
-		void setScale(glm::vec3 scale);
-		void setParent(Transform* _parent);
-		void setParent(Entity* _entity);
-		void rotate(glm::quat quat);
-		glm::mat4 getRotationMatrix();
-		glm::quat getRotation();
-		glm::vec3 getPosition();
-		glm::vec3 getPositionWorld();
-		glm::vec3 getScale();
+		void SetPosition(glm::vec3 position);
+		void SetRotation(glm::vec3 rotation);
+		void SetRotation(glm::quat rotation);
+		void SetScale(glm::vec3 scale);
+		void SetParent(Transform* _parent);
+		void SetParent(Entity* _entity);
+		void Rotate(glm::quat quat);
+		glm::mat4 GetRotationMatrix();
+		glm::quat GetRotation();
+		glm::vec3 GetPosition();
+		glm::vec3 GetPositionWorld();
+		glm::vec3 GetScale();
 
-		glm::mat4 getTransformationMatrix();
-		glm::mat4 getLocalTransformationMatrix();
-		glm::vec3 forward();
-		glm::vec3 forwardWorld();
-		glm::vec3 up();
-		glm::vec3 upWorld();
-		glm::vec3 right();
-		glm::vec3 rightWorld();
-		bool hasChangedSince(unsigned long int tick);
-		bool hasChangedLastTick();
-		Transform* getParent();
-		std::vector<Transform*> getChildren();
-		void renderHandels();
+		glm::mat4 GetTransformationMatrix();
+		glm::mat4 GetLocalTransformationMatrix();
+		glm::vec3 Forward();
+		glm::vec3 ForwardWorld();
+		glm::vec3 Up();
+		glm::vec3 UpWorld();
+		glm::vec3 Right();
+		glm::vec3 RightWorld();
+		bool HasChangedSince(unsigned long int tick);
+		bool HasChangedLastTick();
+		Transform* GetParent();
+		std::vector<Transform*> GetChildren();
+		void RenderHandels();
 
 	private:
 
-		unsigned long int _lastChangedTick = -1;
-		bool _isMatrixCached = false;
-		glm::vec3 _position = glm::vec3(0.0f);
-		glm::quat _rotation = glm::quat(0.0f, 0.0f, 0.0f, 0.0f);
-		glm::vec3 _scale = glm::vec3(1.0f);
-		glm::mat4 _transformationMatrixCached;
-		glm::mat4 _transformationMatrixLast;
-		Transform* _parent;
-		std::vector<Transform*> _children;
+		unsigned long int m_LastChangedTick = -1;
+		bool m_IsMatrixCached = false;
+		glm::vec3 m_Position = glm::vec3(0.0f);
+		glm::quat m_Rotation = glm::quat(0.0f, 0.0f, 0.0f, 0.0f);
+		glm::vec3 m_Scale = glm::vec3(1.0f);
+		glm::mat4 m_TransformationMatrixCached;
+		glm::mat4 m_TransformationMatrixLast;
+		Transform* m_Parent;
+		std::vector<Transform*> m_Children;
 
-		void removeChild(Transform* child);
-		void setChanged();
+		void RemoveChild(Transform* child);
+		void SetChanged();
 	};
 
 

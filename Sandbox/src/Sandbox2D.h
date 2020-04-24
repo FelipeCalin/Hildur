@@ -24,5 +24,7 @@ private:
 	Hildur::Ref<Hildur::Texture2D> m_TextureCherno;
 
 	float rotation = 0.0f;
-	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
+	glm::vec4 m_SquareColor = { 0.0f, 0.45f, 0.5f, 1.0f };
+
+	Hildur::Entity* m_EntityTest;
 };

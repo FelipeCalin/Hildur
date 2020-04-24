@@ -19,7 +19,11 @@ namespace Hildur {
 		void OnUpdate(Timestep ts);
 		void OnEvent(Event& e);
 
-		void SetPosition(glm::vec3 pos) { m_CameraPosition = pos; }
+		const glm::vec3& GetPosition() const { return m_CameraPosition; }
+		void SetPosition(glm::vec3 position) { m_CameraPosition = position; }
+
+		const glm::vec3& GetRotation() const { return m_CameraRotation; }
+		void SetRotation(glm::vec3 rotation) { m_CameraRotation = rotation; }
 
 		PerspectiveCamera& GetCamera() { return m_Camera; }
 		const PerspectiveCamera& GetCamera() const { return m_Camera; }
@@ -40,7 +44,7 @@ namespace Hildur {
 		bool m_Rotation;
 
 		glm::vec3 m_CameraPosition = glm::vec3(1.0f);
-		glm::vec3 m_CameraRotation = glm::vec3(1.0f);
+		glm::vec3 m_CameraRotation = glm::vec3(0.0f);
 		float m_CameraTranslationSpeed = 1.0f;
 	};
 

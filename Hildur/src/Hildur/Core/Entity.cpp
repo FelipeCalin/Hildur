@@ -21,54 +21,54 @@ namespace Hildur {
 		m_Id = Entity::s_IdCnt++;
 		m_IsEnabled = true;
 		m_IsStatic = true;
-		m_Transform = addComponent<Transform>();
+		m_Transform = AddComponent<Transform>();
 	}
 
-	void Entity::destroyComponents()
+	void Entity::DestroyComponents()
 	{
 		for (std::unordered_map<std::type_index, Component*>::iterator it = m_ComponentMap.begin(); it != m_ComponentMap.end();)
 		{
 			Component* c = m_ComponentMap[(it->first)];
-			c->destroy();
+			c->Destroy();
 			it = m_ComponentMap.erase(it);
 			delete c;
 		}
 	}
 
-	void Entity::destroy()
+	void Entity::Destroy()
 	{
-		std::vector<Transform*> children = m_Transform->getChildren();
+		std::vector<Transform*> children = m_Transform->GetChildren();
 		for (std::vector<Transform*>::iterator it = children.begin(); it != children.end(); ++it)
 		{
-			(*it)->getEntity()->destroy();
+			(*it)->GetEntity()->Destroy();
 		}
 
-		destroyComponents();
+		DestroyComponents();
 		//parentScene->removeFromList(this); //TODO: FIX!!
 	}
 
-	int Entity::getId()
+	int Entity::GetId()
 	{
 		return m_Id;
 	}
 
-	void Entity::setEnable(bool enable)
+	void Entity::SetEnable(bool enable)
 	{
 		for (std::unordered_map<std::type_index, Component*>::const_iterator it = m_ComponentMap.begin(); it != m_ComponentMap.end(); ++it)
 		{
-			it->second->setEnable(enable);
+			it->second->SetEnable(enable);
 		}
 
-		std::vector<Transform*> children = m_Transform->getChildren();
+		std::vector<Transform*> children = m_Transform->GetChildren();
 		for (std::vector<Transform*>::iterator it = children.begin(); it != children.end(); ++it)
 		{
-			(*it)->getEntity()->setEnable(enable);
+			(*it)->GetEntity()->SetEnable(enable);
 		}
 
 		m_IsEnabled = enable;
 	}
 
-	void Entity::setStatic(bool _static)
+	void Entity::SetStatic(bool _static)
 	{
 		m_IsStatic = _static;
 	}

@@ -13,6 +13,8 @@ Sandbox2D::Sandbox2D()
 void Sandbox2D::OnAttach() 
 {
 	m_TextureCherno = Hildur::Texture2D::Create("assets/textures/Checkerboard.png");
+
+	Hildur::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 }
 
 void Sandbox2D::OnDetach() 
@@ -29,17 +31,16 @@ void Sandbox2D::OnUpdate(Hildur::Timestep ts)
 
 	{
 		HR_PROFILE_SCOPE("Renderer::Prep");
-		Hildur::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-		Hildur::RenderCommand::Clear();
+
 	}
 
 	{
 		HR_PROFILE_SCOPE("Renderer::Render");
 		Hildur::Renderer2D::BeginScene(m_CameraController.GetCamera());
 		
-		Hildur::Renderer2D::DrawRotatedQuad({ 0.5f, 1.0f }, { 1.0f, 1.0f }, rotation, { 0.8f, 0.3f, 0.7f, 1.0f });
-		Hildur::Renderer2D::DrawQuad({ 0.0f, 5.0f, -0.5f }, { 10.0f, 10.0f }, m_TextureCherno, 10.0f, {0.2f, 0.8f, 1.0f, 1.0f});
-		Hildur::Renderer2D::DrawQuad({ 0.0f, 1.0f }, { 0.8f, 0.8f }, m_SquareColor);
+		Hildur::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.5f }, { 10.0f, 10.0f }, m_TextureCherno, 10.0f, {0.8f, 0.2f, 0.2f, 1.0f});
+		Hildur::Renderer2D::DrawRotatedQuad({ 0.5f, 0.5f }, { 1.0f, 1.0f }, rotation, { 0.1f, 0.9f, 0.1f, 0.25f });
+		Hildur::Renderer2D::DrawQuad({ -0.5, 0.0f, 0.5f }, { 0.8f, 0.8f }, m_SquareColor);
 
 		Hildur::Renderer2D::EndScene();
 	}

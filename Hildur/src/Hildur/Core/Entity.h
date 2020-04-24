@@ -23,7 +23,7 @@ namespace Hildur {
 		Entity(Scene& scene, std::string name);
 
 		template <class T>
-		T* addComponent() 
+		T* AddComponent() 
 		{
 			if (m_ComponentMap.find(typeid(T)) != m_ComponentMap.end()) 
 			{
@@ -32,20 +32,20 @@ namespace Hildur {
 			}
 
 			T* c = new T();
-			c->setup(this, m_Transform);
+			c->Setup(this, m_Transform);
 
 			m_ComponentMap.insert(std::pair<std::type_index, Component*>(typeid(T), c));
 			return c;
 		}
 
 		template<class T>
-		T* getComponent()
+		T* GetComponent()
 		{
 			if (m_ComponentMap.find(typeid(T)) == m_ComponentMap.end()) 
 			{
 				for (std::unordered_map<std::type_index, Component*>::iterator it = m_ComponentMap.begin(); it != m_ComponentMap.end(); ++it) 
 				{
-					if (typeid(T).hash_code() == it->second->getBaseType().hash_code())
+					if (typeid(T).hash_code() == it->second->GetBaseType().hash_code())
 					{
 						return (T*)it->second;
 					}
@@ -59,28 +59,28 @@ namespace Hildur {
 		}
 
 		template <class T>
-		void removeComponent() 
+		void RemoveComponent() 
 		{
-			T* c = getComponent<T>();
+			T* c = GetComponent<T>();
 			m_ComponentMap.erase(typeid(T));
 			delete c;
 		}
 
-		void removeComponent(std::type_index ti)
+		void RemoveComponent(std::type_index ti)
 		{
 			Component* c = m_ComponentMap[ti];
-			c->destroy();
+			c->Destroy();
 			m_ComponentMap.erase(ti);
 			delete c;
 		}
 
-		void destroyComponents();
-		void destroy();
-		int getId();
-		void setEnable(bool enable);
-		bool getEnable() { return m_IsEnabled; }
-		void setStatic(bool _static);
-		bool getStatic() { return m_IsStatic; }
+		void DestroyComponents();
+		void Destroy();
+		int GetId();
+		void SetEnable(bool enable);
+		bool GetEnable() { return m_IsEnabled; }
+		void SetStatic(bool _static);
+		bool GetStatic() { return m_IsStatic; }
 
 	public:
 

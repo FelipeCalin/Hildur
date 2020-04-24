@@ -5,6 +5,7 @@
 #include "Input.h"
 
 #include "Hildur/Core/System/Renderer.h"
+#include "Hildur/Core/System/Renderer2D.h"
 #include "Hildur/Renderer/RenderCommand.h"
 #include "Hildur/Core/Entity.h"
 
@@ -61,7 +62,7 @@ namespace Hildur {
 
 		/// Renderer initialization ///////////////////////////////////
 		Renderer::Init();
-
+		Hildur::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 
 		/// Debug ImGui Layer initialization //////////////////////////
 		m_ImGuiLayer = new ImGuiLayer;
@@ -99,6 +100,20 @@ namespace Hildur {
 			if (!m_Minimized)
 			{
 				{
+					HR_PROFILE_SCOPE("Render Preparation")
+
+					Hildur::RenderCommand::Clear();
+				}
+
+				{
+					HR_PROFILE_SCOPE("2D Scene Rendering")
+
+					Renderer2D::Prep();
+
+					Renderer2D::RenderQueue();
+				}
+
+				{
 					HR_PROFILE_SCOPE("LayerStack OnUpdates")
 
 					for (Layer* layer : m_LayerStack)
@@ -112,7 +127,22 @@ namespace Hildur {
 					for (Layer* ImGuiLayer : m_LayerStack)
 						ImGuiLayer->OnImGuiRender();
 				}
+
+				ImGui::Begin("Current Scene");
+				//std::string currentSceneName = m_SceneManager->GetCurrentName();
+				ImGui::TextUnformatted(m_SceneManager->GetCurrentName().c_str());
+				ImGui::End();
+
+				m_SceneManager->DrawSceneList();
+
 				m_ImGuiLayer->End();
+			}
+
+			if (m_SceneManager->SceneQueued())
+			{
+				m_SceneManager->UnloadScene(SceneManager::GetCurrentScene());
+
+				m_SceneManager->LoadQueuedScene();
 			}
 
 			m_Window->OnUpdate();

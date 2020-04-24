@@ -6,6 +6,11 @@
 #include "Hildur/Renderer/VertexArray.h"
 #include "Hildur/Resource/Shader.h"
 
+#include "Hildur/Core/Component.h"
+#include "Hildur/Component/Transform.h"
+#include "Hildur/Component/Camera.h"
+#include "Hildur/Component/Sprite.h"
+
 #include <glm/gtc/matrix_transform.hpp>
 
 
@@ -17,6 +22,8 @@ namespace Hildur {
 		Ref<VertexArray> QuadVertexArray;
 		Ref<Shader> TextureShader;
 		Ref<Texture2D> WhiteTexture;
+
+		std::vector<Sprite*> RenderList;
 	};
 
 	static Renderer2DStorage* s_Data;
@@ -78,6 +85,40 @@ namespace Hildur {
 	{
 		HR_PROFILE_FUNCTION()
 
+	}
+
+	void Renderer2D::Prep()
+	{
+		s_Data->TextureShader->Bind();
+
+		if (Camera::GetMainCamera())
+			s_Data->TextureShader->SetMat4("u_ViewProjectionMat", Camera::GetMainCamera()->GetViewProjection());
+	}
+
+	void Renderer2D::RenderQueue()
+	{
+		for (Sprite* sprite : s_Data->RenderList)
+		{
+			if (sprite->GetEnable())
+			{
+				/*s_Data->TextureShader->SetFloat4("u_Color", sprite->GetColor());
+				s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
+				if (sprite->GetTexture())
+					sprite->GetTexture()->Bind();
+				else
+					s_Data->WhiteTexture->Bind();
+
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), sprite->GetTransform()->GetPosition())
+					* glm::scale(glm::mat4(1.0f), sprite->GetTransform()->GetScale());
+				s_Data->TextureShader->SetMat4("u_ModelMat", transform);
+
+				s_Data->QuadVertexArray->Bind();
+				RenderCommand::DrawIndexed(s_Data->QuadVertexArray);*/
+			
+				DrawQuad({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+
+			}
+		}
 	}
 
 	//Primitives
@@ -159,6 +200,16 @@ namespace Hildur {
 
 		s_Data->QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+	}
+
+	void Renderer2D::AddToRenderQueue(Sprite* spriteComponent)
+	{
+		s_Data->RenderList.push_back(spriteComponent);
+	}
+
+	void Renderer2D::RemoveFromRenderQueue(Sprite* spriteComponent)
+	{
+		s_Data->RenderList.erase(std::remove(s_Data->RenderList.begin(), s_Data->RenderList.end(), spriteComponent), s_Data->RenderList.end());
 	}
 
 

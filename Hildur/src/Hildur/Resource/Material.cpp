@@ -7,31 +7,51 @@
 namespace Hildur {
 
 
-	Material::Material(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, Ref<Texture> diffuseTex, Ref<Texture> specularTex)
-		: m_Ambient(ambient), m_Diffuse(diffuse), m_Specular(specular), m_DiffuseTex(diffuseTex), m_SpecularTex(specularTex) 
+	Material::~Material()
 	{
+		for (std::unordered_map<std::string, SuperObject*>::iterator it = m_UniformMap.begin(); it != m_UniformMap.end(); ++it)
+		{
+			delete it->second;
+		}
+		m_UniformMap.clear();
 	}
 
-	Material::~Material() 
+	void Material::SetImageBuffer(const std::string& uniformName, ImageBuffer* image)
 	{
+		m_ImageBufferMap[uniformName] = image;
 	}
 
-	Ref<Material> Material::Create(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, Ref<Texture> diffuseTex, Ref<Texture> specularTex) 
+	void Material::UpdateUniforms()
 	{
-		return CreateRef<Material>(ambient, diffuse, specular, diffuseTex, specularTex);
+		UpdateUniforms(m_Shader);
 	}
 
-	void Material::SendToShader(Ref<Shader> shader) 
+	void Material::UpdateUniforms(Ref<Shader> shader)
 	{
-		shader->Bind();
+		for (std::unordered_map<std::string, SuperObject*>::const_iterator it = m_UniformMap.begin(); it != m_UniformMap.end(); ++it)
+		{
+			it->second->Update(shader);
+		}
+	}
 
-		std::dynamic_pointer_cast<Hildur::OpenGLShader>(shader)->UploadUniformFloat3("material.ambient", m_Ambient);
-		std::dynamic_pointer_cast<Hildur::OpenGLShader>(shader)->UploadUniformFloat3("material.diffuse", m_Diffuse);
-		std::dynamic_pointer_cast<Hildur::OpenGLShader>(shader)->UploadUniformFloat3("material.specular", m_Specular);
-		std::dynamic_pointer_cast<Hildur::OpenGLShader>(shader)->UploadUniformInt("diffuseTex", 0);
-		std::dynamic_pointer_cast<Hildur::OpenGLShader>(shader)->UploadUniformInt("specularTex", 1);
+	void Material::BindTextures()
+	{
+		BindTextures(m_Shader);
+	}
 
-		shader->UnBind();
+	void Material::BindTextures(Ref<Shader> shader)
+	{
+		// TODO: Fix
+		//for (std::unordered_map<std::string, ImageBuffer*>::const_iterator it = m_ImageBufferMap.begin(); it != m_ImageBufferMap.end(); ++it)
+		//{
+		//	if (shader->textures.find(it->first) != shader->textures.end())
+		//		it->second->bind(shader->textures[it->first].unit);
+		//}
+	}
+
+	Ref<Shader> Material::GetShader()
+	{
+		return m_Shader;
 	}
 
 
