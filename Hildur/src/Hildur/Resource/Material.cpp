@@ -7,6 +7,11 @@
 namespace Hildur {
 
 
+	Material::Material(Ref<Shader> shader)
+		: m_Shader(shader)
+	{
+	}
+
 	Material::~Material()
 	{
 		for (std::unordered_map<std::string, SuperObject*>::iterator it = m_UniformMap.begin(); it != m_UniformMap.end(); ++it)

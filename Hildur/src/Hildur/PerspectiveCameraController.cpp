@@ -66,7 +66,7 @@ namespace Hildur {
 		HR_PROFILE_FUNCTION()
 
 		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+		m_Camera.SetProjection(glm::radians(m_Fov * m_ZoomLevel * 20), m_AspectRatio, 0.1f, 100.0f);
 
 		return false;
 	}

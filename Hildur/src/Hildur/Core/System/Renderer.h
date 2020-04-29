@@ -4,6 +4,8 @@
 #include "Hildur/Resource/Shader.h"
 #include "Hildur/Resource/Material.h"
 
+#include "Hildur/Component/LightEmitter.h"
+
 #include "Hildur/Renderer/OrthographicCamera.h"
 #include "Hildur/Renderer/PerspectiveCamera.h"
 
@@ -38,8 +40,10 @@ namespace Hildur {
 		static void AddToRenderQueue(Renderable* renderable);
 		static void RemoveFromRenderQueue(Renderable* renderable);
 
-		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
+		static void AddToLightList(LightEmitter* light);
+		static void RemoveFromLightList(LightEmitter* light);
 
+		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 	};
 
 

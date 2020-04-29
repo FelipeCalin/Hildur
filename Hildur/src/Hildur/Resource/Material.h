@@ -17,7 +17,7 @@ namespace Hildur {
 	public:
 
 		//Material() {}
-		Material(Ref<Shader> shader) : m_Shader(shader) {}
+		Material(Ref<Shader> shader);
 		~Material();
 
 		template<typename T>

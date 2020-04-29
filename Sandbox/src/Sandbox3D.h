@@ -17,17 +17,23 @@ public:
 	virtual void OnImGuiRender() override;
 	void OnEvent(Hildur::Event& e) override;
 
+	bool OnWindowResize(Hildur::WindowResizeEvent& e);
+	bool OnWindowClose(Hildur::WindowCloseEvent& e);
+
 private:
 
 	Hildur::ShaderLibrary m_ShaderLibrary;
 
-	Hildur::Ref<Hildur::Texture2D> m_Texture;
+	Hildur::Ref<Hildur::Texture2D> m_Texture1;
 	Hildur::Ref<Hildur::Texture2D> m_Texture2;
+	Hildur::Ref<Hildur::Texture2D> m_Texture3;
 
 	Hildur::Ref<Hildur::Material> m_Material;
-	Hildur::Ref<Hildur::Material> m_FlatColorMaterial;
+	Hildur::Ref<Hildur::Material> m_LightMaterial;
 
-	//Hildur::Ref<Hildur::Mesh> m_Mesh;
+	//Model
+	Hildur::Ref<Hildur::Model> m_Model;
+	Hildur::Ref<Hildur::Model> m_CubeModel;
 
 	Hildur::PerspectiveCameraController m_CameraController;
 
@@ -37,16 +43,25 @@ private:
 
 	float translationSpeed = 1;
 
-	glm::vec3 LightPos;
-	glm::vec3 LightColor;
-
 	//Material Test
-	float ambient = 0.150f;
-	float diffuse = 6.5f;
-	float specular =1.5f;
-	
+	float objectAmbient = 0.150f;
+	float objectDiffuse = 0.40f;
+	float objectSpecular = 1.5f;
+	float objectShininess = 10.0f;
 
-	//Model
-	Hildur::Ref<Hildur::Model> m_Model;
-	Hildur::Ref<Hildur::Model> m_CubeMesh;
+	glm::vec3 lightPos;
+	glm::vec3 lightDir;
+	glm::vec3 lightCol;
+	float lightAmbient = 0.2f;
+	float lightDiffuse = 0.5f;
+	float lightSpecular = 1.0f;
+	float lightConstant = 1.0f;
+	float lightLinear = 0.045f;
+	float lightQuadratic = 0.0075f;
+	float lightCutOff = 5.0f;
+	float lightOuterCutOff = 7.0f;
+
+	//Framebuffer test
+
+	Hildur::Ref<Hildur::FrameBuffer> TestFramebuffer;
 };

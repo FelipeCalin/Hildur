@@ -22,6 +22,7 @@ namespace Hildur {
 		Ref<Texture2D> WhiteTexture;
 
 		std::vector<Renderable*> RenderList;
+		std::vector<LightEmitter*> LightsList;
 	};
 
 	static RendererStorage* s_Data;
@@ -47,6 +48,8 @@ namespace Hildur {
 		HR_PROFILE_RENDERER_FUNCTION()
 
 		s_ViewProjectionMat = camera.GetViewProjectionMatrix();
+
+		//TODO: Only update uniforms on active scene materials
 	}
 
 	void Renderer::BeginScene(PerspectiveCamera& camera) 
@@ -110,6 +113,16 @@ namespace Hildur {
 	void Renderer::RemoveFromRenderQueue(Renderable* renderable)
 	{
 		s_Data->RenderList.erase(std::remove(s_Data->RenderList.begin(), s_Data->RenderList.end(), renderable), s_Data->RenderList.end());
+	}
+
+	void Renderer::AddToLightList(LightEmitter* light)
+	{
+		s_Data->LightsList.push_back(light);
+	}
+
+	void Renderer::RemoveFromLightList(LightEmitter* light)
+	{
+		s_Data->LightsList.erase(std::remove(s_Data->LightsList.begin(), s_Data->LightsList.end(), light), s_Data->LightsList.end());
 	}
 
 

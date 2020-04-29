@@ -70,16 +70,16 @@ namespace Hildur {
 			{ ShaderDataType::Float3, "a_Normal" },
 		};
 
-		HR_CORE_INFO("vertices size: {0}", vertices->size());
 		m_VBO = VertexBuffer::Create(vertices, vertices->size());
 		m_VBO->SetLayout(layout);
 
-		HR_CORE_INFO("indices size: {0}", indices->size());
 		m_IBO = IndexBuffer::Create(indices, indices->size());
 
 		m_VAO = VertexArray::Create();
 		m_VAO->AddVertexBuffer(m_VBO);
 		m_VAO->SetIndexBuffer(m_IBO);
+		
+		HR_CORE_INFO("Created mesh with {0} vertices and {1} indices", vertices->size(), indices->size());
 	}
 
 	//void Mesh::InitModelMatrix() 

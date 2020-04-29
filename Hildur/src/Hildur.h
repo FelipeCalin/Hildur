@@ -35,7 +35,13 @@
 
 #include "Hildur/Component/Transform.h"
 #include "Hildur/Component/Camera.h"
+
+#include "Hildur/Component/LightEmitter.h"
+#include "Hildur/Component/DirectionalLight.h"
+
+#include "Hildur/Component/Renderable.h"
 #include "Hildur/Component/Sprite.h"
+#include "Hildur/Component/MeshRenderer.h"
 
 //-------Renderer Files----------------
 
@@ -45,6 +51,7 @@
 
 #include "Hildur/Renderer/Buffer.h"
 #include "Hildur/Renderer/VertexArray.h"
+#include "Hildur/Resource/FrameBuffer.h"
 
 #include "Hildur/Resource/Shader.h"
 #include "Hildur/Resource/Texture.h"

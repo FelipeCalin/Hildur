@@ -82,7 +82,7 @@ namespace Hildur {
 			{
 				glm::vec2 vec;
 				vec.x = mesh->mTextureCoords[0][i].x;
-				vec.y = mesh->mTextureCoords[0][i].y;
+				vec.y = 1 - mesh->mTextureCoords[0][i].y; //Flip the y coordinates TODO: research
 				vertex.texCoord = vec;
 			}
 			else

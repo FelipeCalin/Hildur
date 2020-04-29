@@ -14,15 +14,12 @@ namespace Hildur {
 	{
 	public:
 
-		bool m_GetReflected = true;
-		bool m_CastShadows = true;
-
 		virtual ~Renderable() {}
 
 		virtual void Init();
 		virtual void Render() = 0;
-		virtual void Render(Shader* shader) {}
-		//virtual void render(Shader* shader, LightEmitter* light) {}
+		virtual void Render(Ref<Shader> shader) {}
+		virtual void Render(Ref<Shader> shader, Ref<LightEmitter> light) {}
 		virtual void OnDestroy();
 		virtual BoundingSphere GetBoundingSphere();
 
@@ -34,6 +31,9 @@ namespace Hildur {
 		Material* GetMaterial() { return m_Material; }
 
 	protected:
+
+		bool m_GetReflected = true;
+		bool m_CastShadows = true;
 
 		RenderType m_Type;
 		Material* m_Material;
