@@ -38,8 +38,15 @@ namespace Hildur {
 			glm::rotate(glm::mat4(1.0f), glm::radians(m_Rotation.z), glm::vec3(0, 0, 1));
 
 
-		m_ViewMatrix = glm::lookAt(m_Position, m_Position + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-			
+		/*m_ViewMatrix = glm::lookAt(m_Position, m_Position + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f))
+			* glm::rotate(glm::mat4(1.0f), m_Rotation.x, glm::vec3(1.0f, 0.0f, 0.0f))
+			* glm::rotate(glm::mat4(1.0f), m_Rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		m_ViewMatrix = glm::inverse(transform);
+
+		m_ForwardDir = glm::vec3(m_ViewMatrix[0].z, m_ViewMatrix[1].z, m_ViewMatrix[2].z);
+		m_UpDir = glm::vec3(0.0f, 1.0f, 0.0f);
+		m_RightDir = glm::normalize(glm::cross(m_UpDir, m_ForwardDir));
+
 		m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
 	}
 

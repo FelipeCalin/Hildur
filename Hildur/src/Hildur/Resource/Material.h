@@ -33,7 +33,7 @@ namespace Hildur {
 			}
 		}
 
-		void SetImageBuffer(const std::string& uniformName, ImageBuffer* image);
+		void SetImageBuffer(const std::string& uniformName, Ref<Texture> image);
 
 		void UpdateUniforms();
 		void UpdateUniforms(Ref<Shader> shader);
@@ -70,7 +70,7 @@ namespace Hildur {
 		};
 
 		Ref<Shader> m_Shader;
-		std::unordered_map<std::string, ImageBuffer*> m_ImageBufferMap;
+		std::unordered_map<std::string, Ref<Texture>> m_ImageBufferMap;
 		std::unordered_map<std::string, SuperObject*> m_UniformMap;
 	};
 

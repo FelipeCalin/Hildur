@@ -43,9 +43,9 @@ namespace Hildur {
 
 		bool m_Rotation;
 
-		glm::vec3 m_CameraPosition = glm::vec3(1.0f);
+		glm::vec3 m_CameraPosition = glm::vec3(0.0f);
 		glm::vec3 m_CameraRotation = glm::vec3(0.0f);
-		float m_CameraTranslationSpeed = 1.0f;
+		float m_CameraTranslationSpeed = 3.0f;
 	};
 
 

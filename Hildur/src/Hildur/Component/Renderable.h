@@ -19,7 +19,7 @@ namespace Hildur {
 		virtual void Init();
 		virtual void Render() = 0;
 		virtual void Render(Ref<Shader> shader) {}
-		virtual void Render(Ref<Shader> shader, Ref<LightEmitter> light) {}
+		virtual void Render(std::vector<LightEmitter*>& lights, Ref<Shader> shader = nullptr) {}
 		virtual void OnDestroy();
 		virtual BoundingSphere GetBoundingSphere();
 
@@ -27,8 +27,8 @@ namespace Hildur {
 		RenderType GetType() { return m_Type; }
 		void SetRenderType(RenderType type);
 
-		void SetMaterial(Material* material) { m_Material = material; }
-		Material* GetMaterial() { return m_Material; }
+		void SetMaterial(Ref<Material> material) { m_Material = material; }
+		Ref<Material> GetMaterial() { return m_Material; }
 
 	protected:
 
@@ -36,7 +36,7 @@ namespace Hildur {
 		bool m_CastShadows = true;
 
 		RenderType m_Type;
-		Material* m_Material;
+		Ref<Material> m_Material;
 	};
 
 

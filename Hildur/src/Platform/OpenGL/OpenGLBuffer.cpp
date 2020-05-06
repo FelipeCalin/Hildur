@@ -11,24 +11,24 @@ namespace Hildur {
 
 	//  Vertex Buffer  ///////////////////////////////////////////////////////
 
-	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t count)
+	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size)
 	{
 		HR_PROFILE_FUNCTION()
 
 		glGenBuffers(1, &m_RendererID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 
-		glBufferData(GL_ARRAY_BUFFER, count * sizeof(Vertex), vertices, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
 	}
 
-	OpenGLVertexBuffer::OpenGLVertexBuffer(Ref<std::vector<Vertex>> vertices, uint32_t count) 
+	OpenGLVertexBuffer::OpenGLVertexBuffer(Ref<std::vector<Vertex>> vertices, uint32_t size) 
 	{
 		HR_PROFILE_FUNCTION()
 
 		glGenBuffers(1, &m_RendererID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 
-		glBufferData(GL_ARRAY_BUFFER, count * sizeof(Vertex), vertices->data(), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, size, vertices->data(), GL_STATIC_DRAW);
 	}
 
 	OpenGLVertexBuffer::~OpenGLVertexBuffer() 

@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "Hildur/Resource/ImageBuffer.h"
 #include "Hildur/Core/Core.h"
 
 
@@ -14,7 +15,7 @@ namespace Hildur {
 		HR_SPECULAR = 1
 	};
 
-	class Texture 
+	class Texture
 	{
 	public:
 
@@ -25,7 +26,7 @@ namespace Hildur {
 
 		virtual void SetData(void* data, uint32_t size) = 0;
 
-		virtual void Bind(uint32_t slot = 0) const = 0;
+		virtual void Bind(uint32_t textureUnit = 0) const = 0;
 
 		virtual uint32_t GetID() const = 0;
 

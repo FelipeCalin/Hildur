@@ -20,23 +20,23 @@ namespace Hildur {
 		HR_PROFILE_FUNCTION()
 
 		if (Input::IsKeyPressed(HR_KEY_A))
-			m_CameraPosition.x -= m_CameraTranslationSpeed * ts;
+			m_CameraPosition -= m_Camera.GetRightDir() * m_CameraTranslationSpeed * ts.GetTimeSeconds();
 		else if (Input::IsKeyPressed(HR_KEY_D))
-			m_CameraPosition.x += m_CameraTranslationSpeed * ts;
+			m_CameraPosition += m_Camera.GetRightDir() * m_CameraTranslationSpeed * ts.GetTimeSeconds();
 
 		if (Input::IsKeyPressed(HR_KEY_W))
-			m_CameraPosition.z += m_CameraTranslationSpeed * ts * 2;
+			m_CameraPosition -= m_Camera.GetForwardDir() * m_CameraTranslationSpeed * ts.GetTimeSeconds() * 2.0f;
 		else if (Input::IsKeyPressed(HR_KEY_S))
-			m_CameraPosition.z -= m_CameraTranslationSpeed * ts * 2;
+			m_CameraPosition += m_Camera.GetForwardDir() * m_CameraTranslationSpeed * ts.GetTimeSeconds() * 2.0f;
 
 		if (Input::IsKeyPressed(HR_KEY_SPACE))
-			m_CameraPosition.y -= m_CameraTranslationSpeed * ts;
+			m_CameraPosition += m_Camera.GetUpDir() * m_CameraTranslationSpeed * ts.GetTimeSeconds() * 2.0f;
 		else if (Input::IsKeyPressed(HR_KEY_LEFT_SHIFT))
-			m_CameraPosition.y += m_CameraTranslationSpeed * ts;
+			m_CameraPosition -= m_Camera.GetUpDir() * m_CameraTranslationSpeed * ts.GetTimeSeconds() * 2.0f;
 
 
 		m_Camera.SetPosition(m_CameraPosition);
-
+		m_Camera.SetRotation(m_CameraRotation);
 		//m_CameraTranslationSpeed = m_ZoomLevel / 2;
 	}
 

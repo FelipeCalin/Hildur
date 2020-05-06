@@ -22,7 +22,7 @@ namespace Hildur {
 		Entity(Scene& scene);
 		Entity(Scene& scene, std::string name);
 
-		template <class T>
+		template <typename T>
 		T* AddComponent() 
 		{
 			if (m_ComponentMap.find(typeid(T)) != m_ComponentMap.end()) 
@@ -38,7 +38,7 @@ namespace Hildur {
 			return c;
 		}
 
-		template<class T>
+		template<typename T>
 		T* GetComponent()
 		{
 			if (m_ComponentMap.find(typeid(T)) == m_ComponentMap.end()) 
@@ -58,7 +58,7 @@ namespace Hildur {
 			return (T*)m_ComponentMap[typeid(T)];
 		}
 
-		template <class T>
+		template <typename T>
 		void RemoveComponent() 
 		{
 			T* c = GetComponent<T>();
@@ -72,6 +72,17 @@ namespace Hildur {
 			c->Destroy();
 			m_ComponentMap.erase(ti);
 			delete c;
+		}
+
+		template<typename T>
+		bool HasComponent()
+		{
+			return m_ComponentMap.find(typeid(T)) != m_ComponentMap.end();
+		}
+
+		bool HasComponent(std::type_index ti)
+		{
+			return m_ComponentMap.find(ti) != m_ComponentMap.end();
 		}
 
 		void DestroyComponents();

@@ -1,8 +1,13 @@
-#include "hrpcheaders.h"
+  #include "hrpcheaders.h"
 #include "Renderer.h"
 
 #include "Hildur/Resource/Texture.h"
+#include "Hildur/Component/Transform.h"
 #include "Hildur/Component/Renderable.h" 
+#include "Hildur/Component/MeshRenderer.h"
+#include "Hildur/Component/LightEmitter.h"
+#include "Hildur/Component/DirectionalLight.h"
+#include "Hildur/Component/Camera.h"
 
 #include "Hildur/Renderer/RenderCommand.h"
 #include "Hildur/Core/System/Renderer2D.h"
@@ -20,13 +25,22 @@ namespace Hildur {
 		Ref<VertexArray> QuadVertexArray;
 		Ref<Shader> TextureShader;
 		Ref<Texture2D> WhiteTexture;
-
-		std::vector<Renderable*> RenderList;
-		std::vector<LightEmitter*> LightsList;
 	};
 
+	static std::vector<Renderable*> s_RenderList;
+	static std::vector<LightEmitter*> s_LightsList;
+
 	static RendererStorage* s_Data;
+
+	static glm::mat4 s_ViewMat;
+	static glm::mat4 s_ProjectionMat;
 	static glm::mat4 s_ViewProjectionMat;
+	static glm::vec3 s_CameraPosition;
+
+	static Ref<CubeMap> s_SkyBox;
+	static Ref<Mesh> s_SkyboxMesh;
+	static Ref<Shader> s_SkyboxShader;
+
 
 	void Renderer::Init() 
 	{
@@ -34,6 +48,54 @@ namespace Hildur {
 		
 		RenderCommand::Init();
 		Renderer2D::Init();
+
+		std::vector<glm::vec3> skyboxVertices = {
+			// positions          
+			{-1.0f,  1.0f, -1.0f},
+			{-1.0f, -1.0f, -1.0f},
+			{ 1.0f, -1.0f, -1.0f},
+			{ 1.0f, -1.0f, -1.0f},
+			{ 1.0f,  1.0f, -1.0f},
+			{-1.0f,  1.0f, -1.0f},
+
+			{-1.0f, -1.0f,  1.0f},
+			{-1.0f, -1.0f, -1.0f},
+			{-1.0f,  1.0f, -1.0f},
+			{-1.0f,  1.0f, -1.0f},
+			{-1.0f,  1.0f,  1.0f},
+			{-1.0f, -1.0f,  1.0f},
+
+			{ 1.0f, -1.0f, -1.0f},
+			{ 1.0f, -1.0f,  1.0f},
+			{ 1.0f,  1.0f,  1.0f},
+			{ 1.0f,  1.0f,  1.0f},
+			{ 1.0f,  1.0f, -1.0f},
+			{ 1.0f, -1.0f, -1.0f},
+
+			{-1.0f, -1.0f,  1.0f},
+			{-1.0f,  1.0f,  1.0f},
+			{ 1.0f,  1.0f,  1.0f},
+			{ 1.0f,  1.0f,  1.0f},
+			{ 1.0f, -1.0f,  1.0f},
+			{-1.0f, -1.0f,  1.0f},
+
+			{-1.0f,  1.0f, -1.0f},
+			{ 1.0f,  1.0f, -1.0f},
+			{ 1.0f,  1.0f,  1.0f},
+			{ 1.0f,  1.0f,  1.0f},
+			{-1.0f,  1.0f,  1.0f},
+			{-1.0f,  1.0f, -1.0f},
+
+			{-1.0f, -1.0f, -1.0f},
+			{-1.0f, -1.0f,  1.0f},
+			{ 1.0f, -1.0f, -1.0f},
+			{ 1.0f, -1.0f, -1.0f},
+			{-1.0f, -1.0f,  1.0f},
+			{ 1.0f, -1.0f,  1.0f}
+		};
+
+		s_SkyboxMesh = Mesh::Create(skyboxVertices);
+		s_SkyboxShader = Shader::Create("assets/shaders/Skybox.glsl");
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height) 
@@ -47,6 +109,8 @@ namespace Hildur {
 	{
 		HR_PROFILE_RENDERER_FUNCTION()
 
+		s_ViewMat = camera.GetViewMatrix();
+		s_ProjectionMat = camera.GetProjectionMatrix();
 		s_ViewProjectionMat = camera.GetViewProjectionMatrix();
 
 		//TODO: Only update uniforms on active scene materials
@@ -56,18 +120,87 @@ namespace Hildur {
 	{
 		HR_PROFILE_RENDERER_FUNCTION()
 
+		s_ViewMat = camera.GetViewMatrix();
+		s_ProjectionMat = camera.GetProjectionMatrix();
 		s_ViewProjectionMat = camera.GetViewProjectionMatrix();
+		s_CameraPosition = camera.GetPosition();
 	}
 
-	void Renderer::EndScene() 
+	void Renderer::EndScene()
 	{
+		HR_PROFILE_RENDERER_FUNCTION()
+
+		//Render skybox
+		if (s_SkyBox)
+		{
+			s_SkyboxShader->Bind();
+			s_SkyBox->Bind(4);
+			s_SkyboxShader->SetInt("u_CubeMap", 4);
+			s_SkyboxShader->SetMat4("u_ViewProjectionMat", s_ProjectionMat
+				* glm::mat4(glm::mat3(s_ViewMat)));
+
+			s_SkyboxMesh->GetVertexArray()->Bind();
+
+			Hildur::RenderCommand::DrawIndexed(s_SkyboxMesh->GetVertexArray());
+		}
 	}
 
+	void Renderer::Prep()
+	{
+		HR_PROFILE_RENDERER_FUNCTION()
+	
+		if (Camera::GetMainCamera())
+		{
+			s_ViewMat = Camera::GetMainCamera()->GetViewMatrix();
+			s_ProjectionMat = Camera::GetMainCamera()->GetProjectionMatrix();
+			s_ViewProjectionMat = Camera::GetMainCamera()->GetViewProjection();
+
+			s_CameraPosition = Camera::GetMainCamera()->GetTransform()->GetPositionWorld();
+		}
+	}
+
+	void Renderer::RenderQueue()
+	{
+		HR_PROFILE_RENDERER_FUNCTION()
+
+		for (Renderable* renderable : s_RenderList)
+		{
+			if (renderable->GetEnable())
+			{
+				////renderable->GetMaterial()->SetProperty("u_ViewProjectionMat", s_ViewProjectionMat);
+				////renderable->GetMaterial()->SetProperty("u_ModelMat", renderable->GetTransform()->GetTransformationMatrix());
+				////renderable->GetMaterial()->UpdateUniforms();
+				//Submit(renderable->GetMaterial(), renderable->GetMesh(), renderable->GetTransform()->GetTransformationMatrix());
+				renderable->Render(s_LightsList);
+			}
+		}
+
+	}
+
+	void Renderer::End()
+	{
+		//Render Skybox
+
+		if (s_SkyBox)
+		{
+			s_SkyboxShader->Bind();
+			s_SkyBox->Bind(4);
+			s_SkyboxShader->SetInt("u_CubeMap", 4);
+			s_SkyboxShader->SetMat4("u_ViewProjectionMat", s_ProjectionMat
+				* glm::mat4(glm::mat3(s_ViewMat)));
+
+			s_SkyboxMesh->GetVertexArray()->Bind();
+
+			Hildur::RenderCommand::DrawIndexed(s_SkyboxMesh->GetVertexArray());
+		}
+	}
+	
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform) 
 	{
 		HR_PROFILE_RENDERER_FUNCTION()
 
 		shader->Bind();
+		std::dynamic_pointer_cast<OpenGLShader> (shader)->UploadUniformFloat3("u_ViewPos", s_CameraPosition);
 		std::dynamic_pointer_cast<OpenGLShader> (shader)->UploadUniformMat4("u_ViewProjectionMat", s_ViewProjectionMat);
 		std::dynamic_pointer_cast<OpenGLShader> (shader)->UploadUniformMat4("u_ModelMat", transform);
 
@@ -104,25 +237,54 @@ namespace Hildur {
 		RenderCommand::DrawIndexed(mesh->GetVertexArray());
 	}
 
+	Ref<CubeMap> Renderer::GetSkybox()
+	{
+		return s_SkyBox;
+	}
+
+	void Renderer::SetSkybox(Ref<CubeMap> cubemap)
+	{
+		s_SkyBox = cubemap;
+	}
 
 	void Renderer::AddToRenderQueue(Renderable* renderable)
 	{
-		s_Data->RenderList.push_back(renderable);
+		s_RenderList.push_back(renderable);
 	}
 
 	void Renderer::RemoveFromRenderQueue(Renderable* renderable)
 	{
-		s_Data->RenderList.erase(std::remove(s_Data->RenderList.begin(), s_Data->RenderList.end(), renderable), s_Data->RenderList.end());
+		s_RenderList.erase(std::remove(s_RenderList.begin(), s_RenderList.end(), renderable), s_RenderList.end());
 	}
 
 	void Renderer::AddToLightList(LightEmitter* light)
 	{
-		s_Data->LightsList.push_back(light);
+		s_LightsList.push_back(light);
 	}
 
 	void Renderer::RemoveFromLightList(LightEmitter* light)
 	{
-		s_Data->LightsList.erase(std::remove(s_Data->LightsList.begin(), s_Data->LightsList.end(), light), s_Data->LightsList.end());
+		s_LightsList.erase(std::remove(s_LightsList.begin(), s_LightsList.end(), light), s_LightsList.end());
+	}
+
+	const glm::vec3& Renderer::GetCameraPos()
+	{
+		return s_CameraPosition;
+	}
+
+	const glm::mat4& Renderer::GetViewMat()
+	{
+		return s_ViewMat;
+	}
+
+	const glm::mat4& Renderer::GetProjectionMat()
+	{
+		return s_ProjectionMat;
+	}
+
+	const glm::mat4& Renderer::GetViewProjectionMat()
+	{
+		return s_ViewProjectionMat;
 	}
 
 

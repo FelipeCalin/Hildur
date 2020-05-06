@@ -21,7 +21,7 @@ namespace Hildur {
 		m_UniformMap.clear();
 	}
 
-	void Material::SetImageBuffer(const std::string& uniformName, ImageBuffer* image)
+	void Material::SetImageBuffer(const std::string& uniformName, Ref<Texture> image)
 	{
 		m_ImageBufferMap[uniformName] = image;
 	}
@@ -47,11 +47,11 @@ namespace Hildur {
 	void Material::BindTextures(Ref<Shader> shader)
 	{
 		// TODO: Fix
-		//for (std::unordered_map<std::string, ImageBuffer*>::const_iterator it = m_ImageBufferMap.begin(); it != m_ImageBufferMap.end(); ++it)
-		//{
-		//	if (shader->textures.find(it->first) != shader->textures.end())
-		//		it->second->bind(shader->textures[it->first].unit);
-		//}
+		for (std::unordered_map<std::string, Ref<Texture>>::const_iterator it = m_ImageBufferMap.begin(); it != m_ImageBufferMap.end(); ++it)
+		{
+			if (shader->textures.find(it->first) != shader->textures.end())
+				it->second->Bind(shader->textures[it->first]);
+		}
 	}
 
 	Ref<Shader> Material::GetShader()

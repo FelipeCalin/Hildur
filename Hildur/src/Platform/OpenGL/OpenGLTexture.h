@@ -21,7 +21,7 @@ namespace Hildur {
 
 		virtual void SetData(void* data, uint32_t size) override;
 
-		virtual void Bind(uint32_t slot = 0) const override;
+		virtual void Bind(uint32_t textureUnit = 0) const override;
 
 		virtual uint32_t GetID() const override { return m_RendererID; };
 

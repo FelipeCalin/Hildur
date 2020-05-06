@@ -9,9 +9,19 @@
 #include "Hildur/Renderer/RenderCommand.h"
 #include "Hildur/Core/Entity.h"
 
+#include "Hildur/Component/Transform.h"
+#include "Hildur/Component/Camera.h"
+#include "Hildur/Component/Renderable.h"
+#include "Hildur/Component/MeshRenderer.h"
+#include "Hildur/Component/LightEmitter.h"
+#include "Hildur/Component/DirectionalLight.h"
+#include "Hildur/Component/PointLight.h"
+#include "Hildur/Types/BoundingBox.h"
+
 #include <imgui.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/gtc/type_ptr.hpp>
 
 
 namespace Hildur {
@@ -102,35 +112,129 @@ namespace Hildur {
 				{
 					HR_PROFILE_SCOPE("Render Preparation")
 
-					Hildur::RenderCommand::Clear();
+						Hildur::RenderCommand::Clear();
+				}
+
+				{
+					HR_PROFILE_SCOPE("3D Scene Rendering")
+
+					Renderer::Prep();
+					Renderer::RenderQueue();
+					Renderer::End();
 				}
 
 				{
 					HR_PROFILE_SCOPE("2D Scene Rendering")
 
-					Renderer2D::Prep();
-
+						Renderer2D::Prep();
 					Renderer2D::RenderQueue();
 				}
 
 				{
 					HR_PROFILE_SCOPE("LayerStack OnUpdates")
 
-					for (Layer* layer : m_LayerStack)
-						layer->OnUpdate(timestep);
+						for (Layer* layer : m_LayerStack)
+							layer->OnUpdate(timestep);
 				}
 
 				m_ImGuiLayer->Begin();
 				{
 					HR_PROFILE_SCOPE("LayerStack OnImGuiRender")
 
-					for (Layer* ImGuiLayer : m_LayerStack)
-						ImGuiLayer->OnImGuiRender();
+						for (Layer* ImGuiLayer : m_LayerStack)
+							ImGuiLayer->OnImGuiRender();
 				}
 
-				ImGui::Begin("Current Scene");
-				//std::string currentSceneName = m_SceneManager->GetCurrentName();
+
+				//Draw scene hierarchy
+				ImGui::Begin("Scene");
+				ImGui::SameLine();
 				ImGui::TextUnformatted(m_SceneManager->GetCurrentName().c_str());
+
+				if (m_SceneManager->GetCurrentScene())
+				{
+					for (Entity* entity : m_SceneManager->GetCurrentScene()->GetEntities())
+					{
+						if (ImGui::CollapsingHeader(entity->m_Name.c_str()))
+						{
+							if (ImGui::Button(((entity->GetEnable() ? "disable " : "enable ") + entity->m_Name).c_str()))
+							{
+								entity->SetEnable(!entity->GetEnable());
+							}
+							entity->m_Transform->RenderHandels();
+
+							if (entity->HasComponent<DirectionalLight>())
+							{
+								glm::vec3 color = entity->GetComponent<DirectionalLight>()->GetColor();
+								float intens = entity->GetComponent<DirectionalLight>()->GetIntensity();
+								ImGui::BeginGroup();
+								ImGui::Text("Dir Light");
+
+								ImGui::ColorEdit3("Color", &color[0]);
+								ImGui::SliderFloat("Intensity", &intens, 0.0f, 10.0f);
+
+								entity->GetComponent<DirectionalLight>()->SetColor(color);
+								entity->GetComponent<DirectionalLight>()->SetIntensity(intens);
+								ImGui::EndGroup();
+							}
+							if (entity->HasComponent<PointLight>())
+							{
+								glm::vec3 color = entity->GetComponent<PointLight>()->GetColor();
+								float intens = entity->GetComponent<PointLight>()->GetIntensity();
+								ImGui::BeginGroup();
+								ImGui::Text("Point Light");
+
+								ImGui::ColorEdit3("Color", &color[0]);
+								ImGui::SliderFloat("Intensity", &intens, 0.0f, 10.0f);
+
+								entity->GetComponent<PointLight>()->SetColor(color);
+								entity->GetComponent<PointLight>()->SetIntensity(intens);
+								ImGui::EndGroup();
+							}
+							if (entity->HasComponent<Camera>())
+							{
+								float fov = entity->GetComponent<Camera>()->GetFOV() * (180.0f / glm::pi<float>());
+								ImGui::BeginGroup();
+								ImGui::Text("Camera");
+
+								ImGui::DragFloat("FoV", &fov, 1.0f, 0.0001f, 360.0f);
+
+								entity->GetComponent<Camera>()->SetFOV(glm::radians(fov));
+								ImGui::EndGroup();
+							}
+							if (entity->HasComponent<MeshRenderer>())
+							{
+								BoundingSphere bs = entity->GetComponent<MeshRenderer>()->GetBoundingSphere();
+								glm::vec3 bsCenter = bs.GetCenter();
+								float bsRadius = bs.GetRadius();
+								ImGui::BeginGroup();
+								ImGui::Text("Mesh Renderer");
+
+								ImGui::BeginGroup();
+								ImGui::Text("Bounding sphere");
+								ImGui::InputFloat3("centre", &bsCenter[0]);
+								ImGui::InputFloat("Redius", &bsRadius);
+								ImGui::EndGroup();
+
+								bs.SetCentre(bsCenter);
+								bs.SetRadius(bsRadius);
+								ImGui::EndGroup();
+							}
+
+							if (ImGui::Button("Add Dir Light Comp") && !entity->HasComponent<DirectionalLight>())
+							{
+								entity->AddComponent<DirectionalLight>();
+							}
+						}
+					}
+					
+					static char buf[32] = "dummy";
+					ImGui::InputText("Name", buf, IM_ARRAYSIZE(buf));
+					if (ImGui::Button("Add Entity"))
+					{
+						m_SceneManager->GetCurrentScene()->instantiate(buf);
+					}
+				}
 				ImGui::End();
 
 				m_SceneManager->DrawSceneList();

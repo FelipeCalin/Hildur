@@ -22,11 +22,17 @@ public:
 
 private:
 
+	void DockUpdate();
+	void DrawSkybox();
+
+private:
+
 	Hildur::ShaderLibrary m_ShaderLibrary;
 
 	Hildur::Ref<Hildur::Texture2D> m_Texture1;
 	Hildur::Ref<Hildur::Texture2D> m_Texture2;
 	Hildur::Ref<Hildur::Texture2D> m_Texture3;
+	Hildur::Ref<Hildur::CubeMap> m_CubeMap;
 
 	Hildur::Ref<Hildur::Material> m_Material;
 	Hildur::Ref<Hildur::Material> m_LightMaterial;
@@ -61,7 +67,16 @@ private:
 	float lightCutOff = 5.0f;
 	float lightOuterCutOff = 7.0f;
 
+	float m_CameraXRot = 0.0f;
+	float m_CameraYRot = 0.0f;
+	float m_CameraXoffset = 0.0f;
+	float m_CameraYoffset = 180.0f;
+	float m_MouseXLast = 0.0f;
+	float m_MouseYLast = 0.0f;
+
+
 	//Framebuffer test
 
 	Hildur::Ref<Hildur::FrameBuffer> TestFramebuffer;
+	Hildur::Ref<Hildur::Mesh> TestMesh;
 };

@@ -11,6 +11,24 @@
 namespace Hildur {
 
 
+	Mesh::Mesh(std::vector<glm::vec3> vertices)
+	{
+		Ref<std::vector<Vertex>> verticesList;
+		Ref<std::vector<uint32_t>> indicesList;
+
+		verticesList.reset(new std::vector<Vertex>);
+		indicesList.reset(new std::vector<uint32_t>);
+
+		for (int i = 0; i < vertices.size(); i++)
+		{
+			glm::vec3 posVec = vertices[i];
+			verticesList->push_back({ posVec, glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f) });
+			indicesList->push_back(i);
+		}
+
+		InitVAO(verticesList, indicesList);
+	}
+
 	Mesh::Mesh(Ref<std::vector<Vertex>> vertices, Ref<std::vector<uint32_t>> indices, std::vector<Ref<Texture2D>> textures)
 	{
 		InitVAO(vertices, indices);
@@ -32,7 +50,12 @@ namespace Hildur {
 		m_IBO->~IndexBuffer();
 	}
 
-	Ref<Mesh> Mesh::Create(Ref<std::vector<Vertex>> vertices, Ref<std::vector<uint32_t>> indices, std::vector<Ref<Texture2D>> textures) 
+	Ref<Mesh> Mesh::Create(std::vector<glm::vec3>& vertices)
+	{
+		return CreateRef<Mesh>(vertices);
+	}
+
+	Ref<Mesh> Mesh::Create(Ref<std::vector<Vertex>> vertices, Ref<std::vector<uint32_t>> indices, std::vector<Ref<Texture2D>> textures)
 	{
 		return CreateRef<Mesh>(vertices, indices, textures);
 	}
@@ -70,7 +93,7 @@ namespace Hildur {
 			{ ShaderDataType::Float3, "a_Normal" },
 		};
 
-		m_VBO = VertexBuffer::Create(vertices, vertices->size());
+		m_VBO = VertexBuffer::Create(vertices, vertices->size() * sizeof(Vertex));
 		m_VBO->SetLayout(layout);
 
 		m_IBO = IndexBuffer::Create(indices, indices->size());
@@ -78,8 +101,11 @@ namespace Hildur {
 		m_VAO = VertexArray::Create();
 		m_VAO->AddVertexBuffer(m_VBO);
 		m_VAO->SetIndexBuffer(m_IBO);
+
+		m_VerticesCount = vertices->size();
+		m_IndicesCount = indices->size();
 		
-		HR_CORE_INFO("Created mesh with {0} vertices and {1} indices", vertices->size(), indices->size());
+		HR_CORE_INFO("Loaded mesh with {0} vertices and {1} indices", vertices->size(), indices->size());
 	}
 
 	//void Mesh::InitModelMatrix() 

@@ -96,9 +96,13 @@ in vec3 v_Normal;
 
 // Uniforms
 uniform Material material;
-uniform PointLight pointLight;
-uniform DirectionalLight dirLight;
-uniform SpotLight spotLight;
+#define MAX_NR_LIGHTS 5
+uniform int nrDirectionalLights;
+uniform DirectionalLight[MAX_NR_LIGHTS] u_DirLights;
+uniform int nrPointLights;
+uniform PointLight[MAX_NR_LIGHTS] u_PointLights;
+uniform int nrSpotLights;
+uniform SpotLight[MAX_NR_LIGHTS] u_SpotLights;
 
 
 // Uniform Maps
@@ -140,9 +144,9 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float distance    = length(light.position - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));    
     // combine results
-    vec3 ambient  = light.ambient  * vec3(texture(albedoMap, v_TexCoord));
-    vec3 diffuse  = light.diffuse  * (diff * vec3(texture(albedoMap, v_TexCoord)));
-    vec3 specular = light.specular * (spec * vec3(texture(roughnessMap, v_TexCoord)));
+    vec3 ambient  = light.ambient   * vec3(texture(albedoMap, v_TexCoord));
+    vec3 diffuse  = light.diffuse   * material.diffuse  * (diff * vec3(texture(albedoMap, v_TexCoord)));
+    vec3 specular = light.specular  * material.specular * (spec * vec3(texture(roughnessMap, v_TexCoord)));
     ambient  *= attenuation;
     diffuse  *= attenuation;
     specular *= attenuation;
@@ -168,8 +172,8 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
         float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
         // combine results
         vec3 ambient  = light.ambient  * vec3(texture(albedoMap, v_TexCoord));
-        vec3 diffuse  = light.diffuse  * diff * vec3(texture(albedoMap, v_TexCoord));
-        vec3 specular = light.specular * spec * vec3(texture(roughnessMap, v_TexCoord));
+        vec3 diffuse  = light.diffuse  * material.diffuse  * diff * vec3(texture(albedoMap, v_TexCoord));
+        vec3 specular = light.specular * material.specular * spec * vec3(texture(roughnessMap, v_TexCoord));
         ambient  *= attenuation;
         diffuse  *= attenuation;
         specular *= attenuation;
@@ -192,15 +196,31 @@ void main()
     vec3 norm = normalize(v_Normal);
     vec3 viewDir = normalize(u_ViewPos - v_Pos);
 
+    vec3 result = (material.ambient * vec3(texture(albedoMap, v_TexCoord))) + (vec3(texture(emissionMap, v_TexCoord)));
+
+
     // phase 1: Directional lighting
-    //vec3 result = CalcDirLight(dirLight, norm, viewDir);
+    for(int i = 0; i < nrDirectionalLights; i++)
+    {
+        result += CalcDirLight(u_DirLights[i], norm, viewDir);
+    }
 
     // phase 2: Point lights
-    vec3 result = CalcPointLight(pointLight, norm, v_Pos, viewDir);
+    for(int i = 0; i < nrPointLights; i++)
+    {
+        result += CalcPointLight(u_PointLights[i], norm, v_Pos, viewDir);
+    }
 
     // phase 3: Spot light
-    //result += CalcSpotLight(spotLight, norm, v_Pos, viewDir);   
-    
+    for(int i = 0; i < nrSpotLights; i++)
+    {
+        result += CalcSpotLight(u_SpotLights[0], norm, v_Pos, viewDir);   
+    }
+
     color = vec4(result, 1.0);
+    //color = vec4(CalcDirLight(u_DirLights[0], norm, viewDir), 1.0);
+    //color = vec4(u_DirLights[0].diffuse, 1.0);
+    //color = vec4(0.5019f, 0.2902f, 0.7294f, 1.0f);
+    //color = vec4(v_Pos, 1.0);
     //color = vec4(vec3(gl_FragCoord.z), 1.0);
 }

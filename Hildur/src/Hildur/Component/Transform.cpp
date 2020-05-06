@@ -11,6 +11,7 @@
 
 #include <algorithm>
 
+#include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
 
 
@@ -88,13 +89,19 @@ namespace Hildur {
 	void Transform::RenderHandels()
 	{
 		{
+			//glm::vec3 euler = glm::eulerAngles(m_Rotation) * (180.0f / 3.14159f);
+			glm::vec3 euler = GetRotationEuler();
+
 			ImGui::BeginGroup();
 			ImGui::TextUnformatted(entity->m_Name.c_str());
-			ImGui::SliderFloat3(("Pos##" + entity->m_Name).c_str(), &(m_Position[0]), -10, 10);
-			//ImGui::SliderFloat4("Rotation", &(_rotation[0]), -10, 10);
-			//setChanged(); //TODO: FIX!!!
+			ImGui::InputFloat3(("Pos##" + entity->m_Name).c_str(), glm::value_ptr(m_Position));
+			ImGui::InputFloat3("Rotation", glm::value_ptr(euler));
+			ImGui::InputFloat3(("Scale##" + entity->m_Name).c_str(), glm::value_ptr(m_Scale));
+			SetChanged();
 			ImGui::EndGroup();
 			ImGui::NewLine();
+
+			SetRotation(euler);
 		}
 	}
 
@@ -109,6 +116,17 @@ namespace Hildur {
 	glm::quat Transform::GetRotation()
 	{
 		return m_Rotation;
+	}
+
+	glm::vec3 Transform::GetRotationEuler()
+	{
+		//std::acos(m_Rotation.w);
+		//float angle = 2 * std::acos(m_Rotation.w);
+		//float x = m_Rotation.x / glm::sqrt(1 - m_Rotation.w * m_Rotation.w);
+		//float y = m_Rotation.y / glm::sqrt(1 - m_Rotation.w * m_Rotation.w);
+		//float z = m_Rotation.z / glm::sqrt(1 - m_Rotation.w * m_Rotation.w);
+		return glm::eulerAngles(m_Rotation) * glm::vec3(180.0f / glm::pi<float>());
+		// TODO: fix
 	}
 
 	glm::vec3 Transform::GetPosition()
@@ -132,13 +150,13 @@ namespace Hildur {
 		if (position != m_Position)
 		{
 			m_Position = position;
-			//setChanged();
+			SetChanged();
 		}
 	}
 
 	void Transform::SetRotation(glm::vec3 rotation)
 	{
-		SetRotation(glm::quat(rotation));
+		SetRotation(glm::quat(glm::radians(rotation)));
 	}
 
 	void Transform::SetRotation(glm::quat rotation)
@@ -146,7 +164,7 @@ namespace Hildur {
 		if (rotation != m_Rotation)
 		{
 			m_Rotation = rotation;
-			//setChanged();
+			SetChanged();
 		}
 	}
 
@@ -155,7 +173,7 @@ namespace Hildur {
 		if (scale != m_Scale)
 		{
 			m_Scale = scale;
-			//setChanged();
+			SetChanged();
 		}
 	}
 
@@ -173,7 +191,7 @@ namespace Hildur {
 		if (parent != nullptr)
 			parent->m_Children.push_back(this);
 
-		//setChanged();
+		SetChanged();
 	}
 
 	void Transform::SetParent(Entity* _entity)
@@ -184,7 +202,7 @@ namespace Hildur {
 	void Transform::Rotate(glm::quat quat)
 	{
 		m_Rotation = glm::normalize(quat * m_Rotation);
-		//setChanged();
+		SetChanged();
 	}
 
 	glm::mat4 Transform::GetTransformationMatrix()

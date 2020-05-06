@@ -14,6 +14,13 @@ namespace Hildur {
 	{
 	public:
 
+		enum Type
+		{
+			LE_DIRECTIONAL,
+			LE_POINT,
+			LE_SPOT
+		};
+
 		virtual ~LightEmitter() {}
 
 		glm::vec3 GetColor() const { return m_Color; }
@@ -21,6 +28,9 @@ namespace Hildur {
 
 		float GetIntensity() const { return m_Intensity; }
 		void SetIntensity(float intensity) { m_Intensity = intensity; }
+
+		Type GetType() const { return m_Type; }
+		void SetType(Type type) { m_Type = type; }
 
 		Ref<Shader> GetLightShader() const { return m_LightShader; }
 		void SetLightShader(Ref<Shader> shader) { m_LightShader = shader; }
@@ -31,6 +41,8 @@ namespace Hildur {
 
 		glm::vec3 m_Color = glm::vec3(1.0f);
 		float m_Intensity = 1;
+
+		Type m_Type;
 
 		Ref<Shader> m_LightShader;
 	};

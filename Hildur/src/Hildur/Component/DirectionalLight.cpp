@@ -11,7 +11,8 @@ namespace Hildur {
 
 	void DirectionalLight::Init()
 	{
-		//Lighting::addLight(this);
+		m_Type = LE_DIRECTIONAL;
+
 		Renderer::AddToLightList(this);
 
 		m_LightProjection = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.1f, 100.0f);
@@ -59,7 +60,7 @@ namespace Hildur {
 	void DirectionalLight::OnDisable()
 	{
 		//Lighting::removeLight(this);
-		Renderer::AddToLightList(this);
+		Renderer::RemoveFromLightList(this);
 	}
 
 

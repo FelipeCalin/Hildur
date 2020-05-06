@@ -17,7 +17,7 @@ namespace Hildur {
 
 		void Render() override;
 		void Render(Ref<Shader> shader) override;
-		void Render(Ref<Shader> shader, Ref<LightEmitter> light) override;
+		void Render(std::vector<LightEmitter*>& lights, Ref<Shader> shader = nullptr) override;
 
 		BoundingSphere GetBoundingSphere();
 		Ref<Mesh> GetMesh() { return m_Mesh; }

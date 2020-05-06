@@ -111,7 +111,9 @@ namespace Hildur {
 			std::vector<Ref<Texture2D>> specularMaps = loadMaterialTextures(material,
 				aiTextureType_SPECULAR, HR_SPECULAR);
 			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-		}	
+		}
+
+		
 
 		return CreateRef<Mesh>(vertices, indices, textures);
 	}

@@ -34,7 +34,6 @@ namespace Hildur {
 
 		void UpdateAspect();
 		void UpdateProjection();
-		void SetFOV(float fov);
 		void SetOrhographicProjection(float radius, float zNear, float zFar);
 		void SetPerspectiveProjection(float fov, float aspect, float zNear, float zFar);
 		void SetMain();
@@ -43,7 +42,9 @@ namespace Hildur {
 		glm::mat4& GetProjectionMatrix();
 		glm::mat4& GetViewMatrix();
 		glm::mat4& GetViewProjection();
+		
 		float GetFOV() { return m_Fov; }
+		void SetFOV(float fov);
 
 		static glm::vec2& WorldToScreen(const glm::vec3& point);
 		static Camera* GetMainCamera() { return m_Main; }

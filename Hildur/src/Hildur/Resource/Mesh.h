@@ -24,9 +24,11 @@ namespace Hildur {
 			}
 		};
 
+		Mesh(std::vector<glm::vec3> vertices);
 		Mesh(Ref<std::vector<Vertex>> vertices, Ref<std::vector<uint32_t>> indices, std::vector<Ref<Texture2D>> textures);
 		~Mesh();
 
+		static Ref<Mesh> Create(std::vector<glm::vec3>& vertices);
 		static Ref<Mesh> Create(Ref<std::vector<Vertex>> vertices, Ref<std::vector<uint32_t>> indices, std::vector<Ref<Texture2D>> textures);
 
 		void Update();
@@ -46,8 +48,8 @@ namespace Hildur {
 
 	private:
 
-		std::vector<Vertex> m_Vertices;
-		std::vector<uint32_t> m_Indices;
+		uint32_t m_VerticesCount = 0;
+		uint32_t m_IndicesCount = 0;
 
 		Ref<VertexArray> m_VAO;
 		Ref<VertexBuffer> m_VBO;

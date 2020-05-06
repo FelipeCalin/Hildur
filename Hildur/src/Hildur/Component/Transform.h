@@ -25,6 +25,7 @@ namespace Hildur {
 		void Rotate(glm::quat quat);
 		glm::mat4 GetRotationMatrix();
 		glm::quat GetRotation();
+		glm::vec3 GetRotationEuler();
 		glm::vec3 GetPosition();
 		glm::vec3 GetPositionWorld();
 		glm::vec3 GetScale();

@@ -21,7 +21,6 @@ namespace Hildur {
 		static void EndScene();
 
 		static void Prep();
-
 		static void RenderQueue();
 
 		//Primitives

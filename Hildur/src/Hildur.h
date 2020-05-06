@@ -38,6 +38,7 @@
 
 #include "Hildur/Component/LightEmitter.h"
 #include "Hildur/Component/DirectionalLight.h"
+#include "Hildur/Component/PointLight.h"
 
 #include "Hildur/Component/Renderable.h"
 #include "Hildur/Component/Sprite.h"
