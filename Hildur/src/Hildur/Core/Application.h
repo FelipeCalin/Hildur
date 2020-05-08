@@ -51,8 +51,8 @@ namespace Hildur {
 
 		Config m_Config;
 
-		std::unique_ptr<SceneManager> m_SceneManager;
-		std::unique_ptr<Window> m_Window;
+		Hildur::Scope<SceneManager> m_SceneManager;
+		Hildur::Scope<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		bool m_Minimized = false;

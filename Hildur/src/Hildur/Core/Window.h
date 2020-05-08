@@ -16,12 +16,14 @@ namespace Hildur {
 		unsigned int Width;
 		unsigned int Height;
 
+		bool IsFullscreen;
 
 		WindowProps(const std::string& title = "Hildur Engine",
 			unsigned int width = 1280,
-			unsigned int height = 720)
+			unsigned int height = 720,
+			bool isFullscreen = false)
 
-			: Title(title), Width(width), Height(height)
+			: Title(title), Width(width), Height(height), IsFullscreen(isFullscreen)
 		{
 		}
 
@@ -43,6 +45,7 @@ namespace Hildur {
 		virtual unsigned int GetWidth() const = 0;
 		virtual unsigned int GetHeight() const = 0;
 
+		virtual void SetName(std::string& name) = 0;
 
 		// Window attributes
 		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;

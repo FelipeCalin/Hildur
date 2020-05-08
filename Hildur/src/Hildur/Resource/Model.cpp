@@ -105,12 +105,13 @@ namespace Hildur {
 		if (mesh->mMaterialIndex >= 0)
 		{
 			aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-			std::vector<Ref<Texture2D>> diffuseMaps = loadMaterialTextures(material,
-				aiTextureType_DIFFUSE, HR_DIFFUSE);
-			textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-			std::vector<Ref<Texture2D>> specularMaps = loadMaterialTextures(material,
-				aiTextureType_SPECULAR, HR_SPECULAR);
-			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+			//std::vector<Ref<Texture2D>> diffuseMaps = loadMaterialTextures(material,
+			//	aiTextureType_DIFFUSE, HR_DIFFUSE);
+			//textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+			//std::vector<Ref<Texture2D>> specularMaps = loadMaterialTextures(material,
+			//	aiTextureType_SPECULAR, HR_SPECULAR);
+			//textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+			// TODO: FIX!!!
 		}
 
 		

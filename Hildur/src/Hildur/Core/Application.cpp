@@ -42,6 +42,7 @@ namespace Hildur {
 
 		WindowProps props;
 		props.Title = m_Config.profile.appName;
+		props.IsFullscreen = m_Config.profile.fullscreen;
 
 		if (m_Config.profile.fullscreen) 
 		{
@@ -72,7 +73,7 @@ namespace Hildur {
 
 		/// Renderer initialization ///////////////////////////////////
 		Renderer::Init();
-		Hildur::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 
 		/// Debug ImGui Layer initialization //////////////////////////
 		m_ImGuiLayer = new ImGuiLayer;
@@ -126,7 +127,7 @@ namespace Hildur {
 				{
 					HR_PROFILE_SCOPE("2D Scene Rendering")
 
-						Renderer2D::Prep();
+					Renderer2D::Prep();
 					Renderer2D::RenderQueue();
 				}
 

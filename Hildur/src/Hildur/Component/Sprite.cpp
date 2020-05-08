@@ -2,6 +2,9 @@
 #include "Sprite.h"
 
 #include "Hildur/Core/System/Renderer2D.h"
+#include "Hildur/Renderer/RenderCommand.h"
+
+#include "Hildur/Component/Transform.h"
 
 
 namespace Hildur {
@@ -13,6 +16,13 @@ namespace Hildur {
 		m_Texture = nullptr;
 
 		Renderer2D::AddToRenderQueue(this);
+	}
+
+	void Sprite::Render()
+	{
+		HR_PROFILE_FUNCTION()
+
+		Renderer2D::DrawRotatedQuad(GetTransform()->GetPosition(), GetTransform()->GetScale(), GetTransform()->GetRotation().z, m_Color);
 	}
 
 	void Sprite::SetColor(const glm::vec4& color)

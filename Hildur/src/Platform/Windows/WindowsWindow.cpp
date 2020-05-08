@@ -43,8 +43,9 @@ namespace Hildur {
 		m_Data.Title = props.Title;
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
+		m_Data.IsFullscreen = props.IsFullscreen;
 
-		HR_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
+		HR_CORE_INFO("Creating window {0} ({1}, {2}, fullscreen: {3})", props.Title, props.Width, props.Height, props.IsFullscreen);
 
 		if (!s_GLFWInitialized) 
 		{
@@ -60,7 +61,8 @@ namespace Hildur {
 		{
 			HR_PROFILE_SCOPE("glfwCreateWindow")
 
-			m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+			GLFWmonitor* monitor = props.IsFullscreen ? glfwGetPrimaryMonitor() : nullptr;
+			m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), monitor, nullptr);
 		}
 
 		m_Context = CreateScope<OpenGLContext>(m_Window);
@@ -175,7 +177,14 @@ namespace Hildur {
 		m_Context->SwapBuffers();
 	}
 
-	void WindowsWindow::SetVSync(bool enabled) 
+	void WindowsWindow::SetName(std::string& name)
+	{
+		m_Data.Title = name;
+
+		glfwSetWindowTitle(m_Window, m_Data.Title.c_str());
+	}
+
+	void WindowsWindow::SetVSync(bool enabled)
 	{
 		HR_PROFILE_FUNCTION();
 		

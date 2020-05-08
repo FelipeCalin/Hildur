@@ -17,9 +17,11 @@ namespace Hildur {
 		virtual ~Renderable() {}
 
 		virtual void Init();
+
 		virtual void Render() = 0;
 		virtual void Render(Ref<Shader> shader) {}
 		virtual void Render(std::vector<LightEmitter*>& lights, Ref<Shader> shader = nullptr) {}
+
 		virtual void OnDestroy();
 		virtual BoundingSphere GetBoundingSphere();
 

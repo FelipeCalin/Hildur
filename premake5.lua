@@ -115,6 +115,7 @@ project "Hildur"
 		runtime "Release"
 		optimize "on"
 
+        
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
@@ -163,4 +164,5 @@ project "Sandbox"
 	filter "configurations:Dist"
 		defines "HR_DIST"
 		runtime "Release"
-		optimize "on"
+        optimize "on"
+        

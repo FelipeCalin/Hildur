@@ -18,14 +18,12 @@ namespace Hildur {
 
 		void SetPosition(glm::vec3 position);
 		void SetRotation(glm::vec3 rotation);
-		void SetRotation(glm::quat rotation);
 		void SetScale(glm::vec3 scale);
 		void SetParent(Transform* _parent);
 		void SetParent(Entity* _entity);
 		void Rotate(glm::quat quat);
 		glm::mat4 GetRotationMatrix();
-		glm::quat GetRotation();
-		glm::vec3 GetRotationEuler();
+		glm::vec3 GetRotation();
 		glm::vec3 GetPosition();
 		glm::vec3 GetPositionWorld();
 		glm::vec3 GetScale();
@@ -49,7 +47,7 @@ namespace Hildur {
 		unsigned long int m_LastChangedTick = -1;
 		bool m_IsMatrixCached = false;
 		glm::vec3 m_Position = glm::vec3(0.0f);
-		glm::quat m_Rotation = glm::quat(0.0f, 0.0f, 0.0f, 0.0f);
+		glm::vec3 m_Rotation = glm::vec3(0.0f);
 		glm::vec3 m_Scale = glm::vec3(1.0f);
 		glm::mat4 m_TransformationMatrixCached;
 		glm::mat4 m_TransformationMatrixLast;

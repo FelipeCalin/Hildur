@@ -90,13 +90,13 @@ namespace Hildur {
 	{
 		{
 			//glm::vec3 euler = glm::eulerAngles(m_Rotation) * (180.0f / 3.14159f);
-			glm::vec3 euler = GetRotationEuler();
+			glm::vec3 euler = GetRotation();
 
 			ImGui::BeginGroup();
 			ImGui::TextUnformatted(entity->m_Name.c_str());
-			ImGui::InputFloat3(("Pos##" + entity->m_Name).c_str(), glm::value_ptr(m_Position));
-			ImGui::InputFloat3("Rotation", glm::value_ptr(euler));
-			ImGui::InputFloat3(("Scale##" + entity->m_Name).c_str(), glm::value_ptr(m_Scale));
+			ImGui::SliderFloat3(("Pos##" + entity->m_Name).c_str(), glm::value_ptr(m_Position), -10.0f, -10.0f);
+			ImGui::SliderFloat3(("Rot##" + entity->m_Name).c_str(), glm::value_ptr(euler), -360.0f, 360.0f);
+			ImGui::SliderFloat3(("Scale##" + entity->m_Name).c_str(), glm::value_ptr(m_Scale), 0.0f, 10.0f);
 			SetChanged();
 			ImGui::EndGroup();
 			ImGui::NewLine();
@@ -108,25 +108,14 @@ namespace Hildur {
 	glm::mat4 Transform::GetRotationMatrix()
 	{
 		//return _rotation.createRotation(); //TODO: FIX!!
-		return glm::rotate(glm::mat4(1.0f), glm::eulerAngles(m_Rotation).x, glm::vec3(1.0f, 0.0f, 0.0f)) *
-			glm::rotate(glm::mat4(1.0f), glm::eulerAngles(m_Rotation).y, glm::vec3(0.0f, 1.0f, 0.0f)) *
-			glm::rotate(glm::mat4(1.0f), glm::eulerAngles(m_Rotation).z, glm::vec3(0.0f, 0.0f, 1.0f));
+		return glm::rotate(glm::mat4(1.0f), glm::radians(m_Rotation.x), glm::vec3(1.0f, 0.0f, 0.0f)) *
+			glm::rotate(glm::mat4(1.0f), glm::radians(m_Rotation.y), glm::vec3(0.0f, 1.0f, 0.0f)) *
+			glm::rotate(glm::mat4(1.0f), glm::radians(m_Rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	}
 
-	glm::quat Transform::GetRotation()
+	glm::vec3 Transform::GetRotation()
 	{
 		return m_Rotation;
-	}
-
-	glm::vec3 Transform::GetRotationEuler()
-	{
-		//std::acos(m_Rotation.w);
-		//float angle = 2 * std::acos(m_Rotation.w);
-		//float x = m_Rotation.x / glm::sqrt(1 - m_Rotation.w * m_Rotation.w);
-		//float y = m_Rotation.y / glm::sqrt(1 - m_Rotation.w * m_Rotation.w);
-		//float z = m_Rotation.z / glm::sqrt(1 - m_Rotation.w * m_Rotation.w);
-		return glm::eulerAngles(m_Rotation) * glm::vec3(180.0f / glm::pi<float>());
-		// TODO: fix
 	}
 
 	glm::vec3 Transform::GetPosition()
@@ -155,11 +144,6 @@ namespace Hildur {
 	}
 
 	void Transform::SetRotation(glm::vec3 rotation)
-	{
-		SetRotation(glm::quat(glm::radians(rotation)));
-	}
-
-	void Transform::SetRotation(glm::quat rotation)
 	{
 		if (rotation != m_Rotation)
 		{

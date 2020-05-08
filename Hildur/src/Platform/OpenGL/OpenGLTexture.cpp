@@ -37,30 +37,37 @@ namespace Hildur {
 			HR_PROFILE_SCOPE("stbi_load - OpenGLTexture2D::OpenGLTexture2D(const std::string&)")
 			data = stbi_load(path.c_str(), &width, &height, &channels, 0);
 		}
-		HR_CORE_ASSERT(data, "Failed to load image!");
+		HR_CORE_ASSERT(data, "Failed to load image: " + path);
 
 		m_Width = width;
 		m_Height = height;
 
 		GLenum internalFormat = 0, dataFormat = 0;
 
-		if (channels == 3) {
-
+		if (channels == 1)
+		{
+			internalFormat = GL_R8;
+			dataFormat = GL_RED;
+		}
+		else if (channels == 2)
+		{
+			HR_CORE_ASSERT(false, "2 channel image not supported!");
+		}
+		else if (channels == 3) 
+		{
 			internalFormat = GL_RGB8;
 			dataFormat = GL_RGB;
-
 		}
-		else if (channels == 4) {
-
+		else if (channels == 4) 
+		{
 			internalFormat = GL_RGBA8;
 			dataFormat = GL_RGBA;
-
 		}
 
 		m_InternalFomat = internalFormat;
 		m_DataFormat = dataFormat;
 
-		HR_CORE_ASSERT(internalFormat & dataFormat, "Data format not supported!");
+		//HR_CORE_ASSERT(internalFormat & dataFormat, "Data format not supported!");
 		
 		glGenTextures(1, &m_RendererID);
 		glBindTexture(GL_TEXTURE_2D, m_RendererID);
