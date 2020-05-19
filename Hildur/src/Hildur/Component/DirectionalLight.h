@@ -20,6 +20,8 @@ namespace Hildur {
 		void Init() override;
 		void Destroy() override;
 
+		void RenderInspector() override;
+
 		glm::mat4 GetLightProjection() const { return m_LightProjection; }
 		void SetLightProjection(const glm::mat4& projectionMatrix) { m_LightProjection = m_LightProjection; }
 

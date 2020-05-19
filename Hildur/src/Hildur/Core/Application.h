@@ -9,6 +9,7 @@
 #include "Hildur/Core/LayerStack.h"
 #include "Hildur/Events/ApplicationEvent.h"
 #include "Hildur/Renderer/Buffer.h"
+#include "Hildur/Resource/FrameBuffer.h"
 
 #include "Hildur/Core/System/SceneManager.h"
 
@@ -27,16 +28,19 @@ namespace Hildur {
 		Application();
 		virtual ~Application();
 
-		void Init(std::map<std::string, Scene*>& sceneMap);
-		void Run();
+		virtual void Init();
+		virtual void SetScenes(std::map<std::string, Scene*>& sceneMap);
+		virtual void Run();
 
-		void OnEvent(Event& e);
+		virtual void OnEvent(Event& e);
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
 
 		inline Window& GetWindow() { return *m_Window; }
 		inline static Application& Get() { return *s_Instance; }
+
+		virtual bool IsInitOverriden() const { return false; }
 
 		//inline static Timestep& GetTimestep() {return }
 
@@ -45,14 +49,12 @@ namespace Hildur {
 		bool OnWindowResize(WindowResizeEvent& e);
 		bool OnWindowClose(WindowCloseEvent& e);
 
-		void DockUpdate();
-
-	private:
+	protected:
 
 		Config m_Config;
 
-		Hildur::Scope<SceneManager> m_SceneManager;
-		Hildur::Scope<Window> m_Window;
+		Scope<SceneManager> m_SceneManager;
+		Scope<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		bool m_Minimized = false;
@@ -66,7 +68,9 @@ namespace Hildur {
 		//uint32_t m_ViewportHeight;
 		//Ref<FrameBuffer> m_FBO;
 
-	private:
+		bool m_OverrideInit = false;
+		
+	protected:
 
 		static Application* s_Instance;
 	};

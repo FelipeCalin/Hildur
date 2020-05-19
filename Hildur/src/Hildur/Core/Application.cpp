@@ -18,6 +18,7 @@
 #include "Hildur/Component/PointLight.h"
 #include "Hildur/Types/BoundingBox.h"
 
+
 #include <imgui.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -35,6 +36,18 @@ namespace Hildur {
 
 	Application::Application()
 	{
+		HR_PROFILE_FUNCTION()
+
+	}
+
+	Application::~Application()
+	{
+		HR_PROFILE_FUNCTION()
+
+	}
+
+	void Application::Init()
+	{
 		HR_PROFILE_FUNCTION();
 		/// Configuration /////////////////////////////////////////////
 
@@ -44,12 +57,12 @@ namespace Hildur {
 		props.Title = m_Config.profile.appName;
 		props.IsFullscreen = m_Config.profile.fullscreen;
 
-		if (m_Config.profile.fullscreen) 
+		if (m_Config.profile.fullscreen)
 		{
 			props.Width = 1960;
 			props.Height = 1080;
 		}
-		else 
+		else
 		{
 			props.Width = m_Config.profile.width;
 			props.Height = m_Config.profile.height;
@@ -61,10 +74,10 @@ namespace Hildur {
 		m_SceneManager = SceneManager::Create();
 
 
-		 /// Window initialization /////////////////////////////////////
+		/// Window initialization /////////////////////////////////////
 
 		HR_CORE_ASSERT(!s_Instance, "Application already exists")
-		s_Instance = this;
+			s_Instance = this;
 
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
@@ -78,16 +91,9 @@ namespace Hildur {
 		/// Debug ImGui Layer initialization //////////////////////////
 		m_ImGuiLayer = new ImGuiLayer;
 		PushOverlay(m_ImGuiLayer);
-
 	}
 
-	Application::~Application()
-	{
-		HR_PROFILE_FUNCTION()
-
-	}
-
-	void Application::Init(std::map<std::string, Scene*>& sceneMap) 
+	void Application::SetScenes(std::map<std::string, Scene*>& sceneMap)
 	{
 		HR_PROFILE_FUNCTION()
 
@@ -113,7 +119,7 @@ namespace Hildur {
 				{
 					HR_PROFILE_SCOPE("Render Preparation")
 
-						Hildur::RenderCommand::Clear();
+					Hildur::RenderCommand::Clear();
 				}
 
 				{
@@ -151,92 +157,9 @@ namespace Hildur {
 				ImGui::Begin("Scene");
 				ImGui::SameLine();
 				ImGui::TextUnformatted(m_SceneManager->GetCurrentName().c_str());
-
-				if (m_SceneManager->GetCurrentScene())
-				{
-					for (Entity* entity : m_SceneManager->GetCurrentScene()->GetEntities())
-					{
-						if (ImGui::CollapsingHeader(entity->m_Name.c_str()))
-						{
-							if (ImGui::Button(((entity->GetEnable() ? "disable " : "enable ") + entity->m_Name).c_str()))
-							{
-								entity->SetEnable(!entity->GetEnable());
-							}
-							entity->m_Transform->RenderHandels();
-
-							if (entity->HasComponent<DirectionalLight>())
-							{
-								glm::vec3 color = entity->GetComponent<DirectionalLight>()->GetColor();
-								float intens = entity->GetComponent<DirectionalLight>()->GetIntensity();
-								ImGui::BeginGroup();
-								ImGui::Text("Dir Light");
-
-								ImGui::ColorEdit3("Color", &color[0]);
-								ImGui::SliderFloat("Intensity", &intens, 0.0f, 10.0f);
-
-								entity->GetComponent<DirectionalLight>()->SetColor(color);
-								entity->GetComponent<DirectionalLight>()->SetIntensity(intens);
-								ImGui::EndGroup();
-							}
-							if (entity->HasComponent<PointLight>())
-							{
-								glm::vec3 color = entity->GetComponent<PointLight>()->GetColor();
-								float intens = entity->GetComponent<PointLight>()->GetIntensity();
-								ImGui::BeginGroup();
-								ImGui::Text("Point Light");
-
-								ImGui::ColorEdit3("Color", &color[0]);
-								ImGui::SliderFloat("Intensity", &intens, 0.0f, 10.0f);
-
-								entity->GetComponent<PointLight>()->SetColor(color);
-								entity->GetComponent<PointLight>()->SetIntensity(intens);
-								ImGui::EndGroup();
-							}
-							if (entity->HasComponent<Camera>())
-							{
-								float fov = entity->GetComponent<Camera>()->GetFOV() * (180.0f / glm::pi<float>());
-								ImGui::BeginGroup();
-								ImGui::Text("Camera");
-
-								ImGui::DragFloat("FoV", &fov, 1.0f, 0.0001f, 360.0f);
-
-								entity->GetComponent<Camera>()->SetFOV(glm::radians(fov));
-								ImGui::EndGroup();
-							}
-							if (entity->HasComponent<MeshRenderer>())
-							{
-								BoundingSphere bs = entity->GetComponent<MeshRenderer>()->GetBoundingSphere();
-								glm::vec3 bsCenter = bs.GetCenter();
-								float bsRadius = bs.GetRadius();
-								ImGui::BeginGroup();
-								ImGui::Text("Mesh Renderer");
-
-								ImGui::BeginGroup();
-								ImGui::Text("Bounding sphere");
-								ImGui::InputFloat3("centre", &bsCenter[0]);
-								ImGui::InputFloat("Redius", &bsRadius);
-								ImGui::EndGroup();
-
-								bs.SetCentre(bsCenter);
-								bs.SetRadius(bsRadius);
-								ImGui::EndGroup();
-							}
-
-							if (ImGui::Button("Add Dir Light Comp") && !entity->HasComponent<DirectionalLight>())
-							{
-								entity->AddComponent<DirectionalLight>();
-							}
-						}
-					}
-					
-					static char buf[32] = "dummy";
-					ImGui::InputText("Name", buf, IM_ARRAYSIZE(buf));
-					if (ImGui::Button("Add Entity"))
-					{
-						m_SceneManager->GetCurrentScene()->instantiate(buf);
-					}
-				}
 				ImGui::End();
+
+				ImGui::ShowDemoWindow();
 
 				m_SceneManager->DrawSceneList();
 

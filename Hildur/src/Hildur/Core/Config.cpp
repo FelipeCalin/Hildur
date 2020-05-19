@@ -79,7 +79,7 @@ namespace Hildur {
 	void Config::createDefault()
 	{
 		std::string def = "#Hildur Engine Configuration file\n"
-			"appName = PhotonBox\n"
+			"appName = Hildur Engine\n"
 			"width = 1280\n"
 			"height = 720\n"
 			"fullscreen = 0\n"

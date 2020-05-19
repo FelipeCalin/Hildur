@@ -131,7 +131,7 @@ namespace Hildur {
 #if HR_PROFILE
     #define HR_PROFILE_BEGIN_SESSION(name, filepath)  ::Hildur::Instrumentor::Get().BeginSession(name, filepath)
     #define HR_PROFILE_END_SESSION()  ::Hildur::Instrumentor::Get().EndSession()
-    #define HR_PROFILE_SCOPE(name) ::Hildur::InstrumentationTimer timer##__LINE__(name);
+    #define HR_PROFILE_SCOPE(name) ::Hildur::InstrumentationTimer timer##__LINE__(name)
     #define HR_PROFILE_FUNCTION() HR_PROFILE_SCOPE(__FUNCSIG__)
     #if HR_PROFILE_RENDERER
         #define HR_PROFILE_RENDERER_SCOPE(name) ::Hildur::InstrumentationTimer timer##__LINE__(name);

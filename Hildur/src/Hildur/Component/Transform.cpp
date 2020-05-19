@@ -60,6 +60,11 @@ namespace Hildur {
 		m_IsMatrixCached = false;
 	}
 
+	bool Transform::HasChildren()
+	{
+		return m_Children.begin() != m_Children.end();
+	}
+
 	bool Transform::HasChangedSince(unsigned long int tick)
 	{
 		return tick != m_LastChangedTick;
@@ -86,23 +91,21 @@ namespace Hildur {
 		m_Children.erase(std::remove(m_Children.begin(), m_Children.end(), child), m_Children.end());
 	}
 
-	void Transform::RenderHandels()
+	void Transform::RenderInspector()
 	{
-		{
-			//glm::vec3 euler = glm::eulerAngles(m_Rotation) * (180.0f / 3.14159f);
-			glm::vec3 euler = GetRotation();
+		//glm::vec3 euler = glm::eulerAngles(m_Rotation) * (180.0f / 3.14159f);
+		glm::vec3 euler = GetRotation();
 
-			ImGui::BeginGroup();
-			ImGui::TextUnformatted(entity->m_Name.c_str());
-			ImGui::SliderFloat3(("Pos##" + entity->m_Name).c_str(), glm::value_ptr(m_Position), -10.0f, -10.0f);
-			ImGui::SliderFloat3(("Rot##" + entity->m_Name).c_str(), glm::value_ptr(euler), -360.0f, 360.0f);
-			ImGui::SliderFloat3(("Scale##" + entity->m_Name).c_str(), glm::value_ptr(m_Scale), 0.0f, 10.0f);
-			SetChanged();
-			ImGui::EndGroup();
-			ImGui::NewLine();
+		ImGui::BeginGroup();
+		ImGui::TextUnformatted(entity->m_Name.c_str());
+		ImGui::SliderFloat3(("Pos##" + entity->m_Name).c_str(), glm::value_ptr(m_Position), -10.0f, 10.0f);
+		ImGui::SliderFloat3(("Rot##" + entity->m_Name).c_str(), glm::value_ptr(euler), -360.0f, 360.0f);
+		ImGui::SliderFloat3(("Scale##" + entity->m_Name).c_str(), glm::value_ptr(m_Scale), 0.0f, 10.0f);
+		SetChanged();
+		ImGui::EndGroup();
+		ImGui::NewLine();
 
-			SetRotation(euler);
-		}
+		SetRotation(euler);
 	}
 
 	glm::mat4 Transform::GetRotationMatrix()

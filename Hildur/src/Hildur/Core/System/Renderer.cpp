@@ -37,7 +37,7 @@ namespace Hildur {
 	static glm::mat4 s_ViewProjectionMat;
 	static glm::vec3 s_CameraPosition;
 
-	static Ref<CubeMap> s_SkyBox;
+	static Ref<CubeMap> s_SkyBox = nullptr;
 	static Ref<Mesh> s_SkyboxMesh;
 	static Ref<Shader> s_SkyboxShader;
 
@@ -131,7 +131,7 @@ namespace Hildur {
 		HR_PROFILE_RENDERER_FUNCTION()
 
 		//Render skybox
-		if (s_SkyBox)
+		if (s_SkyBox != nullptr)
 		{
 			s_SkyboxShader->Bind();
 			s_SkyBox->Bind(4);
@@ -181,11 +181,11 @@ namespace Hildur {
 	{
 		//Render Skybox
 
-		if (s_SkyBox)
+		if (s_SkyBox != nullptr)
 		{
 			s_SkyboxShader->Bind();
-			s_SkyBox->Bind(4);
-			s_SkyboxShader->SetInt("u_CubeMap", 4);
+			s_SkyBox->Bind(1);
+			s_SkyboxShader->SetInt("u_CubeMap", 1);
 			s_SkyboxShader->SetMat4("u_ViewProjectionMat", s_ProjectionMat
 				* glm::mat4(glm::mat3(s_ViewMat)));
 

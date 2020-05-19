@@ -217,6 +217,13 @@ public:
 		shaderBall->GetComponent<Hildur::MeshRenderer>()->SetMesh(CerberusModel->GetMeshes()[0]);
 		shaderBall->GetComponent<Hildur::MeshRenderer>()->SetMaterial(Material);
 
+		Hildur::Entity* cube = instantiate("cube");
+		cube->GetComponent<Hildur::Transform>()->SetParent(shaderBall);
+		cube->GetComponent<Hildur::Transform>()->SetPosition(glm::vec3(1, 0, 1));
+		cube->GetComponent<Hildur::Transform>()->SetScale(glm::vec3(0.1f, 0.1f, 0.1f));
+		cube->AddComponent<Hildur::MeshRenderer>();
+		cube->GetComponent<Hildur::MeshRenderer>()->SetMesh(CubeModel->GetMeshes()[0]);
+		cube->GetComponent<Hildur::MeshRenderer>()->SetMaterial(Material);
 
 		Hildur::RenderCommand::SetClearColor({ 0.3f, 0.3f, 0.3f, 1 });
 	}
@@ -236,7 +243,9 @@ public:
 		scenes["SuperScene"] = new SuperScene();
 		scenes["Scene 3D"] = new Scene3D();
 
-		Init(scenes);
+		Init();
+
+		SetScenes(scenes);
 
 		//PushLayer(new Sandbox2D());
 		//PushLayer(new Sandbox3D());

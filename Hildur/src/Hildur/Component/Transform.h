@@ -22,6 +22,7 @@ namespace Hildur {
 		void SetParent(Transform* _parent);
 		void SetParent(Entity* _entity);
 		void Rotate(glm::quat quat);
+		
 		glm::mat4 GetRotationMatrix();
 		glm::vec3 GetRotation();
 		glm::vec3 GetPosition();
@@ -36,11 +37,14 @@ namespace Hildur {
 		glm::vec3 UpWorld();
 		glm::vec3 Right();
 		glm::vec3 RightWorld();
+
+		bool HasChildren();
 		bool HasChangedSince(unsigned long int tick);
 		bool HasChangedLastTick();
+		
 		Transform* GetParent();
 		std::vector<Transform*> GetChildren();
-		void RenderHandels();
+		void RenderInspector();
 
 	private:
 

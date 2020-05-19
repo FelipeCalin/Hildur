@@ -5,6 +5,8 @@
 
 #include "Hildur/Component/Renderable.h"
 
+#include <imgui.h>
+
 
 namespace Hildur {
 
@@ -16,11 +18,47 @@ namespace Hildur {
 		SetMain();
 
 		float aspect = (float)Application::Get().GetWindow().GetWidth() / (float)Application::Get().GetWindow().GetHeight();
-		SetPerspectiveProjection(70, aspect, 0.01f, 10000.0f);
+		SetPerspectiveProjection(glm::radians(70.0f), aspect, 0.01f, 10000.0f);
 	}
 
 	void Camera::Destroy()
 	{
+	}
+
+	void Camera::RenderInspector()
+	{
+		ImGui::BeginGroup();
+		const char* items[2] = { "Perspctive", "Orthographic" };
+		static const char* current_item = NULL;
+		float newFOV = glm::degrees(m_Fov);
+
+		if (ImGui::BeginCombo("Projection", current_item)) // The second parameter is the label previewed before opening the combo.
+		{
+			for (int n = 0; n < IM_ARRAYSIZE(items); n++)
+			{
+				bool is_selected = (current_item == items[n]); // You can store your selection however you want, outside or inside your objects
+				if (ImGui::Selectable(items[n], is_selected))
+					current_item = items[n];
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+			}
+			ImGui::EndCombo();
+		}
+		ImGui::SliderFloat("Field of View", &newFOV, 0.01f, 120.0f);
+		ImGui::EndGroup();
+		ImGui::NewLine();
+	
+		if (newFOV != glm::degrees(m_Fov))
+		{
+			m_Fov = glm::radians(newFOV);
+			UpdateAspect();
+		}
+
+		if (current_item == "Perspctive" && !m_IsPerspective)
+			SetPerspectiveProjection(glm::radians(60.0f), 1920.0f / 1080.0f, 0.1f, 100.0f);
+
+		if (current_item == "Orthographic" && m_IsPerspective)
+			SetOrhographicProjection(glm::radians(60.0f), 0.1f, 100.0f);
 	}
 
 	void Camera::UpdateAspect()

@@ -27,11 +27,13 @@ namespace Hildur {
 			Init();
 		}
 
+
 		virtual ~Component() = 0;
 		virtual void Init() {}
 		virtual void OnEnable();
 		virtual void OnDisable();
 		virtual void Destroy();
+		virtual void RenderInspector() {};
 		virtual std::type_index GetBaseType();
 
 	protected:

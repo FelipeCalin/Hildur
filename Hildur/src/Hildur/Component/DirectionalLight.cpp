@@ -4,6 +4,7 @@
 #include "Hildur/Core/System/Renderer.h"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <imgui.h>
 
 
 namespace Hildur {
@@ -27,6 +28,15 @@ namespace Hildur {
 	{
 		//Lighting::removeLight(this);
 		Renderer::RemoveFromLightList(this);
+	}
+
+	void DirectionalLight::RenderInspector()
+	{
+		ImGui::BeginGroup();
+		ImGui::ColorEdit3("Color", &m_Color[0]);
+		ImGui::InputFloat("Intensity", &m_Intensity);
+		ImGui::EndGroup();
+		ImGui::NewLine();
 	}
 
 	/*

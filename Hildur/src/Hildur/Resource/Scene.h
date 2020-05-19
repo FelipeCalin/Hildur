@@ -38,9 +38,9 @@ namespace Hildur {
 		{
 			static_assert(std::is_base_of<ManagedResource, T>::value, "T must inherit from ManagedResource");
 
-			_resources.push_back(name);
+			m_Resources.push_back(name);
 
-			return ResourceManager::createResource<T, D>(name, data);
+			return ResourceManager::CreateResource<T, D>(name, data);
 		}
 
 		template <class T>
@@ -48,9 +48,9 @@ namespace Hildur {
 		{
 			static_assert(std::is_base_of<ManagedResource, T>::value, "T must inherit from ManagedResource");
 
-			_resources.push_back(name);
+			m_Resources.push_back(name);
 
-			return ResourceManager::createResource<T>(name);
+			return ResourceManager::CreateResource<T>(name);
 		}
 
 		template <class T, typename C>
@@ -58,9 +58,9 @@ namespace Hildur {
 		{
 			static_assert(std::is_base_of<ManagedResource, T>::value, "T must inherit from ManagedResource");
 
-			_resources.push_back(path.getAbsolutePath());
+			m_Resources.push_back(path.getAbsolutePath());
 
-			return ResourceManager::createResource<T, C>(path, config);
+			return ResourceManager::CreateResource<T, C>(path, config);
 		}
 
 		template <class T>
@@ -68,9 +68,9 @@ namespace Hildur {
 		{
 			static_assert(std::is_base_of<ManagedResource, T>::value, "T must inherit from ManagedResource");
 
-			_resources.push_back(path.getAbsolutePath());
+			m_Resources.push_back(path.getAbsolutePath());
 
-			return ResourceManager::createResource<T>(path);
+			return ResourceManager::CreateResource<T>(path);
 		}
 
 		void Destroy(Entity* go);
