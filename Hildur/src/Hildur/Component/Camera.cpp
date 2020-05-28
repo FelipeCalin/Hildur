@@ -132,10 +132,11 @@ namespace Hildur {
 		//if (transform->HasChangedLastTick())
 		//{
 		//m_ViewMatrix = glm::lookAt(transform->GetPositionWorld(), transform->Up(), transform->Forward());
-		glm::mat4 transformMat = glm::translate(glm::mat4(1.0f), transform->GetPositionWorld()) *
-			glm::rotate(glm::mat4(1.0f), glm::radians(transform->GetRotation().x), glm::vec3(1, 0, 0)) *
+		glm::mat4 transformMat = glm::rotate(glm::mat4(1.0f), glm::radians(transform->GetRotation().x), glm::vec3(1, 0, 0)) *
 			glm::rotate(glm::mat4(1.0f), glm::radians(transform->GetRotation().y), glm::vec3(0, 1, 0)) *
 			glm::rotate(glm::mat4(1.0f), glm::radians(transform->GetRotation().z), glm::vec3(0, 0, 1));
+		transformMat = glm::translate(transformMat, transform->GetPositionWorld());
+		
 		m_ViewMatrix = glm::inverse(transformMat);
 		//}
 

@@ -5,6 +5,8 @@
 #include "Hildur/Events/MouseEvent.h"
 #include "Hildur/Events/KeyEvent.h"
 
+#include "Hildur/Core/System/Renderer.h"
+
 #include "Platform/OpenGL/OpenGLContext.h"
 
 namespace Hildur {
@@ -60,6 +62,11 @@ namespace Hildur {
 
 		{
 			HR_PROFILE_SCOPE("glfwCreateWindow")
+
+#if defined(HZ_DEBUG)
+			if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
+				glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+#endif
 
 			GLFWmonitor* monitor = props.IsFullscreen ? glfwGetPrimaryMonitor() : nullptr;
 			m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), monitor, nullptr);

@@ -22,6 +22,9 @@ namespace Hildur {
 		virtual void Render(Ref<Shader> shader) {}
 		virtual void Render(std::vector<LightEmitter*>& lights, Ref<Shader> shader = nullptr) {}
 
+		uint32_t GetID() const { return m_ID; }
+		void SetID(uint32_t id) { m_ID = id; }
+
 		virtual void OnDestroy();
 		virtual BoundingSphere GetBoundingSphere();
 
@@ -39,6 +42,8 @@ namespace Hildur {
 
 		RenderType m_Type;
 		Ref<Material> m_Material;
+
+		uint32_t m_ID;
 	};
 
 

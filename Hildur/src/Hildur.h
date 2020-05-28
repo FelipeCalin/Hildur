@@ -8,7 +8,8 @@
 
 #include "Hildur/Core/Application.h"
 #include "Hildur/Resource/Layer.h"
-#include "Hildur/util/Log.h"
+#include "Hildur/Util/Log.h"
+#include "Hildur/ImGui/ImGuiLogSink.h" // TODO: overhaul
 
 #include "Hildur/Core/Timestep.h"
 

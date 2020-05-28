@@ -54,6 +54,11 @@ namespace Hildur {
 		return glm::vec3(r[0].x, r[1].x, r[2].x);
 	}
 
+	//void Transform::LookAt(glm::vec3 position)
+	//{
+	//	m_TransformationMatrixCached = glm::lookAt<glm::vec3>(m_Position, position, Up());
+	//}
+
 	void Transform::SetChanged()
 	{
 		//_lastChangedTick = Logic::getTickIndex(); //TODO: FIX!!
@@ -190,6 +195,21 @@ namespace Hildur {
 	{
 		m_Rotation = glm::normalize(quat * m_Rotation);
 		SetChanged();
+	}
+
+	void Transform::AddPosition(glm::vec3 position)
+	{
+		m_Position += position;
+	}
+
+	void Transform::AddRotation(glm::vec3 rotation)
+	{
+		m_Rotation += rotation;
+	}
+
+	void Transform::AddScale(glm::vec3 scale)
+	{
+		m_Scale += scale;
 	}
 
 	glm::mat4 Transform::GetTransformationMatrix()

@@ -14,6 +14,8 @@
 
 #include "Platform/OpenGL/OpenGLShader.h"
 
+#include <unordered_map>
+
 #include <glm/gtc/type_ptr.hpp>
 
 
@@ -28,6 +30,7 @@ namespace Hildur {
 	};
 
 	static std::vector<Renderable*> s_RenderList;
+	static std::unordered_map<uint32_t, Renderable*> s_ObjectIDList;
 	static std::vector<LightEmitter*> s_LightsList;
 
 	static RendererStorage* s_Data;
@@ -40,6 +43,7 @@ namespace Hildur {
 	static Ref<CubeMap> s_SkyBox = nullptr;
 	static Ref<Mesh> s_SkyboxMesh;
 	static Ref<Shader> s_SkyboxShader;
+	static Ref<Shader> s_IDShader;
 
 
 	void Renderer::Init() 
@@ -96,6 +100,8 @@ namespace Hildur {
 
 		s_SkyboxMesh = Mesh::Create(skyboxVertices);
 		s_SkyboxShader = Shader::Create("assets/shaders/Skybox.glsl");
+
+		s_IDShader = Hildur::Shader::Create("assets/shaders/Color.glsl");
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height) 
@@ -167,14 +173,9 @@ namespace Hildur {
 		{
 			if (renderable->GetEnable())
 			{
-				////renderable->GetMaterial()->SetProperty("u_ViewProjectionMat", s_ViewProjectionMat);
-				////renderable->GetMaterial()->SetProperty("u_ModelMat", renderable->GetTransform()->GetTransformationMatrix());
-				////renderable->GetMaterial()->UpdateUniforms();
-				//Submit(renderable->GetMaterial(), renderable->GetMesh(), renderable->GetTransform()->GetTransformationMatrix());
 				renderable->Render(s_LightsList);
 			}
 		}
-
 	}
 
 	void Renderer::End()
@@ -193,6 +194,21 @@ namespace Hildur {
 
 			Hildur::RenderCommand::DrawIndexed(s_SkyboxMesh->GetVertexArray());
 		}
+	}
+
+	void Renderer::RenderID()
+	{
+		HR_PROFILE_RENDERER_FUNCTION()
+
+			for (Renderable* renderable : s_RenderList)
+			{
+				if (renderable->GetEnable())
+				{
+					s_IDShader->SetFloat4("u_Color", { renderable->GetID() * 0.1f, 0.0f, 0.0f, 1.0f });
+
+					renderable->Render(s_IDShader);
+				}
+			}
 	}
 	
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform) 
@@ -250,11 +266,25 @@ namespace Hildur {
 	void Renderer::AddToRenderQueue(Renderable* renderable)
 	{
 		s_RenderList.push_back(renderable);
+
+		for (int i = 1; i < 100; i++)
+		{
+			if (s_ObjectIDList[i] == nullptr)
+			{
+				s_ObjectIDList[i] = renderable;
+				renderable->SetID(i);
+
+				break;
+			}
+		}
 	}
 
 	void Renderer::RemoveFromRenderQueue(Renderable* renderable)
 	{
 		s_RenderList.erase(std::remove(s_RenderList.begin(), s_RenderList.end(), renderable), s_RenderList.end());
+
+		s_ObjectIDList[renderable->GetID()] = nullptr;
+		renderable->SetID(0);
 	}
 
 	void Renderer::AddToLightList(LightEmitter* light)

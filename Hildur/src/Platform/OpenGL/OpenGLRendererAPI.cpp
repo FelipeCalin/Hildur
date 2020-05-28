@@ -7,10 +7,42 @@
 namespace Hildur {
 
 
+#if 0
+	void OpenGLMessageCallback(
+		unsigned source,
+		unsigned type,
+		unsigned id,
+		unsigned severity,
+		int length,
+		const char* message,
+		const void* userParam)
+	{
+		switch (severity)
+		{
+		case GL_DEBUG_SEVERITY_HIGH:         HR_CORE_CRITICAL(message); return;
+		case GL_DEBUG_SEVERITY_MEDIUM:       HR_CORE_ERROR(message); return;
+		case GL_DEBUG_SEVERITY_LOW:          HR_CORE_WARN(message); return;
+		case GL_DEBUG_SEVERITY_NOTIFICATION: HR_CORE_TRACE(message); return;
+		}
+
+		HR_CORE_ASSERT(false, "Unknown severity level!");
+	}
+#endif
+
 	void OpenGLRendererAPI::Init()
 	{
 		HR_PROFILE_FUNCTION();
 		
+#ifdef HR_DEBUG
+#if 0
+		glEnable(GL_DEBUG_OUTPUT);
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+		glDebugMessageCallback(OpenGLMessageCallback, nullptr);
+
+		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, NULL, GL_FALSE);
+#endif
+#endif
+
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

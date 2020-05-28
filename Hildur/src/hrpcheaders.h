@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <functional>
 #include <cmath>
+#include <mutex>
 
 #include <string>
 #include <sstream>

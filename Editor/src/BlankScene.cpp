@@ -22,6 +22,7 @@ void BlankScene::Load()
 	Hildur::Ref<Hildur::Texture2D> Texture1 = Hildur::Texture2D::Create("assets/textures/AriasBG.PNG");
 	Hildur::Ref<Hildur::Texture2D> Texture2 = Hildur::Texture2D::Create("assets/textures/Fingerprints1.jpg");
 	Hildur::Ref<Hildur::Texture2D> Texture3 = Hildur::Texture2D::Create("assets/textures/ShaderBallEmission.png");
+	Hildur::Ref<Hildur::Texture2D> Texture4 = Hildur::Texture2D::Create("assets/textures/grid.png");
 
 	// Shaders ////////////////////////////
 
@@ -31,12 +32,13 @@ void BlankScene::Load()
 	PhongShader->textures["roughnessMap"] = 3;
 	Hildur::Ref<Hildur::Shader> LightShader = ShaderLibrary.Load("assets/shaders/Light.glsl");
 	Hildur::Ref<Hildur::Shader> ColorShader = ShaderLibrary.Load("assets/shaders/Color.glsl");
+	Hildur::Ref<Hildur::Shader> TextureShader = ShaderLibrary.Load("assets/shaders/Texture.glsl");
+	TextureShader->textures["u_Texture"] = 4;
 	Hildur::Ref<Hildur::Shader> PostPShader = ShaderLibrary.Load("assets/shaders/FrameBufferQuad.glsl");
 
 	// Materials //////////////////////////
 
 	Hildur::Ref<Hildur::Material> Material;
-	Hildur::Ref<Hildur::Material> LightMaterial;
 	Material = Hildur::Material::Create(PhongShader);
 	Material->SetProperty("material.ambient", glm::vec3(0.2f));
 	Material->SetProperty("material.diffuse", glm::vec3(0.5f));
@@ -46,14 +48,23 @@ void BlankScene::Load()
 	Material->SetProperty("roughnessMap", 3U);
 	Material->SetImageBuffer("albedoMap", Texture1);
 	Material->SetImageBuffer("roughnessMap", Texture2);
+	Hildur::Ref<Hildur::Material> GridMaterial;
+	GridMaterial = Hildur::Material::Create(TextureShader);
+	GridMaterial->SetProperty("u_Texture", 4U);
+	GridMaterial->SetImageBuffer("u_Texure", Texture4);
+	GridMaterial->SetProperty("u_TilingFactor", 1.0f);
+	GridMaterial->SetProperty("u_Color", glm::vec3(1.0f));
+	Hildur::Ref<Hildur::Material> LightMaterial;
 	LightMaterial = Hildur::Material::Create(LightShader);
 
 	// Models /////////////////////////////
 
 	Hildur::Ref<Hildur::Model> Model;
 	Hildur::Ref<Hildur::Model> CubeModel;
+	Hildur::Ref<Hildur::Model> QuadModel;
 	Model = Hildur::Model::Create("assets/models/ShaderBall.fbx");
 	CubeModel = Hildur::Model::Create("assets/models/cube.obj");
+	QuadModel = Hildur::Model::Create("assets/models/quad.obj");
 
 	// Entities ///////////////////////////
 
@@ -64,6 +75,14 @@ void BlankScene::Load()
 	cam->GetComponent<Hildur::Camera>()->SetPerspectiveProjection(glm::radians(60.0f), 1920.0f / 1080.0f, 0.1f, 100.0f);
 	//cam->AddComponent<Hildur::StateControllerScript>();
 	//cam->AddComponent<Hildur::CameraControllerScript>();
+
+	Hildur::Entity* grid = instantiate("Grid");
+	grid->GetComponent<Hildur::Transform>()->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	grid->GetComponent<Hildur::Transform>()->SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+	grid->GetComponent<Hildur::Transform>()->SetScale(glm::vec3(0.1f, 0.1f, 0.1f));
+	grid->AddComponent<Hildur::MeshRenderer>();
+	grid->GetComponent<Hildur::MeshRenderer>()->SetMesh(QuadModel->GetMeshes()[0]);
+	grid->GetComponent<Hildur::MeshRenderer>()->SetMaterial(GridMaterial);
 
 	Hildur::Entity* sun = instantiate("Sun");
 	sun->GetComponent<Hildur::Transform>()->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
