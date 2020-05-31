@@ -10,7 +10,7 @@
 namespace Hildur {
 
 
-	class Mesh 
+	class Mesh : public ManagedResource
 	{
 	public:
 
@@ -34,9 +34,10 @@ namespace Hildur {
 		void Update();
 		//Ref<VertexArray> Render(Ref<Shader> shader);
 
+		glm::vec3 GetMinBoundingBox() const { return m_BoundingBoxMin; }
+		glm::vec3 GetMaxBoundingBox() const { return m_BoundingBoxMax; }
+
 		Ref<VertexArray> GetVertexArray() const { return m_VAO; }
-		Ref<Texture2D> GetDiffuseTex() const { return m_DiffuseTex; }
-		Ref<Texture2D> GetSpecularTex() const { return m_SpecularTex; }
 
 	private:
 
@@ -55,8 +56,8 @@ namespace Hildur {
 		Ref<VertexBuffer> m_VBO;
 		Ref<IndexBuffer> m_IBO;
 
-		Ref<Texture2D> m_DiffuseTex;
-		Ref<Texture2D> m_SpecularTex;
+		glm::vec3 m_BoundingBoxMin;
+		glm::vec3 m_BoundingBoxMax;
 	};
 
 

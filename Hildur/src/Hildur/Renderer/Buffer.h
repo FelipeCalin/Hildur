@@ -132,8 +132,8 @@ namespace Hildur {
 		virtual void Bind() const = 0;
 		virtual void UnBind() const = 0;
 
-		static Ref<VertexBuffer> Create(float* vertices, uint32_t size); //TODO: Remove
-		static Ref<VertexBuffer> Create(Ref<std::vector<Vertex>> vertices, uint32_t size);
+		static Ref<VertexBuffer> Create(float* vertices, uint32_t count); //TODO: Remove
+		static Ref<VertexBuffer> Create(Ref<std::vector<Vertex>> vertices, uint32_t count);
 	};
 
 	class IndexBuffer 
@@ -147,8 +147,8 @@ namespace Hildur {
 
 		virtual uint32_t GetCount() const = 0;
 
-		static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t size);
-		static Ref<IndexBuffer> Create(Ref<std::vector<uint32_t>> indices, uint32_t size);
+		static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t count);
+		static Ref<IndexBuffer> Create(Ref<std::vector<uint32_t>> indices, uint32_t count);
 	};
 
 

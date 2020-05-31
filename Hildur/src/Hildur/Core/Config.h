@@ -17,6 +17,8 @@ namespace Hildur {
 			int width = 1280;
 			int height = 720;
 			bool fullscreen = false;
+			int PosX = 100;
+			int PosY = 100;
 			bool vsync = false;
 			bool supersampling = false;
 			bool showFPS = false;

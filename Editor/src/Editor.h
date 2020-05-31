@@ -2,6 +2,10 @@
 
 #include <Hildur.h>
 
+#include "ImGuiWidgets/FileExplorer.h"
+#include "ImGuiWidgets/Viewport.h"
+
+
 #include <GLM/glm/glm.hpp>
 
 
@@ -26,6 +30,7 @@ namespace Editor {
 	private:
 
 		bool OnWindowResize(Hildur::WindowResizeEvent& e);
+		bool OnWindowMove(Hildur::WindowMoveEvent& e);
 		bool OnWindowClose(Hildur::WindowCloseEvent& e);
 
 		bool OnMouseClick(Hildur::MouseButtonPressedEvent& e);
@@ -43,25 +48,23 @@ namespace Editor {
 		bool m_CanClose = false;
 
 		Hildur::Ref<Hildur::FrameBuffer> m_FrameBuffer;
-		Hildur::Ref<Hildur::FrameBuffer> m_IDFrameBuffer;
 
 		//Viewport
-		uint32_t m_ViewportWidth = 0;
-		uint32_t m_ViewportHeight = 0;
-		bool m_IsMovingInVP = false;
-		bool m_IsInViewport = false;
-		glm::vec2 m_OriginalMousePos;
-		float m_ViewportScroll = 4;
-		glm::vec3 m_ViewportCamPos;
-		float m_ViewportCamRot;
+		Viewport m_Viewport;
 		//Test
-		Hildur::Renderable* m_SelectedEntity;
+		Hildur::Entity* m_SelectedEntity;
 
 		//Hierarchy
 		Hildur::Entity* m_InspectedEntity = nullptr;
 		bool m_OpenRootNode = true;
 
 		//Inspector
+		bool m_ExploreFSInspector = false;
+		imgui_ext::file_browser_modal m_InspectorFileBrowser = imgui_ext::file_browser_modal("Import model");
+
+		//Asset manager
+		bool m_IsImportClicked = false;
+		imgui_ext::file_browser_modal fileBrowser = imgui_ext::file_browser_modal("Import");
 
 		//Console
 		std::shared_ptr<Hildur::ImGuiConsole> m_Console;

@@ -1,6 +1,8 @@
 #include "hrpcheaders.h"
 #include "MeshRenderer.h"
 
+#include "Hildur/Component/Camera.h"
+
 #include "Hildur/Component/Transform.h"
 #include "Hildur/Component/LightEmitter.h"
 #include "Hildur/Component/DirectionalLight.h"
@@ -10,7 +12,7 @@
 
 namespace Hildur {
 
-
+	
 	void MeshRenderer::Render()
 	{
 		std::vector<LightEmitter*> nullList;
@@ -25,27 +27,29 @@ namespace Hildur {
 
 	void MeshRenderer::Render(std::vector<LightEmitter*>& lights, Ref<Shader> shader)
 	{
-		if (shader == nullptr) 
+		if (shader == nullptr)
+		{
 			shader = m_Material->GetShader();
 
-		shader->Bind();
-		m_Mesh->GetVertexArray()->Bind();
+			shader->Bind();
 
-		m_Material->SetProperty("u_ViewPos", Renderer::GetCameraPos());
-		m_Material->SetProperty("u_ViewProjectionMat", Renderer::GetViewProjectionMat());
-		m_Material->SetProperty("u_ModelMat", GetTransform()->GetTransformationMatrix());
-		
+			m_Mesh->GetVertexArray()->Bind();
 
-		uint32_t nrOfDirLights = 0;
-		uint32_t nrOfPointLights = 0;
-		uint32_t nrOfSpotLights = 0;
+			m_Material->SetProperty("u_ViewPos", Renderer::GetCameraPos());
+			m_Material->SetProperty("u_ViewProjectionMat", Renderer::GetViewProjectionMat());
+			m_Material->SetProperty("u_ModelMat", GetTransform()->GetTransformationMatrix());
 
-		for (LightEmitter* light : lights)
-		{
-			if (light->GetEnable())
+
+			uint32_t nrOfDirLights = 0;
+			uint32_t nrOfPointLights = 0;
+			uint32_t nrOfSpotLights = 0;
+
+			for (LightEmitter* light : lights)
 			{
-				switch (light->GetType())
+				if (light->GetEnable())
 				{
+					switch (light->GetType())
+					{
 					case LightEmitter::LE_DIRECTIONAL:
 					{
 						m_Material->SetProperty(("u_DirLights[" + std::to_string(nrOfDirLights) + "].direction"),
@@ -87,47 +91,89 @@ namespace Hildur {
 					{
 						HR_CORE_ASSERT(false, "Only Directional and Point lights supported!")
 
-						break;
+							break;
 					}
 
-					default:	HR_CORE_ASSERT(false, "Only Directional and Point lights supported!")
+					default:	HR_CORE_ASSERT(false, "Only Directional and Point lights supported!");
+					}
 				}
 			}
+
+			m_Material->SetProperty("nrDirectionalLights", nrOfDirLights);
+			m_Material->SetProperty("nrPointLights", nrOfPointLights);
+			m_Material->SetProperty("nrSpotLights", nrOfSpotLights);
+
+
+			m_Material->UpdateUniforms();
+			m_Material->BindTextures();
 		}
+		else
+		{
+			shader->Bind();
 
-		m_Material->SetProperty("nrDirectionalLights", nrOfDirLights);
-		m_Material->SetProperty("nrPointLights", nrOfPointLights);
-		m_Material->SetProperty("nrSpotLights", nrOfSpotLights);
+			m_Mesh->GetVertexArray()->Bind();
+
+			shader->SetFloat3("u_ViewPos", Renderer::GetCameraPos());
+			shader->SetMat4("u_ViewProjectionMat", Renderer::GetViewProjectionMat());
+			shader->SetMat4("u_ModelMat", GetTransform()->GetTransformationMatrix());
+		}
 		
-		
-		m_Material->UpdateUniforms();
-		m_Material->BindTextures();
 
-		//shader->enableAttributes();
-
-		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _mesh->getEBO());
-		//glDrawElements(GL_TRIANGLES, (GLsizei)_mesh->indices.size(), GL_UNSIGNED_INT, 0);
 		RenderCommand::DrawIndexed(m_Mesh->GetVertexArray());
 
 		//Renderer::addDrawCall();
-
-		//shader->disableAttributes();
-
-		//glBindVertexArray(0);
 	}
 
-	BoundingSphere MeshRenderer::GetBoundingSphere()
+	void MeshRenderer::RenderBoundingBox()
 	{
-		//TODO: fix
-		return BoundingSphere();
+		m_BoundingBoxVA->Bind();
+	
+		RenderCommand::DrawIndexed(m_BoundingBoxVA);
+	}
+
+	bool MeshRenderer::IsInView()
+	{
+		return Hildur::Camera::GetMainCamera()->FrustumTest(this);
 	}
 
 	MeshRenderer& MeshRenderer::SetMesh(Ref<Mesh> mesh)
 	{
 		m_Mesh = mesh;
+
+		glm::vec3 min = m_Mesh->GetMinBoundingBox();
+		glm::vec3 max = m_Mesh->GetMaxBoundingBox();
+
+		float verts[8 * 3] =
+		{
+			min.x, min.y, min.z,
+			min.x, min.y, max.z,
+			min.x, max.y, min.z,
+			min.x, max.y, max.z,
+			max.x, min.y, min.z,
+			max.x, min.y, max.z,
+			max.x, max.y, min.z,
+			max.x, max.y, max.z,
+		};
+
+		uint32_t indices[] =
+		{
+			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23
+		};
+
+		BufferLayout layout =
+		{
+			{ ShaderDataType::Float3, "a_Position" }
+		};
+
+		Ref<VertexBuffer> vb = VertexBuffer::Create(verts, 8 * 3);
+		Ref<IndexBuffer> ib = IndexBuffer::Create(indices, 8 * 3);
+		vb->SetLayout(layout);
+		m_BoundingBoxVA = VertexArray::Create();
+		m_BoundingBoxVA->AddVertexBuffer(vb);
+		m_BoundingBoxVA->SetIndexBuffer(ib);
+
 		return *this;
 	}
-
 
 
 }

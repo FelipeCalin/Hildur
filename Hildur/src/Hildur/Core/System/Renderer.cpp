@@ -17,6 +17,7 @@
 #include <unordered_map>
 
 #include <glm/gtc/type_ptr.hpp>
+#include <glad/glad.h>		// TODO: remove
 
 
 namespace Hildur {
@@ -30,8 +31,8 @@ namespace Hildur {
 	};
 
 	static std::vector<Renderable*> s_RenderList;
-	static std::unordered_map<uint32_t, Renderable*> s_ObjectIDList;
 	static std::vector<LightEmitter*> s_LightsList;
+	static std::map<uint32_t, Renderable*> s_ObjectIDList;
 
 	static RendererStorage* s_Data;
 
@@ -200,15 +201,37 @@ namespace Hildur {
 	{
 		HR_PROFILE_RENDERER_FUNCTION()
 
-			for (Renderable* renderable : s_RenderList)
+		for (Renderable* renderable : s_RenderList)
+		{
+			if (renderable->GetEnable())
 			{
-				if (renderable->GetEnable())
-				{
-					s_IDShader->SetFloat4("u_Color", { renderable->GetID() * 0.1f, 0.0f, 0.0f, 1.0f });
+				s_IDShader->Bind();
+				s_IDShader->SetFloat4("u_Color", { renderable->GetID() / (float)255, 0.0f, 0.0f, 1.0f });
 
-					renderable->Render(s_IDShader);
-				}
+				renderable->Render(s_IDShader);
 			}
+		}
+	}
+
+	void Renderer::RenderGizmos()
+	{
+		HR_PROFILE_RENDERER_FUNCTION()
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		for (Renderable* renderable : s_RenderList)
+		{
+			if (renderable->GetEnable())
+			{
+				s_IDShader->Bind();
+				s_IDShader->SetFloat4("u_Color", { 1.0f, 1.0f, 1.0f, 1.0f });
+				s_IDShader->SetFloat3("u_ViewPos", GetCameraPos());
+				s_IDShader->SetMat4("u_ViewProjectionMat", Renderer::GetViewProjectionMat());
+				s_IDShader->SetMat4("u_ModelMat", renderable->GetTransform()->GetTransformationMatrix());
+
+				renderable->RenderBoundingBox();
+			}
+		}
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 	
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform) 
@@ -267,24 +290,26 @@ namespace Hildur {
 	{
 		s_RenderList.push_back(renderable);
 
-		for (int i = 1; i < 100; i++)
+		int i = 1;
+		while (s_ObjectIDList[i] != nullptr)
 		{
-			if (s_ObjectIDList[i] == nullptr)
-			{
-				s_ObjectIDList[i] = renderable;
-				renderable->SetID(i);
-
-				break;
-			}
+			i++;
 		}
+		s_ObjectIDList[i] = renderable;
+		renderable->SetID(i);
 	}
 
 	void Renderer::RemoveFromRenderQueue(Renderable* renderable)
 	{
 		s_RenderList.erase(std::remove(s_RenderList.begin(), s_RenderList.end(), renderable), s_RenderList.end());
 
-		s_ObjectIDList[renderable->GetID()] = nullptr;
-		renderable->SetID(0);
+		int i = 0;
+		while (s_ObjectIDList.at(i) != renderable)
+		{
+			i++;
+		}
+		s_ObjectIDList.erase(s_ObjectIDList.find(i));
+		renderable->SetID(0.0f);
 	}
 
 	void Renderer::AddToLightList(LightEmitter* light)
@@ -295,6 +320,16 @@ namespace Hildur {
 	void Renderer::RemoveFromLightList(LightEmitter* light)
 	{
 		s_LightsList.erase(std::remove(s_LightsList.begin(), s_LightsList.end(), light), s_LightsList.end());
+	}
+
+	Hildur::Entity* Renderer::GetEntityFromID(uint32_t id)
+	{
+		if (id != 0 && s_ObjectIDList.at(id) != nullptr)
+		{
+			return s_ObjectIDList.at(id)->GetEntity();
+		}
+
+		return nullptr;
 	}
 
 	const glm::vec3& Renderer::GetCameraPos()

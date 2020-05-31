@@ -19,11 +19,28 @@ namespace Hildur {
 		verticesList.reset(new std::vector<Vertex>);
 		indicesList.reset(new std::vector<uint32_t>);
 
+		m_BoundingBoxMin = glm::vec3(0.0f);
+		m_BoundingBoxMax = glm::vec3(0.0f);
+
 		for (int i = 0; i < vertices.size(); i++)
 		{
 			glm::vec3 posVec = vertices[i];
 			verticesList->push_back({ posVec, glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f) });
 			indicesList->push_back(i);
+
+			if (posVec.x < m_BoundingBoxMin.x)
+				m_BoundingBoxMin.x = posVec.x;
+			if (posVec.y < m_BoundingBoxMin.y)
+				m_BoundingBoxMin.y = posVec.y;
+			if (posVec.z < m_BoundingBoxMin.z)
+				m_BoundingBoxMin.z = posVec.z;
+
+			if (posVec.x > m_BoundingBoxMax.x)
+				m_BoundingBoxMax.x = posVec.x;
+			if (posVec.y > m_BoundingBoxMax.y)
+				m_BoundingBoxMax.y = posVec.y;
+			if (posVec.z > m_BoundingBoxMax.z)
+				m_BoundingBoxMax.z = posVec.z;
 		}
 
 		InitVAO(verticesList, indicesList);
@@ -31,14 +48,35 @@ namespace Hildur {
 
 	Mesh::Mesh(Ref<std::vector<Vertex>> vertices, Ref<std::vector<uint32_t>> indices, std::vector<Ref<Texture2D>> textures)
 	{
+		m_BoundingBoxMin = glm::vec3(0.0f);
+		m_BoundingBoxMax = glm::vec3(0.0f);
+
+		for (int i = 0; i < vertices->size(); i++)
+		{
+			glm::vec3 posVec = vertices->at(i).position;
+
+			if (posVec.x < m_BoundingBoxMin.x)
+				m_BoundingBoxMin.x = posVec.x;
+			if (posVec.y < m_BoundingBoxMin.y)
+				m_BoundingBoxMin.y = posVec.y;
+			if (posVec.z < m_BoundingBoxMin.z)
+				m_BoundingBoxMin.z = posVec.z;
+
+			if (posVec.x > m_BoundingBoxMax.x)
+				m_BoundingBoxMax.x = posVec.x;
+			if (posVec.y > m_BoundingBoxMax.y)
+				m_BoundingBoxMax.y = posVec.y;
+			if (posVec.z > m_BoundingBoxMax.z)
+				m_BoundingBoxMax.z = posVec.z;
+		}
+
 		InitVAO(vertices, indices);
 
 		for (int i = 0; i < textures.size(); i++)
 		{
 			switch (textures[i]->type)
 			{
-			case HR_DIFFUSE: m_DiffuseTex = textures[i];
-			case HR_SPECULAR: m_SpecularTex = textures[i];
+				// TODO: Fix!!!!
 			}
 		}
 	}
@@ -63,7 +101,7 @@ namespace Hildur {
 	void Mesh::Update() 
 	{
 	}
-
+	
 	//Ref<VertexArray> Mesh::Render(Ref<Shader> shader) 
 	//{
 	//	UpdateUniforms(shader);

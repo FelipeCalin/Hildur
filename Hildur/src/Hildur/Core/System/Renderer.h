@@ -7,6 +7,8 @@
 
 #include "Hildur/Component/LightEmitter.h"
 
+#include "Hildur/Core/Entity.h"
+
 #include "Hildur/Renderer/OrthographicCamera.h"
 #include "Hildur/Renderer/PerspectiveCamera.h"
 
@@ -39,6 +41,7 @@ namespace Hildur {
 		static void End();
 
 		static void RenderID();
+		static void RenderGizmos();
 
 		static void Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform = glm::mat4(1.0f));
 		static void Submit(const Ref<Shader>& shader, const Ref<Mesh>& mesh, const glm::mat4& transform = glm::mat4(1.0f));
@@ -52,6 +55,8 @@ namespace Hildur {
 
 		static void AddToLightList(LightEmitter* light);
 		static void RemoveFromLightList(LightEmitter* light);
+
+		static Hildur::Entity* GetEntityFromID(uint32_t id);
 
 		static const glm::vec3& GetCameraPos();
 		static const glm::mat4& GetViewMat();

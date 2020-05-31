@@ -10,8 +10,8 @@ namespace Hildur {
 	{
 	public:
 
-		//virtual void Init() override;
-		//virtual void OnEnable() override;
+		//void Init() override;
+		//void OnEnable() override;
 		//virtual void OnDisable() override;
 		//virtual void Destroy() override;
 
@@ -19,14 +19,17 @@ namespace Hildur {
 		void Render(Ref<Shader> shader) override;
 		void Render(std::vector<LightEmitter*>& lights, Ref<Shader> shader = nullptr) override;
 
-		BoundingSphere GetBoundingSphere();
+		void RenderBoundingBox() override;
+		
+		bool IsInView() override;
+		
 		Ref<Mesh> GetMesh() { return m_Mesh; }
-
 		MeshRenderer& SetMesh(Ref<Mesh> mesh);
 	
 	private:
 
 		Ref<Mesh> m_Mesh;
+		Ref<VertexArray> m_BoundingBoxVA;
 
 	};
 

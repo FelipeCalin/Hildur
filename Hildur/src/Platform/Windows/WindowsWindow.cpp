@@ -47,7 +47,7 @@ namespace Hildur {
 		m_Data.Height = props.Height;
 		m_Data.IsFullscreen = props.IsFullscreen;
 
-		HR_CORE_INFO("Creating window {0} ({1}, {2}, fullscreen: {3})", props.Title, props.Width, props.Height, props.IsFullscreen);
+		HR_CORE_INFO("Creating window {0} ({1}, {2}, fullscreen: {3}), at ({4}, {5})", props.Title, props.Width, props.Height, props.IsFullscreen, props.PosX, props.PosY);
 
 		if (!s_GLFWInitialized) 
 		{
@@ -63,17 +63,22 @@ namespace Hildur {
 		{
 			HR_PROFILE_SCOPE("glfwCreateWindow")
 
-#if defined(HZ_DEBUG)
+#if 0
+#ifdef HR_DEBUG
 			if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
 				glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+#endif
 #endif
 
 			GLFWmonitor* monitor = props.IsFullscreen ? glfwGetPrimaryMonitor() : nullptr;
 			m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), monitor, nullptr);
+			//glfwSetWindowPos(m_Window, m_Data.PosX, m_Data.PosY); // TODO: Fix!!!!!!!!!!!!!
 		}
 
 		m_Context = CreateScope<OpenGLContext>(m_Window);
 		m_Context->Init();
+
+		glfwGetWindowPos(m_Window, &m_Data.PosX, &m_Data.PosY);
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
@@ -86,6 +91,16 @@ namespace Hildur {
 				data.Height = height;
 
 				WindowResizeEvent event(width, height);
+				data.EventCallback(event);
+			});
+
+		glfwSetWindowPosCallback(m_Window, [](GLFWwindow* window, int xpos, int ypos)
+			{
+				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+				data.PosX = xpos;
+				data.PosY = ypos;
+
+				WindowMoveEvent event(xpos, ypos);
 				data.EventCallback(event);
 			});
 
@@ -137,18 +152,18 @@ namespace Hildur {
 
 				switch (action)
 				{
-				case GLFW_PRESS:
-				{
-					MouseButtonPressedEvent event(button);
-					data.EventCallback(event);
-					break;
-				}
-				case GLFW_RELEASE:
-				{
-					MouseButtonReleasedEvent event(button);
-					data.EventCallback(event);
-					break;
-				}
+					case GLFW_PRESS:
+					{
+						MouseButtonPressedEvent event(button);
+						data.EventCallback(event);
+						break;
+					}
+					case GLFW_RELEASE:
+					{
+						MouseButtonReleasedEvent event(button);
+						data.EventCallback(event);
+						break;
+					}
 				}
 			});
 

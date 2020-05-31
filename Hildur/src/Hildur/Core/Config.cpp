@@ -51,6 +51,14 @@ namespace Hildur {
 			{
 				profile.fullscreen = (bool)std::stoi(tokens[1]);
 			}
+			else if (tokens[0].compare("PosX") == 0)
+			{
+				profile.PosX = std::stoi(tokens[1]);
+			}
+			else if (tokens[0].compare("PosY") == 0)
+			{
+				profile.PosY = std::stoi(tokens[1]);
+			}
 			else if (tokens[0].compare("vsync") == 0)
 			{
 				profile.vsync = (bool)std::stoi(tokens[1]);
@@ -78,11 +86,13 @@ namespace Hildur {
 
 	void Config::createDefault()
 	{
-		std::string def = "#Hildur Engine Configuration file\n"
+		std::string def = "#Hildur Engine Configuration file"
 			"appName = Hildur Engine\n"
 			"width = 1280\n"
 			"height = 720\n"
 			"fullscreen = 0\n"
+			"PosX = 100\n"
+			"PosY = 100\n"
 			"vsync = 0\n"
 			"supersampling = 0\n"
 			"show_fps = 0\n"

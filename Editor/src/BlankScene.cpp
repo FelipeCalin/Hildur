@@ -76,13 +76,13 @@ void BlankScene::Load()
 	//cam->AddComponent<Hildur::StateControllerScript>();
 	//cam->AddComponent<Hildur::CameraControllerScript>();
 
-	Hildur::Entity* grid = instantiate("Grid");
-	grid->GetComponent<Hildur::Transform>()->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-	grid->GetComponent<Hildur::Transform>()->SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
-	grid->GetComponent<Hildur::Transform>()->SetScale(glm::vec3(0.1f, 0.1f, 0.1f));
-	grid->AddComponent<Hildur::MeshRenderer>();
-	grid->GetComponent<Hildur::MeshRenderer>()->SetMesh(QuadModel->GetMeshes()[0]);
-	grid->GetComponent<Hildur::MeshRenderer>()->SetMaterial(GridMaterial);
+	//Hildur::Entity* grid = instantiate("Grid");
+	//grid->GetComponent<Hildur::Transform>()->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	//grid->GetComponent<Hildur::Transform>()->SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+	//grid->GetComponent<Hildur::Transform>()->SetScale(glm::vec3(0.1f, 0.1f, 0.1f));
+	//grid->AddComponent<Hildur::MeshRenderer>();
+	//grid->GetComponent<Hildur::MeshRenderer>()->SetMesh(QuadModel->GetMeshes()[0]);
+	//grid->GetComponent<Hildur::MeshRenderer>()->SetMaterial(GridMaterial);
 
 	Hildur::Entity* sun = instantiate("Sun");
 	sun->GetComponent<Hildur::Transform>()->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -106,14 +106,14 @@ void BlankScene::Load()
 	shaderBall->GetComponent<Hildur::MeshRenderer>()->SetMesh(Model->GetMeshes()[0]);
 	shaderBall->GetComponent<Hildur::MeshRenderer>()->SetMaterial(Material);
 
-	Hildur::Entity* leCube = instantiate("LeCube");
-	leCube->GetComponent<Hildur::Transform>()->SetPosition(glm::vec3(0.0f, 0.0f, -1.0f));
-	leCube->GetComponent<Hildur::Transform>()->SetRotation(glm::vec3(-90.0f, 0.0f, 0.0f));
-	leCube->GetComponent<Hildur::Transform>()->SetScale(glm::vec3(0.1f, 0.1f, 0.1f));
-	leCube->GetComponent<Hildur::Transform>()->SetParent(shaderBall);
-	leCube->AddComponent<Hildur::MeshRenderer>();
-	leCube->GetComponent<Hildur::MeshRenderer>()->SetMesh(CubeModel->GetMeshes()[0]);
-	leCube->GetComponent<Hildur::MeshRenderer>()->SetMaterial(Material);
+	//Hildur::Entity* leCube = instantiate("LeCube");
+	//leCube->GetComponent<Hildur::Transform>()->SetPosition(glm::vec3(0.0f, 0.0f, -1.0f));
+	//leCube->GetComponent<Hildur::Transform>()->SetRotation(glm::vec3(-90.0f, 0.0f, 0.0f));
+	//leCube->GetComponent<Hildur::Transform>()->SetScale(glm::vec3(0.1f, 0.1f, 0.1f));
+	//leCube->GetComponent<Hildur::Transform>()->SetParent(shaderBall);
+	//leCube->AddComponent<Hildur::MeshRenderer>();
+	//leCube->GetComponent<Hildur::MeshRenderer>()->SetMesh(CubeModel->GetMeshes()[0]);
+	//leCube->GetComponent<Hildur::MeshRenderer>()->SetMaterial(Material);
 
 
 	Hildur::RenderCommand::SetClearColor({ 0.3f, 0.3f, 0.3f, 1 });

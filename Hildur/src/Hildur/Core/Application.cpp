@@ -16,8 +16,6 @@
 #include "Hildur/Component/LightEmitter.h"
 #include "Hildur/Component/DirectionalLight.h"
 #include "Hildur/Component/PointLight.h"
-#include "Hildur/Types/BoundingBox.h"
-
 
 #include <imgui.h>
 #include <glad/glad.h>
@@ -37,6 +35,7 @@ namespace Hildur {
 	Application::Application()
 	{
 		HR_PROFILE_FUNCTION()
+
 
 	}
 

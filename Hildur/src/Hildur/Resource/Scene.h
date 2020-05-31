@@ -23,7 +23,7 @@ class ManagedResource;
 namespace Hildur {
 
 
-	class Scene
+	class Scene : ManagedResource
 	{
 	public:
 

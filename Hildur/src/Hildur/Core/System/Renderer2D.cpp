@@ -12,15 +12,20 @@
 #include "Hildur/Component/Sprite.h"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <glad/glad.h>		// TODO: Remove dependencie, and abstract line drawing
 
 
 namespace Hildur {
 
 
+	static inline double GET_ABS(double x) { return x > 0 ? x : -x; }
+
 	struct Renderer2DStorage 
 	{
 		Ref<VertexArray> QuadVertexArray;
+		Ref<VertexArray> LineVertexArray;
 		Ref<Shader> TextureShader;
+		Ref<Shader> LineShader;
 		Ref<Texture2D> WhiteTexture;
 
 		std::vector<Sprite*> RenderList;
@@ -34,6 +39,7 @@ namespace Hildur {
 
 		s_Data = new Renderer2DStorage();
 
+		// Quad Setup
 		s_Data->QuadVertexArray = VertexArray::Create();
 
 		float squareVertices[5 * 4] = 
@@ -57,11 +63,35 @@ namespace Hildur {
 		squareIB = IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 		s_Data->QuadVertexArray->SetIndexBuffer(squareIB);
 
+
+		// Line Setup
+		s_Data->LineVertexArray = VertexArray::Create();
+
+		float lineVertices[3 * 4] =
+		{
+			-0.5f, -0.5f, 0.0f,
+			 0.5f, -0.5f, 0.0f,
+			 0.5f,  0.5f, 0.0f,
+			-0.5f,  0.5f, 0.0f
+		};
+
+		Ref<VertexBuffer> lineVB;
+		lineVB = VertexBuffer::Create(lineVertices, sizeof(lineVertices));
+		lineVB->SetLayout({
+			{ ShaderDataType::Float3, "a_Position" }
+			});
+
+		s_Data->LineVertexArray->AddVertexBuffer(squareVB);
+		s_Data->LineVertexArray->SetIndexBuffer(squareIB);
+
+
+		// White Texture
 		s_Data->WhiteTexture = Texture2D::Create(1, 1);
 		uint32_t whiteTextureData = 0xffffffff;
 		s_Data->WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
 
 		s_Data->TextureShader = Shader::Create("assets/shaders/Texture.glsl");
+		s_Data->LineShader = Shader::Create("assets/shaders/Line.glsl");
 		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetInt("u_Texture", 0);
 	}
@@ -79,6 +109,9 @@ namespace Hildur {
 
 		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetMat4("u_ViewProjectionMat", camera.GetViewProjectionMatrix());
+
+		s_Data->LineShader->Bind();
+		s_Data->LineShader->SetMat4("u_ViewProjectionMat", camera.GetViewProjectionMatrix());
 	}
 
 	void Renderer2D::EndScene()
@@ -90,9 +123,12 @@ namespace Hildur {
 	void Renderer2D::Prep()
 	{
 		s_Data->TextureShader->Bind();
-
 		if (Camera::GetMainCamera())
 			s_Data->TextureShader->SetMat4("u_ViewProjectionMat", Camera::GetMainCamera()->GetViewProjection());
+
+		s_Data->LineShader->Bind();
+		if (Camera::GetMainCamera())
+			s_Data->LineShader->SetMat4("u_ViewProjectionMat", Camera::GetMainCamera()->GetViewProjection());
 	}
 
 	void Renderer2D::RenderQueue()
@@ -200,6 +236,17 @@ namespace Hildur {
 
 		s_Data->QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+	}
+
+	void Renderer2D::DrawLine(const glm::vec2& point1, const glm::vec2& point2, const glm::vec4& color, float thickness)
+	{
+		HR_PROFILE_FUNCTION()
+
+		s_Data->LineShader->SetFloat4("u_Color", color);
+		s_Data->LineShader->SetMat4("u_ModelMat", glm::mat4(1.0f));
+
+		s_Data->LineVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->LineVertexArray);
 	}
 
 	void Renderer2D::AddToRenderQueue(Sprite* spriteComponent)

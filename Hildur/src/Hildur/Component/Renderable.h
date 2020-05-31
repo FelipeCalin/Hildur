@@ -4,7 +4,9 @@
 
 #include "Hildur/Core/System/Renderer.h"
 #include "Hildur/Resource/Material.h"
-#include "Hildur/Types/BoundingBox.h"
+
+#include "Hildur/Types/BoundingSphere.h"
+#include "Hildur/Types/AABB.h"
 
 
 namespace Hildur {
@@ -22,11 +24,15 @@ namespace Hildur {
 		virtual void Render(Ref<Shader> shader) {}
 		virtual void Render(std::vector<LightEmitter*>& lights, Ref<Shader> shader = nullptr) {}
 
-		uint32_t GetID() const { return m_ID; }
-		void SetID(uint32_t id) { m_ID = id; }
+		virtual void RenderBoundingBox() = 0;
+
+		float GetID() const { return m_ID; }
+		void SetID(float id) { m_ID = id; }
 
 		virtual void OnDestroy();
 		virtual BoundingSphere GetBoundingSphere();
+
+		virtual bool IsInView() = 0;
 
 		void Destroy();
 		RenderType GetType() { return m_Type; }
@@ -43,7 +49,10 @@ namespace Hildur {
 		RenderType m_Type;
 		Ref<Material> m_Material;
 
-		uint32_t m_ID;
+		Ref<BoundingSphere> m_BoundingSphere;
+		Ref<AABB> m_AABB;
+
+		float m_ID;
 	};
 
 

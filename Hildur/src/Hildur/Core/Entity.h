@@ -99,10 +99,11 @@ namespace Hildur {
 		Transform* m_Transform;
 		std::string m_Name;
 
+		bool m_IsEnabled; // TODO: Set private without breaking something!
+	
 	private:
 
 		static int s_IdCnt;
-		bool m_IsEnabled;
 		bool m_IsStatic;
 		int m_Id;
 		std::unordered_map<std::type_index, Component*> m_ComponentMap;

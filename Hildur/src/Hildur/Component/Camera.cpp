@@ -67,6 +67,12 @@ namespace Hildur {
 		UpdateProjection();
 	}
 
+	void Camera::UpdateAspect(float aspect)
+	{
+		m_Aspect = aspect;
+		UpdateProjection();
+	}
+
 	void Camera::UpdateProjection()
 	{
 		if (m_IsPerspective)

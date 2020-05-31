@@ -35,6 +35,7 @@ namespace Hildur {
 		void RenderInspector() override;
 
 		void UpdateAspect();
+		void UpdateAspect(float aspect);
 		void UpdateProjection();
 		void SetOrhographicProjection(float radius, float zNear, float zFar);
 		void SetPerspectiveProjection(float fov, float aspect, float zNear, float zFar);

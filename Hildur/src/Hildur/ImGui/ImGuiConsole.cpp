@@ -8,10 +8,15 @@
 
 namespace Hildur {
 
+
     uint16_t ImGuiConsole::s_MessageBufferCapacity = 200;
-    uint16_t ImGuiConsole::s_MessageBufferIndex = 0;
-    std::vector<std::shared_ptr<ImGuiConsole::Message>> ImGuiConsole::s_MessageBuffer(s_MessageBufferCapacity);
+    uint16_t ImGuiConsole::s_MessageBufferSize = 0;
+    uint16_t ImGuiConsole::s_MessageBufferBegin = 0;
     ImGuiConsole::Message::Level ImGuiConsole::s_MessageBufferRenderFilter = ImGuiConsole::Message::Level::Trace;
+    std::vector<std::shared_ptr<ImGuiConsole::Message>> ImGuiConsole::s_MessageBuffer(s_MessageBufferCapacity);
+    bool ImGuiConsole::s_AllowScrollingToBottom = true;
+    bool ImGuiConsole::s_RequestScrollToBottom = false;
+
 
     std::shared_ptr<ImGuiConsole> ImGuiConsole::GetConsole()
     {
@@ -23,9 +28,14 @@ namespace Hildur {
         if (message->m_Level == Message::Level::Invalid)
             return;
 
-        *(s_MessageBuffer.begin() + s_MessageBufferIndex) = message;
-        if (++s_MessageBufferIndex == s_MessageBufferCapacity)
-            s_MessageBufferIndex = 0;
+        *(s_MessageBuffer.begin() + s_MessageBufferBegin) = message;
+        if (++s_MessageBufferBegin == s_MessageBufferCapacity)
+            s_MessageBufferBegin = 0;
+        if (s_MessageBufferSize < s_MessageBufferCapacity)
+            s_MessageBufferSize++;
+
+        if (s_AllowScrollingToBottom)
+            s_RequestScrollToBottom = true;
     }
 
     void ImGuiConsole::OnImGuiRender(bool* show)
@@ -67,33 +77,43 @@ namespace Hildur {
         ImGui::PopItemWidth();
 
         // Buttons to quickly change level
-        ImGui::SameLine(0, spacing);
+        ImGui::SameLine(0.0f, spacing);
         if (ImGui::ArrowButton("##MessageBufferRenderFilter_L", ImGuiDir_Left))
         {
             s_MessageBufferRenderFilter = Message::GetLowerLevel(s_MessageBufferRenderFilter);
         }
-        ImGui::SameLine(0, spacing);
+        ImGui::SameLine(0.0f, spacing);
         if (ImGui::ArrowButton("##MessageBufferRenderFilter_R", ImGuiDir_Right))
         {
             s_MessageBufferRenderFilter = Message::GetHigherLevel(s_MessageBufferRenderFilter);
         }
 
         // Text change level
-        ImGui::SameLine(0, spacing);
-        ImGui::Text("Display log level");
+        ImGui::SameLine(0.0f, spacing);
+        ImGui::Text("Display level");
+
+        // Checkbox for scrolling lock
+        ImGui::SameLine(0.0f, 5.0f * spacing);
+        ImGui::Checkbox("Scroll to bottom", &s_AllowScrollingToBottom);
     }
 
     void ImGuiConsole::ImGuiRendering::ImGuiRenderMessages()
     {
         ImGui::BeginChild("ScrollRegion", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
         {
-            auto messageStart = s_MessageBuffer.begin() + s_MessageBufferIndex;
+            auto messageStart = s_MessageBuffer.begin() + s_MessageBufferBegin;
             if (*messageStart) // If contains old message here
                 for (auto message = messageStart; message != s_MessageBuffer.end(); message++)
                     (*message)->OnImGuiRender();
-            if (s_MessageBufferIndex != 0) // Skipped first messages in vector
+            if (s_MessageBufferBegin != 0) // Skipped first messages in vector
                 for (auto message = s_MessageBuffer.begin(); message != messageStart; message++)
                     (*message)->OnImGuiRender();
+
+            if (s_RequestScrollToBottom && ImGui::GetScrollMaxY() > 0)
+            {
+                ImGui::SetScrollY(ImGui::GetScrollMaxY());
+                s_RequestScrollToBottom = false;
+            }
         }
         ImGui::EndChild();
     }
@@ -173,12 +193,12 @@ namespace Hildur {
     {
         switch (level)
         {
-            case ImGuiConsole::Message::Level::Trace: return { 0.75f, 0.75f, 0.75f, 1.00f }; // White-ish gray
-            case ImGuiConsole::Message::Level::Info: return { 0.00f, 0.50f, 0.00f, 1.00f }; // Green
-            case ImGuiConsole::Message::Level::Debug: return { 0.00f, 0.50f, 0.50f, 1.00f }; // Cyan
-            case ImGuiConsole::Message::Level::Warn: return { 1.00f, 1.00f, 0.00f, 1.00f }; // Yellow
-            case ImGuiConsole::Message::Level::Error: return { 1.00f, 0.00f, 0.00f, 1.00f }; // Red
-            case ImGuiConsole::Message::Level::Critical: return { 1.00f, 1.00f, 1.00f, 1.00f }; // White-white
+            case ImGuiConsole::Message::Level::Trace:       return { 0.75f, 0.75f, 0.75f, 1.00f }; // White-ish gray
+            case ImGuiConsole::Message::Level::Info:        return { 0.00f, 0.50f, 0.00f, 1.00f }; // Green
+            case ImGuiConsole::Message::Level::Debug:       return { 0.00f, 0.50f, 0.50f, 1.00f }; // Cyan
+            case ImGuiConsole::Message::Level::Warn:        return { 1.00f, 1.00f, 0.00f, 1.00f }; // Yellow
+            case ImGuiConsole::Message::Level::Error:       return { 1.00f, 0.00f, 0.00f, 1.00f }; // Red
+            case ImGuiConsole::Message::Level::Critical:    return { 1.0f, 0.0f, 1.0f, 1.0f }; // White-white
         }
         return { 1.00f, 1.00f, 1.00f, 1.00f };
     }

@@ -12,7 +12,9 @@ namespace Hildur {
 		Renderer::AddToRenderQueue(this);
 	}
 
-	void Renderable::OnDestroy() {}
+	void Renderable::OnDestroy() 
+	{
+	}
 
 	BoundingSphere Renderable::GetBoundingSphere()
 	{
@@ -31,7 +33,6 @@ namespace Hildur {
 		Renderer::AddToRenderQueue(this);
 		m_Type = type;
 	}
-
 
 
 }

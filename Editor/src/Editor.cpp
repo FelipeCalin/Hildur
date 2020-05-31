@@ -31,10 +31,12 @@ namespace Editor {
 		Hildur::WindowProps props;
 		props.Title = "Hildur Editor";
 		props.IsFullscreen = m_Config.profile.fullscreen;
+		props.PosX = m_Config.profile.PosX;
+		props.PosY = m_Config.profile.PosY;
 
 		if (m_Config.profile.fullscreen)
 		{
-			props.Width = 1960;
+			props.Width = 1960; // TODO: When "fulscreen" set width and height to display width and height, abstract
 			props.Height = 1080;
 		}
 		else
@@ -43,6 +45,7 @@ namespace Editor {
 			props.Height = m_Config.profile.height;
 		}
 
+		
 		/// System Singleton Instacing ////////////////////////////////
 
 		m_Window = Hildur::Window::Create(props);
@@ -77,15 +80,16 @@ namespace Editor {
 		m_FrameBuffer->AddTextureAttachment("color");
 		m_FrameBuffer->AddDepthBufferAttachment();
 		m_FrameBuffer->Ready();
-		m_ViewportWidth = m_Window->GetWidth();
-		m_ViewportHeight = m_Window->GetHeight();
+		//m_ViewportWidth = m_Window->GetWidth();
+		//m_ViewportHeight = m_Window->GetHeight();
+		m_Viewport.Init(m_Window->GetWidth(), m_Window->GetHeight());
 
 		/// Object ID FrameBuffer /////////////////////////////////////
 
-		m_IDFrameBuffer = Hildur::FrameBuffer::Create(m_ViewportWidth, m_ViewportHeight);
-		m_IDFrameBuffer->AddTextureAttachment("color");
-		m_IDFrameBuffer->AddDepthBufferAttachment();
-		m_IDFrameBuffer->Ready();
+		//m_IDFrameBuffer = Hildur::FrameBuffer::Create(m_ViewportWidth, m_ViewportHeight);
+		//m_IDFrameBuffer->AddTextureAttachment("color");
+		//m_IDFrameBuffer->AddDepthBufferAttachment();
+		//m_IDFrameBuffer->Ready();
 
 		//TODO: Fix!!!
 
@@ -119,13 +123,13 @@ namespace Editor {
 
 				Hildur::RenderCommand::Clear();
 				m_FrameBuffer->Clear();
-				m_IDFrameBuffer->Clear();
+				m_Viewport.GetIDFrameBuffer()->Clear();
 
 				m_FrameBuffer->Enable();
 				{
 					HR_PROFILE_SCOPE("3D Scene Rendering")
 
-						Hildur::Renderer::Prep();
+					Hildur::Renderer::Prep();
 					Hildur::Renderer::RenderQueue();
 					Hildur::Renderer::End();
 				}
@@ -133,18 +137,25 @@ namespace Editor {
 				{
 					HR_PROFILE_SCOPE("2D Scene Rendering")
 
-						Hildur::Renderer2D::Prep();
-					Hildur::Renderer2D::RenderQueue();
+						//Hildur::Renderer2D::Prep();
+						//Hildur::Renderer2D::RenderQueue();
+						//Hildur::Renderer2D::DrawLine({ -0.25f, -0.25f }, { 0.25f, 0.25f });
 				}
 				m_FrameBuffer->Disable();
 
-				m_IDFrameBuffer->Enable();
+				m_Viewport.GetIDFrameBuffer()->Enable();
 				{
-					HR_PROFILE_SCOPE("LayerStack OnUpdates")
+					HR_PROFILE_SCOPE("Object ID Rendering")
 
-						Hildur::Renderer::RenderID();
+					Hildur::Renderer::RenderID();
 				}
-				m_IDFrameBuffer->Disable();
+				m_Viewport.GetIDFrameBuffer()->Disable();
+
+				//{
+				//	HR_PROFILE_SCOPE("Gizmo Rendering")
+
+				//	Hildur::Renderer::RenderGizmos();
+				//}
 
 				{
 					HR_PROFILE_SCOPE("LayerStack OnUpdates")
@@ -175,12 +186,15 @@ namespace Editor {
 	{
 		HR_PROFILE_FUNCTION()
 
-			Hildur::EventDispatcher distpatcher(e);
+		Hildur::EventDispatcher distpatcher(e);
 		distpatcher.Dispatch<Hildur::WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize));
+		distpatcher.Dispatch<Hildur::WindowMoveEvent>(BIND_EVENT_FN(OnWindowMove));
 		distpatcher.Dispatch<Hildur::WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
 
 		distpatcher.Dispatch<Hildur::MouseButtonPressedEvent>(BIND_EVENT_FN(OnMouseClick));
 		distpatcher.Dispatch<Hildur::MouseScrolledEvent>(BIND_EVENT_FN(OnMouseScrolled));
+
+		m_Viewport.OnEvent(e);
 
 		//HR_CORE_TRACE("{0}", e);
 
@@ -206,6 +220,11 @@ namespace Editor {
 		return false;
 	}
 
+	bool Editor::OnWindowMove(Hildur::WindowMoveEvent& e)
+	{
+		return false;
+	}
+
 	bool Editor::OnWindowClose(Hildur::WindowCloseEvent& e)
 	{
 		m_WantsToClose = true;
@@ -222,21 +241,15 @@ namespace Editor {
 
 	bool Editor::OnMouseClick(Hildur::MouseButtonPressedEvent& e)
 	{
+		/*HR_CORE_TRACE("Mouse Click on: {0}, {1}; Is on Viewport: {2} \n Viewport Coords are: {3}, {4}; Window position: {5}, {6}",
+			Hildur::Input::GetMouseX() + GetWindow().GetPositionX(), Hildur::Input::GetMouseY() + GetWindow().GetPositionY(),
+			m_Viewport.IsMouseInViewport(), m_Viewport.GetMouseViewportPos().x, m_Viewport.GetMouseViewportPos().y, GetWindow().GetPositionX(), GetWindow().GetPositionY());*/
+
 		return false;
 	}
 
 	bool Editor::OnMouseScrolled(Hildur::MouseScrolledEvent& e)
 	{
-		if (m_IsInViewport)
-		{
-			m_ViewportScroll += e.GetYOffset();
-
-			//Hildur::Transform* camTransform = Hildur::Camera::GetMainCamera()->GetTransform();
-			//float camX = sin(camTransform->GetRotation().y) * m_ViewportScroll;
-			//float camZ = cos(camTransform->GetRotation().y) * m_ViewportScroll;
-			//camTransform->SetPosition({ camX, 0.0f, camZ });
-		}
-
 		return false;
 	}
 
@@ -244,53 +257,9 @@ namespace Editor {
 	{
 		ImGui::ShowDemoWindow();
 
-
 		//Viewport
-		ImGui::Begin("Viewport");
-		m_ViewportWidth = ImGui::GetWindowContentRegionMax().x;
-		m_ViewportHeight = ImGui::GetWindowContentRegionMax().y;
-		m_IsInViewport = ImGui::IsWindowHovered();
-		ImGui::GetWindowDrawList()->AddImage(
-			(void*)(intptr_t)m_FrameBuffer->GetAttachment("color")->rendererID,
-			ImVec2(ImGui::GetCursorScreenPos()),
-			ImVec2(ImGui::GetCursorScreenPos().x + m_ViewportWidth, ImGui::GetCursorScreenPos().y + m_ViewportHeight));
-		if (Hildur::Input::IsMouseButtonPressed(1) && m_IsInViewport && !m_IsMovingInVP)
-		{
-			m_IsMovingInVP = true;
-			m_OriginalMousePos = { Hildur::Input::GetMouseX(), Hildur::Input::GetMouseY() };
-			m_ViewportCamPos = Hildur::Renderer::GetCameraPos();
-			m_ViewportCamRot = Hildur::Camera::GetMainCamera()->GetTransform()->GetRotation().y;
-		}
-		else if (Hildur::Input::IsMouseButtonPressed(1) && m_IsMovingInVP)
-		{
-			float RotX = (Hildur::Input::GetMouseY() - m_OriginalMousePos.y) * 0.01f;
-			m_ViewportCamRot += (Hildur::Input::GetMouseX() - m_OriginalMousePos.x) * 0.01f;
-			HR_CORE_INFO("RotY: {0}", m_ViewportCamRot);
-			Hildur::Transform* camTransform = Hildur::Camera::GetMainCamera()->GetTransform();
-			camTransform->SetRotation({ 0.0f, m_ViewportCamRot, 0.0f });
-			float camX = sin(-glm::radians(m_ViewportCamRot)) * m_ViewportScroll;
-			float camZ = cos(-glm::radians(m_ViewportCamRot)) * m_ViewportScroll;
-			float CamY = camTransform->GetPosition().y;
-			m_ViewportCamPos += glm::vec3(camX, CamY, camZ);
-			camTransform->SetPosition(m_ViewportCamPos);
-		}
-		else if (!Hildur::Input::IsMouseButtonPressed(1))
-		{
-			m_IsMovingInVP = false;
-		}
-
-		if (m_IsInViewport && Hildur::Input::IsMouseButtonPressed(0))
-		{
-			m_IDFrameBuffer->Enable();
-
-			uint32_t mousePosViewPortX = ImGui::GetMousePos().x - ImGui::GetCursorScreenPos().x + 8;
-			uint32_t mousePosViewPortY = ImGui::GetMousePos().y - ImGui::GetCursorScreenPos().y + 8;
-
-			HR_CORE_INFO("{0}, {1}", mousePosViewPortX, mousePosViewPortY);
-		}
-
-		Hildur::Renderer::OnWindowResize(m_ViewportWidth, m_ViewportHeight);
-		ImGui::End();
+		m_Viewport.Render(m_FrameBuffer, GetWindow());
+		m_SelectedEntity = m_Viewport.GetSelectedEntity();
 
 
 		//TEST
@@ -322,10 +291,12 @@ namespace Editor {
 		}
 		ImGui::End();
 
+		
 		//Inspector
 		ImGui::Begin("Inspector");
 		if (m_InspectedEntity != nullptr)
 		{
+			ImGui::Checkbox("Enable", &m_InspectedEntity->m_IsEnabled);
 			m_InspectedEntity->m_Transform->RenderInspector();
 			if (m_InspectedEntity->HasComponent<Hildur::Camera>())
 				m_InspectedEntity->GetComponent<Hildur::Camera>()->RenderInspector();
@@ -334,17 +305,38 @@ namespace Editor {
 			if (m_InspectedEntity->HasComponent<Hildur::PointLight>())
 				m_InspectedEntity->GetComponent<Hildur::PointLight>()->RenderInspector();
 			if (m_InspectedEntity->HasComponent<Hildur::MeshRenderer>())
+			{
 				m_InspectedEntity->GetComponent<Hildur::MeshRenderer>()->RenderInspector();
+				if (ImGui::Button("Load model"))
+					m_ExploreFSInspector = true;
+			}
 		}
 		ImGui::End();
+		std::string modelPath;
+		if (m_InspectorFileBrowser.render(m_ExploreFSInspector, modelPath))
+		{
+			// The "path" string will hold a valid file path here.
+			HR_CORE_WARN("Opened Model in location: {0}", modelPath);
+
+			m_InspectedEntity->GetComponent<Hildur::MeshRenderer>()->SetMesh(Hildur::Model::Create(modelPath)->GetMeshes()[0]);
+			m_ExploreFSInspector = false;
+		}
 
 		//Asset Manager
 		ImGui::Begin("Asset Manager");
-
 		ImGui::End();
+
+		std::string path;
+		if (fileBrowser.render(m_IsImportClicked, path)) 
+		{
+			// The "path" string will hold a valid file path here.
+			HR_CORE_ERROR("Opened file in location: {0}", path);
+		}
+
 
 		//Console
 		m_Console->OnImGuiRender(&m_UIShowConsole);
+
 
 		//Are you sure you want to quit?
 		if (m_WantsToClose)

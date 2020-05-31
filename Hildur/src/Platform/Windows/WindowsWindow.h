@@ -20,6 +20,10 @@ namespace Hildur {
 		inline unsigned int GetWidth() const override { return m_Data.Width; }
 		inline unsigned int GetHeight() const override { return m_Data.Height; }
 
+		glm::vec2 GetPosition() const override { return glm::vec2(m_Data.PosX, m_Data.PosY); }
+		unsigned int GetPositionX() const override { return (unsigned int)m_Data.PosX; }
+		unsigned int GetPositionY() const override { return (unsigned int)m_Data.PosY; }
+
 		void SetName(std::string& name) override;
 
 		// Window attributes
@@ -43,6 +47,7 @@ namespace Hildur {
 		{
 			std::string Title;
 			unsigned int Width, Height;
+			int PosX, PosY;
 			bool IsFullscreen;
 			bool VSync;
 

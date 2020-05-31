@@ -11,7 +11,7 @@
 namespace Hildur {
 
 
-	class Model
+	class Model : public ManagedResource
 	{
 	public:
 

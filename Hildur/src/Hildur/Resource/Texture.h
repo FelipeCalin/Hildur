@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "Hildur/Core/ManagedResource.h"
 #include "Hildur/Resource/ImageBuffer.h"
 #include "Hildur/Core/Core.h"
 
@@ -32,7 +33,7 @@ namespace Hildur {
 
 	};
 
-	class Texture2D : public Texture 
+	class Texture2D : public ManagedResource, public Texture 
 	{
 	public:
 

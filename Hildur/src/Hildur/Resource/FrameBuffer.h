@@ -70,6 +70,8 @@ namespace Hildur {
 		void Resize();
 		void Resize(uint32_t width, uint32_t height);
 
+		glm::vec4 ReadPixel(std::string attachment, uint32_t x, uint32_t y);
+
 		void Blit(FrameBuffer* target, std::string sourceAttachment, std::string targetAttachment);
 		void BlitToScreen(std::string name);
 		uint32_t GetTextureID(std::string name) { return m_ColorAttachments[name].rendererID; }

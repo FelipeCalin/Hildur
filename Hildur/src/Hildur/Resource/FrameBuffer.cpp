@@ -258,7 +258,7 @@ namespace Hildur {
 	void FrameBuffer::Resize(uint32_t width, uint32_t height)
 	{
 		// Only recreate nonstatic buffers
-		if (m_ScreenFactor == -1) return;
+		if (m_ScreenFactor != -1) return;
 
 		m_Width = width;
 		m_Height = height;
@@ -284,6 +284,21 @@ namespace Hildur {
 		}
 
 		Ready();
+	}
+
+	glm::vec4 FrameBuffer::ReadPixel(std::string attachment, uint32_t x, uint32_t y)
+	{
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_RendererID);
+		glReadBuffer(GetAttachment(attachment)->attachmentIndex);
+
+		glm::vec4 pixel;
+
+		glReadPixels(x, y, 1, 1, GL_RGB, GL_FLOAT, &pixel);
+
+		glReadBuffer(GL_NONE);
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+
+		return pixel;
 	}
 
 	void FrameBuffer::Blit(FrameBuffer* target, std::string sourceAttachment, std::string targetAttachment)

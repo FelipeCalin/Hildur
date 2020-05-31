@@ -33,6 +33,9 @@ namespace Hildur {
 		static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color);
 		static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor = 1.0f, const glm::vec4& colorShift = glm::vec4(1.0f));
 		static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor = 1.0f, const glm::vec4& colorShift = glm::vec4(1.0f));
+
+		//Lines
+		static void DrawLine(const glm::vec2& point1, const glm::vec2& point2, const glm::vec4& color = glm::vec4(1.0f), float thickness = 5);
 	
 		static void AddToRenderQueue(Sprite* spriteComponent);
 		static void RemoveFromRenderQueue(Sprite* spriteComonent);
