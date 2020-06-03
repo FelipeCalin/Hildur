@@ -1,2 +1,3 @@
 # Hildur
-a multipltform game engine
+
+Hildur is a simple, semi functional game engine, following Yan Chernikov's Hazel engine Hazel.
